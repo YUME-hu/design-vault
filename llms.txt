@@ -1,0 +1,30 @@
+# design-vault-plugin
+
+> A DeepSeek Harness plugin.
+
+## Install
+
+    dsh plugin --profile web add design-vault-plugin
+
+## Verify
+
+    dsh --profile web --dump-config | grep -A2 "id: design-vault-plugin"
+
+## Develop
+
+    pnpm install
+    pnpm verify
+
+## Read next
+
+- README.md — user guide
+- AGENTS.md — repository rules and invariants
+- src/host/ — Host half
+- src/client/ — browser half
+- tests/ — both suites
+
+## Contracts
+
+- Package: design-vault-plugin
+- Patch row: `design-vault-plugin`
+- Client module id: `design-vault-plugin`

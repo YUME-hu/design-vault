@@ -1,0 +1,5 @@
+# DSH composes a profile from patch layers. Every bundle contributes one; this
+# layer inserts the plugin's own row. It does not patch another plugin.
+- insert:
+    - id: design-vault-plugin
+      name: design-vault-plugin

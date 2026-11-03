@@ -1,0 +1,86 @@
+{
+  "name": "design-vault-plugin",
+  "version": "0.1.0",
+  "description": "DSH Workbench: a live design-system previewer that turns a style vault into CSS variables, palette tokens and motion-web compliant AI prompts.",
+  "license": "MIT",
+  "author": "梦澐子",
+  "type": "module",
+  "icon": "./icon.svg",
+  "exports": {
+    ".": "./lib/index.js",
+    "./client": "./lib/client.js",
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "lib/",
+    "cordis.patch.yml",
+    "icon.svg",
+    "locale/*.json",
+    "README.md",
+    "README.zh.md",
+    "AGENTS.md",
+    "llms.txt",
+    "LICENSE",
+    "CHANGELOG.md",
+    "PUBLISHING.md"
+  ],
+  "scripts": {
+    "build": "tsdown",
+    "typecheck": "tsc --noEmit",
+    "lint": "oxlint src tests scripts",
+    "format": "oxfmt --check src tests scripts",
+    "format:write": "oxfmt src tests scripts",
+    "test": "vitest run",
+    "verify": "oxfmt --check src tests scripts && oxlint src tests scripts && tsc --noEmit && vitest run && tsdown && node scripts/check.mjs && npm pack --dry-run",
+    "prepack": "tsdown"
+  },
+  "engines": {
+    "node": ">=24"
+  },
+  "dsh": {
+    "manifestVersion": 1,
+    "bundle": {
+      "patch": "./cordis.patch.yml"
+    },
+    "client": {
+      "platform": "web"
+    },
+    "engines": {
+      "dsh": ">=0.2.1-rc.5"
+    }
+  },
+  "devDependencies": {
+    "@types/culori": "^4.0.1",
+    "@types/node": "^26.6.6",
+    "@types/react": "^19.3.0",
+    "jsdom": "^30.1.3",
+    "oxfmt": "^0.75.0",
+    "oxlint": "^1.90.0",
+    "react": "^19.3.1",
+    "tsdown": "^0.23.4",
+    "typescript": "^7.0.2",
+    "unrun": "^0.3.1",
+    "vitest": "^5.0.5"
+  },
+  "keywords": [
+    "dsh",
+    "dsh-plugin",
+    "deepseek-harness",
+    "design-system",
+    "design-tokens",
+    "oklch",
+    "motion"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/YUME-hu/design-vault-plugin.git"
+  },
+  "bugs": {
+    "url": "https://github.com/YUME-hu/design-vault-plugin/issues"
+  },
+  "homepage": "https://github.com/YUME-hu/design-vault-plugin#readme",
+  "dependencies": {
+    "culori": "^4.0.2",
+    "zod": "^3.25.76"
+  }
+}
