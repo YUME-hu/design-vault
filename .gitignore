@@ -1,0 +1,44 @@
+# ── dependencies ──────────────────────────────────────────────
+node_modules/
+.pnp
+.pnp.js
+
+# ── Next.js ───────────────────────────────────────────────────
+.next/
+out/
+build/
+next-env.d.ts
+*.tsbuildinfo
+
+# ── secrets (真实密钥永不入仓) ──────────────────────────────────
+.env
+.env.local
+.env.*.local
+*.pem
+*.key
+
+# ── runtime records (抓取状态 / token 用量 / LLM 原始响应) ───────
+data/ingest-state.json
+data/llm-usage.log
+data/pending.json
+data/refs.json
+data/frames/
+
+# ── 本地参考库：截图可能含私人项目信息 ─────────────────────────
+refs/
+.shots/
+
+# ── 打包/导出产物 ─────────────────────────────────────────────
+*.tgz
+*.zip
+backup/
+exports/
+
+# ── misc ──────────────────────────────────────────────────────
+.DS_Store
+Thumbs.db
+npm-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+.idea/
+.vscode/

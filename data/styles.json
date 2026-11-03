@@ -1,0 +1,1077 @@
+[
+  {
+    "id": "nasa-punk-industrial-console",
+    "name": "NASA-Punk 工业控制台",
+    "sources": [
+      {
+        "type": "manual",
+        "url": "",
+        "upstream": "",
+        "video": ""
+      }
+    ],
+    "original_prompt": "",
+    "prompt_type": "manual",
+    "frontend_prompt": "设计一套 NASA-Punk 工业控制台风格的前端界面（Web，RSC + Tailwind）。\n\n整体气质：像 1970 年代航天任务的纸质技术手册被搬上了屏幕——克制、精确、可信，带一点复古未来感。不是赛博朋克，不要霓虹发光。\n\n视觉规则（必须全部遵守）：\n1. 零圆角。所有卡片、按钮、输入框的 border-radius 一律为 0。\n2. 所有容器使用 1px 实线边框，颜色 #191919（炭黑），不使用阴影、不使用模糊、不使用 backdrop-filter。\n3. 底色 #ECE5D6（米白纸面），主文字 #191919。仅在强调处使用 #D63A2C（信号红），红色面积占比 < 5%。\n4. 卡片四个角中的左上与右下各放一个 4px × 4px 的炭黑实心方块作为铆钉装饰。\n5. 卡片顶部有一条 6px 高的 45° 黑/白警示斜纹带。\n6. 页面背景叠加 24px 网格的蓝图网格线，透明度 0.03。\n7. 等宽字体（Space Mono）用于所有标签、编号、数值、状态；标签全大写 + letter-spacing 0.22em。中文正文用 Noto Sans SC。\n8. 字号阶梯 12/14/16/20/28/40，只使用这几个档位。\n9. 按钮：直角、1px 炭黑边、透明底；Hover 时黑白反转（底 #191919 / 字 #ECE5D6），不加 transition、不加光效。\n10. 导航：等宽全大写 + tracking-widest，当前项左侧带一个 4px 宽的红色竖条。\n\n组件要求：\n- 卡片 = 白底（#FFFFFF）、1px 边、铆钉角标、顶部警示斜纹。\n- AI 终端区 = 背景 #191919、文字 #ECE5D6、无对话气泡、细线分割；每行前缀 [SYS_LOG // 时间戳]，行尾一个红色方块光标。\n- 头像 = 六边形裁切 + 黑白滤镜 + 硬件角标。\n\n性能约束：全图形用 CSS/SVG 实现，零外部图片；不使用大阴影、不使用高斯模糊；动效只用 120ms 以内的 opacity/transform。\n\n可访问性：正文与底色对比度 ≥ 7:1，红色仅用于非文字型强调或大字号，正文链接不得只用颜色区分。",
+    "suitable_projects": [
+      "portfolio",
+      "dashboard"
+    ],
+    "unsuitable_projects": [
+      "children",
+      "ecommerce"
+    ],
+    "project_tags": [
+      "industrial",
+      "retro-futurism",
+      "light",
+      "high-contrast",
+      "monospace",
+      "technical",
+      "zero-radius"
+    ],
+    "palette": {
+      "primary": "#D63A2C",
+      "bg": "#ECE5D6",
+      "surface": "#FFFFFF",
+      "text": "#191919",
+      "muted": "#4C5A68",
+      "info": "#21467A",
+      "warning": "#D45814",
+      "sand": "#DBA972"
+    },
+    "palette_source": "manual",
+    "identity_colors": [
+      "#4C5A68",
+      "#7A7F4E",
+      "#D2A85E",
+      "#A8432F"
+    ],
+    "typography": {
+      "heading": "Space Mono",
+      "body": "Noto Sans SC",
+      "scale": "12/14/16/20/28/40，标题全大写 tracking-widest"
+    },
+    "tokens": {
+      "radius": "0",
+      "border": "1px solid #191919",
+      "shadow": "none",
+      "spacing": "4/8/12/16/24/32/48",
+      "grid": "blueprint grid, opacity 0.03",
+      "hazard_stripe": "6px 45° black/white stripes on card top",
+      "rivet": "4px solid black square, top-left & bottom-right"
+    },
+    "components": {
+      "button": "直角，1px 炭黑边，Hover 黑白反转，无 transition 光效",
+      "card": "白底，1px 边，铆钉角标，顶部警示斜纹",
+      "nav": "等宽全大写，tracking-widest",
+      "ai_terminal": "背景 #191919，文字 #ECE5D6，无气泡，细线分割，[SYS_LOG // 时间戳] + 红色方块光标",
+      "avatar": "六边形裁切 + 黑白滤镜 + 硬件角标"
+    },
+    "performance_notes": "全图形 CSS/SVG 实现，零外部图片；移除 backdrop-filter、大面积阴影、模糊",
+    "notes": "",
+    "related_effects": [],
+    "confidence": 1,
+    "created_at": "2026-10-28",
+    "updated_at": "2026-10-28"
+  },
+  {
+    "id": "novelai-prompt-studio",
+    "name": "NovelAI Prompt Studio",
+    "sources": [
+      {
+        "type": "bilibili",
+        "url": "https://github.com/LBEILC/NovelAIPromptStudio",
+        "upstream": "路北路陈 (40238601)",
+        "video": "BV1TDnm6TEf4"
+      }
+    ],
+    "original_prompt": "",
+    "prompt_type": "frontend",
+    "frontend_prompt": "界面采用明暗双主题（README 提供 dark/light 两套 banner）。工作台以提示词分块为核心：Tag 与英文描述混写可拆块显示，{ } [ ] 权重需一眼可辨，同时支持像网页一样直接改文字。左侧为版本栏，只显示当前分支线，停在某一版时弹出与上一版的完整对比。图片库采用等高排列的图片流，右侧显示选中图片的提示词。图片下方一排操作按钮：放大、增强、局部重绘、扩图、去背景、上色、换表情。Agent 发起的生成进入“待确认”队列，确认后才发出。界面字体为 MiSans。",
+    "suitable_projects": [
+      "ai-product",
+      "saas-tool",
+      "dashboard",
+      "docs"
+    ],
+    "unsuitable_projects": [
+      "game",
+      "children",
+      "ecommerce"
+    ],
+    "project_tags": [
+      "clean",
+      "data-dense",
+      "developer",
+      "light",
+      "minimal",
+      "systematic",
+      "technical",
+      "tonal"
+    ],
+    "palette": {
+      "primary": "#607598",
+      "bg": "#F3F5F9",
+      "surface": "#FCFDFF",
+      "text": "#23272C",
+      "muted": "#4F5661"
+    },
+    "palette_source": "direction-mapped",
+    "identity_colors": [],
+    "typography": {
+      "heading": "MiSans",
+      "body": "MiSans",
+      "scale": "14/16/20/28/40"
+    },
+    "tokens": {
+      "radius": "0",
+      "border": "1px solid #23272c",
+      "shadow": "none",
+      "spacing": "4/8/12/16/24/32/48"
+    },
+    "components": {
+      "button": "图片下方一排操作按钮：放大、增强、局部重绘、扩图、去背景、上色、换表情"
+    },
+    "performance_notes": "",
+    "notes": "palette 由色彩方向映射生成（neutral/muted/medium），色值为算法产出，建议在调色器里复核对比度。 部分设计令牌未在信源中出现，使用了零圆角 / 8px 网格基线。",
+    "related_effects": [],
+    "confidence": 0.6,
+    "created_at": "2026-10-28",
+    "updated_at": "2026-10-28"
+  },
+  {
+    "id": "pending-01b652bc",
+    "name": "瑞士风格",
+    "sources": [
+      {
+        "type": "bilibili-search",
+        "url": "",
+        "upstream": "路北路陈 (路北路陈 (40238601))",
+        "video": "BV1hWar6SEVP"
+      }
+    ],
+    "original_prompt": "",
+    "prompt_type": "frontend",
+    "frontend_prompt": "用瑞士国际主义风格（Swiss Style / International Typographic Style）设计。12 栏模块化网格，所有元素的边缘都对齐到网格线。字体用新怪诞无衬线体（Helvetica、Neue Haas Grotesk 或 Inter），只用常规和粗体两种字重；标题极大、正文很小，形成强烈的大小对比。文字一律左对齐、右边不齐，不要居中，也不要两端对齐。不对称构图，留出大面积空白。配色只用黑、米白和一个强调红，全部平涂，不要阴影、渐变、纹理和装饰插画。需要图片时用黑白照片或简单几何形。用细线分隔区块，用 01、02 这样的编号和小号的年份、地点信息点缀。",
+    "suitable_projects": [
+      "portfolio",
+      "editorial",
+      "marketing",
+      "docs",
+      "blog"
+    ],
+    "unsuitable_projects": [
+      "game",
+      "children"
+    ],
+    "project_tags": [
+      "clean",
+      "minimal",
+      "systematic",
+      "neutral",
+      "high-contrast",
+      "editorial",
+      "square",
+      "light"
+    ],
+    "palette": {
+      "primary": "#4974BA",
+      "bg": "#FAFCFF",
+      "surface": "#FCFDFF",
+      "text": "#0E1217",
+      "muted": "#414853",
+      "danger": "#C92F33",
+      "success": "#33854A"
+    },
+    "palette_source": "direction-mapped",
+    "identity_colors": [],
+    "typography": {
+      "heading": "新怪诞无衬线体（Helvetica、Neue Haas Grotesk、Akzidenz-Grotesk、Univers）",
+      "body": "新怪诞无衬线体，只用常规和粗体两种字重",
+      "scale": "标题极大、正文很小，形成强烈的大小对比"
+    },
+    "tokens": {
+      "radius": "0",
+      "border": "用细线分隔区块",
+      "shadow": "无阴影",
+      "spacing": "模块网格、不对称构图、大片留白"
+    },
+    "components": {
+      "layout": "信源未提供组件细节，需人工补充。"
+    },
+    "performance_notes": "",
+    "notes": "来源：字幕提取 palette 由色彩方向映射生成（neutral/balanced/high），色值为算法产出，建议在调色器里复核对比度。 部分设计令牌未在信源中出现，使用了零圆角 / 8px 网格基线。 组件规格缺失，已占位，入库后需要补。",
+    "related_effects": [],
+    "confidence": 0.5,
+    "created_at": "2026-10-28",
+    "updated_at": "2026-10-28"
+  },
+  {
+    "id": "pending-cae26adb",
+    "name": "中性极简网页设计",
+    "sources": [
+      {
+        "type": "bilibili-search",
+        "url": "",
+        "upstream": "设计特区DesignZone (设计特区DesignZone (8613199))",
+        "video": "BV17dkoB8EB1"
+      }
+    ],
+    "original_prompt": "",
+    "prompt_type": "frontend",
+    "frontend_prompt": "整体使用低饱和的米白与浅褐配色，营造温和中性的视觉氛围；标题使用粗体无衬线字体，配合线条排版形成强烈节奏感；通过大字号标题与清晰的板块划分建立稳定的视觉秩序；每个区块留白充足、层级分明，传达专业感与理性气质，保持克制与平衡。",
+    "suitable_projects": [
+      "portfolio",
+      "marketing",
+      "editorial",
+      "blog",
+      "docs"
+    ],
+    "unsuitable_projects": [
+      "dashboard",
+      "data-viz",
+      "game",
+      "children"
+    ],
+    "project_tags": [
+      "minimal",
+      "clean",
+      "bold-type",
+      "neutral",
+      "editorial",
+      "light",
+      "tonal"
+    ],
+    "palette": {
+      "primary": "#607598",
+      "bg": "#F3F5F9",
+      "surface": "#FCFDFF",
+      "text": "#23272C",
+      "muted": "#4F5661"
+    },
+    "palette_source": "direction-mapped",
+    "identity_colors": [],
+    "typography": {
+      "heading": "粗体无衬线字体",
+      "body": "无衬线字体",
+      "scale": "大字号标题，层级分明"
+    },
+    "tokens": {
+      "radius": "0",
+      "border": "1px solid #23272c",
+      "shadow": "none",
+      "spacing": "4/8/12/16/24/32/48"
+    },
+    "components": {
+      "layout": "信源未提供组件细节，需人工补充。"
+    },
+    "performance_notes": "",
+    "notes": "来源：字幕提取 palette 由色彩方向映射生成（neutral/muted/medium），色值为算法产出，建议在调色器里复核对比度。 部分设计令牌未在信源中出现，使用了零圆角 / 8px 网格基线。 组件规格缺失，已占位，入库后需要补。",
+    "related_effects": [],
+    "confidence": 0.5,
+    "created_at": "2026-10-28",
+    "updated_at": "2026-10-28"
+  },
+  {
+    "id": "monochrome-data-editorial",
+    "name": "Monochrome Data Editorial",
+    "sources": [
+      {
+        "type": "bilibili-search",
+        "url": "",
+        "upstream": "设计特区DesignZone (设计特区DesignZone (8613199))",
+        "video": "BV1e5SCBiEQF"
+      }
+    ],
+    "original_prompt": "",
+    "prompt_type": "frontend",
+    "frontend_prompt": "由三帧构成的企业级 AI 技术叙事页面：以极端黑白反转（亮白篇章与纯黑篇章交替）制造节奏，搭配细体无衬线大标题、宽字距全大写拉丁标签、纵向排列的日文注记与细网格线，形成瑞士国际主义排版与数据科技感的混合体；图像区采用黑白人物矩阵、节点连线图与产品黑色卡片，克制地只在局部使用单一冷调强调色，整体像一份会呼吸的技术白皮书。",
+    "suitable_projects": [],
+    "unsuitable_projects": [],
+    "project_tags": [
+      "企业科技官网",
+      "AI 数据平台",
+      "黑白单色系",
+      "瑞士网格排版",
+      "日式极简",
+      "宽字距大写标签",
+      "明暗反转分段",
+      "细体无衬线大字",
+      "数据可视化节点图",
+      "编辑式留白",
+      "纵向侧标注",
+      "B2B 可信叙事"
+    ],
+    "palette": {
+      "primary": "#906B52",
+      "bg": "#FFFBF8",
+      "surface": "#FFFDFC",
+      "text": "#16100D",
+      "muted": "#51453E",
+      "danger": "#C92F33",
+      "success": "#33854A"
+    },
+    "palette_source": "direction-mapped",
+    "identity_colors": [],
+    "typography": {
+      "heading": "system-ui",
+      "body": "system-ui",
+      "scale": "14/16/20/28/40"
+    },
+    "tokens": {
+      "radius": "0",
+      "border": "1px solid #16100d",
+      "shadow": "none",
+      "spacing": "4/8/12/16/24/32/48"
+    },
+    "components": {
+      "layout": "信源未提供组件细节，需人工补充。"
+    },
+    "performance_notes": "",
+    "notes": "来源：视觉截帧提取 data/frames/BV1e5SCBiEQF\\montage.png palette 由色彩方向映射生成（warm/muted/high），色值为算法产出，建议在调色器里复核对比度。 信源未给出字体，先用 system-ui，建议替换。 部分设计令牌未在信源中出现，使用了零圆角 / 8px 网格基线。 组件规格缺失，已占位，入库后需要补。",
+    "related_effects": [],
+    "confidence": 0.7,
+    "created_at": "2026-10-28",
+    "updated_at": "2026-10-28"
+  },
+  {
+    "id": "pending-83e763fe",
+    "name": "灰度条纹遮罩与信息感排版",
+    "sources": [
+      {
+        "type": "bilibili-search",
+        "url": "",
+        "upstream": "设计特区DesignZone (设计特区DesignZone (8613199))",
+        "video": "BV1e5SCBiEQF"
+      }
+    ],
+    "original_prompt": "",
+    "prompt_type": "frontend",
+    "frontend_prompt": "整体只使用黑白灰单色系，页面底色为浅灰，逐级过渡到中灰与近黑。首页在灰度城市照片上叠加横向条纹遮罩，做出扫描加载效果，并在其上叠加大号日文标语。标题使用粗体无衬线日文字体，说明文字使用细体，形成粗细对比。导航与 Footer 使用条形黑条，全站保持统一的栅格感与高信息密度，气质克制理性，贴合 AI 与合成数据主题。",
+    "suitable_projects": [
+      "marketing",
+      "saas-tool",
+      "ai-product",
+      "docs"
+    ],
+    "unsuitable_projects": [
+      "game",
+      "children",
+      "ecommerce"
+    ],
+    "project_tags": [
+      "enterprise",
+      "企业科技官网",
+      "黑白单色系",
+      "minimal",
+      "data-dense",
+      "technical",
+      "日式极简",
+      "瑞士网格排版",
+      "high-contrast",
+      "systematic"
+    ],
+    "palette": {
+      "primary": "#607598",
+      "bg": "#FAFCFF",
+      "surface": "#FCFDFF",
+      "text": "#0E1217",
+      "muted": "#414853",
+      "danger": "#C92F33",
+      "success": "#33854A"
+    },
+    "palette_source": "direction-mapped",
+    "identity_colors": [],
+    "typography": {
+      "heading": "无衬线日文字体（近似 Noto Sans JP / ヒラギノ角ゴ系），粗体",
+      "body": "无衬线日文字体（近似 Noto Sans JP / ヒラギノ角ゴ系），细体",
+      "scale": "大号标语与细体说明形成强粗细对比"
+    },
+    "tokens": {
+      "radius": "0",
+      "border": "1px solid #0e1217",
+      "shadow": "none",
+      "spacing": "4/8/12/16/24/32/48"
+    },
+    "components": {
+      "navigation": "条形导航，Footer 为黑条"
+    },
+    "performance_notes": "",
+    "notes": "补丁验证：真实文本提取（含技术方案） palette 由色彩方向映射生成（neutral/muted/high），色值为算法产出，建议在调色器里复核对比度。 部分设计令牌未在信源中出现，使用了零圆角 / 8px 网格基线。",
+    "related_effects": [
+      "effect-1"
+    ],
+    "confidence": 0.6,
+    "created_at": "2026-10-28",
+    "updated_at": "2026-10-28"
+  },
+  {
+    "id": "superopc-shader",
+    "name": "SuperOPC 互动 shader 卡片",
+    "sources": [
+      {
+        "type": "bilibili",
+        "url": "",
+        "upstream": "AI个体指南 (19307699)",
+        "video": "BV1BLe26EERk"
+      }
+    ],
+    "original_prompt": "",
+    "prompt_type": "frontend",
+    "frontend_prompt": "制作互动 shader 卡片，用于活动邀请、会员中心、个人网站等场景；卡片以 shader 视觉为核心，强调交互与视觉设计感。",
+    "suitable_projects": [
+      "portfolio",
+      "marketing",
+      "ai-product"
+    ],
+    "unsuitable_projects": [
+      "game",
+      "children",
+      "docs"
+    ],
+    "project_tags": [
+      "technical"
+    ],
+    "palette": {
+      "primary": "#4974BA",
+      "bg": "#F3F5F9",
+      "surface": "#FCFDFF",
+      "text": "#23272C",
+      "muted": "#4F5661"
+    },
+    "palette_source": "direction-mapped",
+    "identity_colors": [],
+    "typography": {
+      "heading": "system-ui",
+      "body": "system-ui",
+      "scale": "14/16/20/28/40"
+    },
+    "tokens": {
+      "radius": "0",
+      "border": "1px solid #23272c",
+      "shadow": "none",
+      "spacing": "4/8/12/16/24/32/48"
+    },
+    "components": {
+      "layout": "信源未提供组件细节，需人工补充。"
+    },
+    "performance_notes": "",
+    "notes": "来源：字幕提取 palette 由色彩方向映射生成（neutral/balanced/medium），色值为算法产出，建议在调色器里复核对比度。 信源未给出字体，先用 system-ui，建议替换。 部分设计令牌未在信源中出现，使用了零圆角 / 8px 网格基线。 组件规格缺失，已占位，入库后需要补。",
+    "related_effects": [
+      "shader"
+    ],
+    "confidence": 0.5,
+    "created_at": "2026-10-28",
+    "updated_at": "2026-10-28"
+  },
+  {
+    "id": "webgl",
+    "name": "极简奢华 WebGL 工作室官网",
+    "sources": [
+      {
+        "type": "bilibili",
+        "url": "",
+        "upstream": "设计特区DesignZone (8613199)",
+        "video": "BV1MF2kBjEJL"
+      }
+    ],
+    "original_prompt": "",
+    "prompt_type": "frontend",
+    "frontend_prompt": "整体置于工业感混凝土展厅的 3D 场景中，用 WebGL 构建可随镜头滑动切换的「布景仓库」，项目卡片像悬浮实体装置一样陈列，品牌案例置于舞台中央。滚动时配合柔和的镜头推进、光影反射与滚动视差，让作品集浏览接近逛线下展的体验。标题使用高对比衬线 Display 字体，UI 使用现代无衬线字体，形成衬线与无衬线的组合。按钮为温暖的肉杏色，界面辅以细线条 UI，整体保持高级秀场氛围，同时保留清晰的项目导航与索引体验。",
+    "suitable_projects": [
+      "portfolio",
+      "marketing",
+      "editorial"
+    ],
+    "unsuitable_projects": [
+      "dashboard",
+      "docs",
+      "game",
+      "children",
+      "data-viz"
+    ],
+    "project_tags": [
+      "editorial",
+      "high-contrast",
+      "light",
+      "minimal",
+      "trust",
+      "细体无衬线大字",
+      "编辑式留白"
+    ],
+    "palette": {
+      "primary": "#906B52",
+      "bg": "#FFFBF8",
+      "surface": "#FFFDFC",
+      "text": "#16100D",
+      "muted": "#51453E",
+      "danger": "#C92F33",
+      "success": "#33854A"
+    },
+    "palette_source": "direction-mapped",
+    "identity_colors": [],
+    "typography": {
+      "heading": "高对比衬线 Display 字体（类似 Canela）",
+      "body": "现代无衬线 UI 字体（类似 Helvetica）",
+      "scale": "大字号衬线标题搭配小号无衬线 UI 文本"
+    },
+    "tokens": {
+      "radius": "0",
+      "border": "1px solid #16100d",
+      "shadow": "none",
+      "spacing": "4/8/12/16/24/32/48"
+    },
+    "components": {
+      "button": "温暖的肉杏色按钮"
+    },
+    "performance_notes": "",
+    "notes": "来源：字幕提取 palette 由色彩方向映射生成（warm/muted/high），色值为算法产出，建议在调色器里复核对比度。 部分设计令牌未在信源中出现，使用了零圆角 / 8px 网格基线。",
+    "related_effects": [
+      "webgl-3d",
+      "effect-2"
+    ],
+    "confidence": 0.5,
+    "created_at": "2026-10-28",
+    "updated_at": "2026-10-28"
+  },
+  {
+    "id": "instagram",
+    "name": "Instagram 品牌感字体展示",
+    "sources": [
+      {
+        "type": "bilibili",
+        "url": "",
+        "upstream": "设计特区DesignZone (8613199)",
+        "video": "BV1PuS6BVEXY"
+      }
+    ],
+    "original_prompt": "",
+    "prompt_type": "frontend",
+    "frontend_prompt": "使用 Instagram Sans 字体，大面积纯色背景，搭配高饱和霓虹色块（品红、紫色、黑色、白色）。展示字形路径与锚点动画，让字体结构可视化。整体排版极简，交互轻盈流畅，强调节奏感。",
+    "suitable_projects": [
+      "portfolio",
+      "marketing",
+      "editorial"
+    ],
+    "unsuitable_projects": [
+      "dashboard",
+      "game",
+      "children"
+    ],
+    "project_tags": [
+      "bold-type",
+      "high-contrast",
+      "minimal",
+      "editorial"
+    ],
+    "palette": {
+      "primary": "#2D6FDC",
+      "bg": "#FAFCFF",
+      "surface": "#FCFDFF",
+      "text": "#0E1217",
+      "muted": "#414853",
+      "danger": "#C92F33",
+      "success": "#33854A"
+    },
+    "palette_source": "direction-mapped",
+    "identity_colors": [],
+    "typography": {
+      "heading": "Instagram Sans",
+      "body": "Instagram Sans",
+      "scale": "极简排版，强调字体本身"
+    },
+    "tokens": {
+      "radius": "0",
+      "border": "1px solid #0e1217",
+      "shadow": "none",
+      "spacing": "4/8/12/16/24/32/48"
+    },
+    "components": {
+      "layout": "信源未提供组件细节，需人工补充。"
+    },
+    "performance_notes": "",
+    "notes": "来源：字幕提取 palette 由色彩方向映射生成（neutral/vivid/high），色值为算法产出，建议在调色器里复核对比度。 部分设计令牌未在信源中出现，使用了零圆角 / 8px 网格基线。 组件规格缺失，已占位，入库后需要补。",
+    "related_effects": [
+      "effect-1-2"
+    ],
+    "confidence": 0.5,
+    "created_at": "2026-10-28",
+    "updated_at": "2026-10-28"
+  },
+  {
+    "id": "ibm-carbon-white",
+    "name": "IBM Carbon（White 主题）",
+    "sources": [
+      {
+        "type": "extracted-draft",
+        "url": "https://carbondesignsystem.com/elements/color/usage/",
+        "upstream": "@carbon/themes + @carbon/colors + @carbon/type（IBM 官方分发包）",
+        "video": ""
+      }
+    ],
+    "original_prompt": "",
+    "prompt_type": "manual",
+    "frontend_prompt": "设计一套 IBM Carbon 风格的企业级数据界面（Web，White 主题）。\n\n骨架：8px 基准网格，控件统一贴左对齐，圆角一律 0px，界面要像仪表盘而不是消费级 App。\n\n颜色：页面 #FFFFFF，layer-01 #F4F4F4，输入框 field-01 #F4F4F4，正文 #161616，次要文字 #525252，辅助文字 #6F6F6F，分割线 #E0E0E0，强描边 #8D8D8D，错误 #DA1E28，成功 #24A148，警告 #F1C21B。交互色只有一个：#0F62FE，用于链接、主按钮、焦点。\n\n层级：不要投影。用 layer-01 / layer-02 / layer-03 的背景色区分嵌套层级，只有浮层允许一层轻投影。\n\n字体：IBM Plex Sans，代码与数字用 IBM Plex Mono。字号阶梯 12/14/16/20/28/32/42/54；正文 14 或 16，小标题 600 字重，超大标题 300 字重并收紧行高。\n\n控件：按钮直角、1px 描边，主按钮 #0F62FE 实底白字；所有可聚焦元素用 2px #0F62FE 外描边做焦点环；表格用 layer 底色区分行，不用圆角卡片堆叠。\n\n间距：2/4/8/12/16/24/32/40/48，垂直节奏以 8 的倍数为主。",
+    "suitable_projects": [
+      "dashboard",
+      "docs",
+      "saas-tool",
+      "data-viz"
+    ],
+    "unsuitable_projects": [
+      "children",
+      "editorial",
+      "marketing"
+    ],
+    "project_tags": [
+      "light",
+      "systematic",
+      "technical",
+      "data-dense",
+      "enterprise",
+      "square"
+    ],
+    "palette": {
+      "primary": "#0F62FE",
+      "bg": "#FFFFFF",
+      "surface": "#F4F4F4",
+      "text": "#161616",
+      "muted": "#525252",
+      "warning": "#F1C21B",
+      "danger": "#DA1E28",
+      "success": "#24A148"
+    },
+    "palette_source": "official-docs",
+    "identity_colors": [
+      "#0F62FE",
+      "#161616",
+      "#8D8D8D",
+      "#DA1E28"
+    ],
+    "typography": {
+      "heading": "IBM Plex Sans",
+      "body": "IBM Plex Sans",
+      "mono": "IBM Plex Mono",
+      "scale": "12/14/16/20/28/32/42/54（label → heading-07）"
+    },
+    "tokens": {
+      "radius": "0",
+      "border": "1px solid #8D8D8D（输入）/ #E0E0E0（分割）",
+      "shadow": "none（层级靠 layer-01/02/03 背景色区分）",
+      "spacing": "2/4/8/12/16/24/32/40/48（8px 网格）",
+      "focus": "2px solid #0F62FE",
+      "layers": "background #FFFFFF · layer-01 #F4F4F4 · field-01 #F4F4F4"
+    },
+    "components": {
+      "button": "直角、1px 描边；主按钮 #0F62FE 实底白字；焦点环 2px #0F62FE",
+      "tile": "layer-01 #F4F4F4 底 + 1px #E0E0E0 边，无圆角无阴影",
+      "data_table": "行底色用 layer 分层，1px #E0E0E0 分割线，不做大圆角卡片",
+      "text_input": "field-01 #F4F4F4 底 + 底部 1px #8D8D8D，聚焦 2px #0F62FE",
+      "side_nav": "左侧导航，选中项用 layer 底色 + #0F62FE 强调"
+    },
+    "performance_notes": "用 layer 背景色代替阴影，减少 paint 面积；表格固定行高 + 等宽数字，避免滚动时数字抖动。",
+    "notes": "",
+    "related_effects": [],
+    "confidence": 0.6,
+    "created_at": "2026-10-28",
+    "updated_at": "2026-10-28"
+  },
+  {
+    "id": "stripe-elements-default",
+    "name": "Stripe Elements（默认主题）",
+    "sources": [
+      {
+        "type": "extracted-draft",
+        "url": "https://docs.stripe.com/elements/appearance-api",
+        "upstream": "Stripe Elements Appearance API 文档中的默认变量",
+        "video": ""
+      }
+    ],
+    "original_prompt": "",
+    "prompt_type": "manual",
+    "frontend_prompt": "设计一套 Stripe Elements 默认主题风格的结算 / 表单界面。\n\n颜色：主色 #0570DE，背景 #FFFFFF，正文 #30313D，错误 #DF1B41，描边 #E0E6EB。\n\n圆角：4px（borderRadius 默认值）。\n\n描边与阴影：输入框与卡片只用 1px #E0E6EB 描边，不加投影，层级靠留白与描边区分，不要玻璃拟态。\n\n字体：Ideal Sans 优先，回退 system-ui；正文 16px（移动端输入框不小于 16px 防缩放），标签 14px，说明 12px。\n\n间距：以 2px 为基准单位（spacingUnit），常用 8/12/16/24。\n\n控件：输入框 40px 高、4px 圆角、聚焦时描边变主色；主按钮全宽、主色实底、白字、500 字重；错误态只在字段下方用 #DF1B41 的 12px 文案 + 红色描边，不弹 toast。\n\n整体：干净、克制、有信任感，不要装饰性插画、不要大标题艺术字。",
+    "suitable_projects": [
+      "ecommerce",
+      "marketing",
+      "saas-tool",
+      "dashboard"
+    ],
+    "unsuitable_projects": [
+      "game",
+      "children",
+      "editorial"
+    ],
+    "project_tags": [
+      "light",
+      "clean",
+      "neutral",
+      "systematic",
+      "fintech",
+      "trust"
+    ],
+    "palette": {
+      "primary": "#0570DE",
+      "bg": "#FFFFFF",
+      "surface": "#FFFFFF",
+      "text": "#30313D",
+      "muted": "#E0E6EB",
+      "danger": "#DF1B41"
+    },
+    "palette_source": "official-docs",
+    "identity_colors": [
+      "#0570DE",
+      "#30313D",
+      "#DF1B41",
+      "#E0E6EB"
+    ],
+    "typography": {
+      "heading": "Ideal Sans, system-ui, sans-serif",
+      "body": "Ideal Sans, system-ui, sans-serif",
+      "scale": "16px 基准（fontSizeBase），字号从 base 按 rem 派生（3Xs → 2Xl）"
+    },
+    "tokens": {
+      "radius": "4px（borderRadius 默认值）",
+      "border": "1px solid #E0E6EB",
+      "shadow": "官方 Appearance API 未定义投影变量：默认主题只用描边与背景分层",
+      "spacing": "2px 基准（spacingUnit），常用 2/4/8/12/16/24"
+    },
+    "components": {
+      "input": "40px 高、1px #E0E6EB 描边、4px 圆角，聚焦改为主色描边",
+      "button": "主色 #0570DE 实底白字，4px 圆角，全宽，500 字重",
+      "card": "白底 + 1px #E0E6EB，无阴影",
+      "error": "字段下方 12px #DF1B41 文案 + 红色描边"
+    },
+    "performance_notes": "表单不做装饰性动画；聚焦只改 border-color，不触发重排；输入框字号 16px 防止 iOS 自动缩放。",
+    "notes": "Stripe 官方 Appearance API 提供 colorTextSecondary 变量（次要文字），但未公开其默认 HEX。本条的 muted 取同一文档中输入框描边色 #E0E6EB，属于「弱化/分隔」映射，不是官方 secondary text 色值；确认前需复核对比度。",
+    "related_effects": [],
+    "confidence": 0.6,
+    "created_at": "2026-10-28",
+    "updated_at": "2026-10-28"
+  },
+  {
+    "id": "material-3-baseline",
+    "name": "Material 3 基线（Baseline Light）",
+    "sources": [
+      {
+        "type": "extracted-draft",
+        "url": "https://m3.material.io/styles/color/roles",
+        "upstream": "@material/web tokens v0_192（Google 官方分发包）",
+        "video": ""
+      }
+    ],
+    "original_prompt": "",
+    "prompt_type": "manual",
+    "frontend_prompt": "设计一套 Material 3（Material You）风格的 Web 界面。\n\n色彩：主色 #6750A4，页面底色 #FEF7FF（surface），卡片用 #FFFFFF（surface-container-lowest），正文 #1D1B20，次要文字与描边 #49454F / #79747E，错误 #B3261E，次色 #625B71。\n\n形状：卡片圆角 12px（medium），按钮用全圆角 pill；整体沿用 none 0 / extra-small 4 / small 8 / medium 12 / large 16 / extra-large 28 的形状阶梯，不要所有元素一个圆角。\n\n层级：不要重阴影。靠 tonal surface 抬升（surface → container-low → container → container-high），阴影最多用到 elevation level1（1dp）。\n\n字体：Roboto。字号阶梯 11/12/14/16/22/24/28/32/36/45/57（label / body / title / headline / display），正文 16px，label 12px。\n\n控件：Filled 按钮主色实底 + on-primary 白字；Outlined 按钮 1px #79747E 描边；Filled 输入框底色用 surface-container-highest，底部 1px 描边，聚焦变 2px 主色；导航栏 80dp 高，选中项用 secondary container #E8DEF8 填充。\n\n状态与动效：hover / focus / pressed 用 state layer（on-surface 的低透明度覆盖）实现，不要直接改背景色；过渡 150–200ms，用 emphasized 曲线。\n\n间距：4dp 基准网格，常用 4/8/12/16/24/32/48。",
+    "suitable_projects": [
+      "saas-tool",
+      "dashboard",
+      "ecommerce",
+      "ai-product",
+      "docs"
+    ],
+    "unsuitable_projects": [
+      "editorial",
+      "game"
+    ],
+    "project_tags": [
+      "light",
+      "systematic",
+      "rounded",
+      "friendly",
+      "tonal",
+      "neutral"
+    ],
+    "palette": {
+      "primary": "#6750A4",
+      "bg": "#FEF7FF",
+      "surface": "#FFFFFF",
+      "text": "#1D1B20",
+      "muted": "#49454F",
+      "info": "#625B71",
+      "danger": "#B3261E"
+    },
+    "palette_source": "official-docs",
+    "identity_colors": [
+      "#6750A4",
+      "#625B71",
+      "#7D5260",
+      "#B3261E"
+    ],
+    "typography": {
+      "heading": "Roboto",
+      "body": "Roboto",
+      "scale": "11/12/14/16/22/24/28/32/36/45/57（label → display 五档）"
+    },
+    "tokens": {
+      "radius": "12px（shape：none 0 / xs 4 / sm 8 / md 12 / lg 16 / xl 28）",
+      "border": "1px solid #79747E（outline）",
+      "shadow": "elevation 0–5（1/3/6/8/12dp），卡片默认 level1",
+      "spacing": "4/8/12/16/24/32/48（4dp 基准网格）",
+      "shape_scale": "corner-none 0 / extra-small 4 / small 8 / medium 12 / large 16 / extra-large 28",
+      "surface_roles": "surface #FEF7FF · container-lowest #FFFFFF · on-surface #1D1B20 · outline #79747E"
+    },
+    "components": {
+      "button": "Filled：主色 #6750A4 实底 + on-primary 白字，pill 圆角；Outlined：1px #79747E 描边",
+      "card": "surface-container-low 底 + elevation level1 + 12px 圆角",
+      "text_field": "Filled 输入框，底部 1px #79747E 描边，聚焦变 2px 主色",
+      "nav": "Navigation bar 80dp，选中项用 secondary container #E8DEF8 填充",
+      "dialog": "28px 圆角，surface-container-high 底，不用重阴影"
+    },
+    "performance_notes": "状态层用半透明覆盖而不是改背景色，避免整块重绘；只保留 elevation level1，不用 backdrop-filter 与大范围模糊。",
+    "notes": "",
+    "related_effects": [],
+    "confidence": 0.6,
+    "created_at": "2026-10-28",
+    "updated_at": "2026-10-28"
+  },
+  {
+    "id": "github-primer-light",
+    "name": "GitHub Primer（Light）",
+    "sources": [
+      {
+        "type": "extracted-draft",
+        "url": "https://primer.style/foundations/color",
+        "upstream": "@primer/primitives 10（GitHub 官方分发包，light 主题）",
+        "video": ""
+      }
+    ],
+    "original_prompt": "",
+    "prompt_type": "manual",
+    "frontend_prompt": "设计一套 GitHub Primer 风格的产品界面（浅色）。\n\n底色与层次：页面 #FFFFFF，次级区块 #F6F8FA，正文 #1F2328，次要文字 #59636E，分割线与描边 #D1D9E0，强调色 #0969DA，危险 #CF222E，成功 #1A7F37，注意 #9A6700。\n\n圆角：默认 6px（medium），小控件 3px，头像与胶囊用全圆角。\n\n阴影：只允许一层极轻的 resting 阴影（0 1px 1px rgba(31,35,40,.06), 0 1px 3px rgba(31,35,40,.06)），不要大投影、不要渐变。\n\n字体：系统字体栈 -apple-system, BlinkMacSystemFont, Segoe UI, Noto Sans, Helvetica, Arial；代码用 ui-monospace, SFMono-Regular, Menlo。正文 14px，小字 12px，标题 16/20/24/32。\n\n控件：按钮 32px 高、1px 描边、6px 圆角；主按钮 #0969DA 实底白字；表格与列表用 1px 分割线，行高紧凑；标签用 12px 描边胶囊。\n\n密度：信息密度高但不拥挤，行距 1.4–1.5，层级靠字重与颜色而不是投影。",
+    "suitable_projects": [
+      "docs",
+      "saas-tool",
+      "dashboard",
+      "blog"
+    ],
+    "unsuitable_projects": [
+      "game",
+      "children"
+    ],
+    "project_tags": [
+      "light",
+      "neutral",
+      "systematic",
+      "developer",
+      "data-dense",
+      "clean"
+    ],
+    "palette": {
+      "primary": "#0969DA",
+      "bg": "#FFFFFF",
+      "surface": "#F6F8FA",
+      "text": "#1F2328",
+      "muted": "#59636E",
+      "warning": "#9A6700",
+      "danger": "#CF222E",
+      "success": "#1A7F37"
+    },
+    "palette_source": "official-docs",
+    "identity_colors": [
+      "#0969DA",
+      "#1F2328",
+      "#D1242F",
+      "#1A7F37"
+    ],
+    "typography": {
+      "heading": "-apple-system, BlinkMacSystemFont, Segoe UI, Noto Sans, Helvetica, Arial",
+      "body": "-apple-system, BlinkMacSystemFont, Segoe UI, Noto Sans, Helvetica, Arial",
+      "mono": "ui-monospace, SFMono-Regular, SF Mono, Menlo, Consolas, Liberation Mono, monospace",
+      "scale": "12/14/16/20/32/40（caption → display）"
+    },
+    "tokens": {
+      "radius": "6px（borderRadius-medium）；小控件 3px",
+      "border": "1px solid #D1D9E0",
+      "shadow": "0 1px 1px rgba(31,35,40,0.06), 0 1px 3px rgba(31,35,40,0.06)",
+      "spacing": "4/8/12/16/24/32/40/48（4px 基准）",
+      "font_stack": "系统字体栈，代码用 ui-monospace"
+    },
+    "components": {
+      "button": "32px 高、6px 圆角、1px #D1D9E0 描边；主按钮 #0969DA 实底白字",
+      "card": "白底 + 1px #D1D9E0 + 6px 圆角 + 极轻 resting 阴影",
+      "label": "12px 描边胶囊，圆角全圆",
+      "data_list": "1px 分割线，行高紧凑，hover 用 #F6F8FA",
+      "code_block": "#F6F8FA 底 + 1px 描边 + 等宽字体"
+    },
+    "performance_notes": "只用一层 resting 阴影；列表 hover 只改背景色不改尺寸，避免 layout thrash；代码块长行横向滚动而不是撑破容器。",
+    "notes": "",
+    "related_effects": [],
+    "confidence": 0.6,
+    "created_at": "2026-10-28",
+    "updated_at": "2026-10-28"
+  },
+  {
+    "id": "marathon-like-deepseek-harness-skin",
+    "name": "marathon-like deepseek harness skin",
+    "sources": [
+      {
+        "type": "bilibili-search",
+        "url": "https://github.com/yasneg616/marathon-like-deepseek-harness-skin",
+        "upstream": "YAsneg-雪唯吾 (YAsneg-雪唯吾 (28940996))",
+        "video": "BV1jFpn6VE2G"
+      }
+    ],
+    "original_prompt": "",
+    "prompt_type": "frontend",
+    "frontend_prompt": "整体走酸性工业风：大色块、硬边界、工业排版。夜间配色只有四个角色——酸性绿用于操作和当前状态，蓝色标出交互，石墨黑留给阅读，灰白色撑起正文；四块遮罩也直接取这四种颜色。字标用矩形切割和断口；GRID 字体放在开屏、HARNESS 字样和大号数字上，SIGNAL 字体放在编号与辅助信息里；中文正文保留原来的字体和字号。按钮收方，反馈落在四个角上：悬停时 3px 厚角收拢，按下时从中心填满再外扩一圈轮廓。输入框恢复矩形边框、切角、信号灯与聚焦反馈，聚焦时边线接上、厚角落位、右上角小灯亮起。右上角最小化、最大化/还原、关闭按竖向排列。侧栏 113px，两列色条错位排列，每个工作区保留自己的编号和识别色，悬停或键盘聚焦时会话卡片从旁边展开；黑夜黑底白字，白天白底深字。侧栏收起后 001、002、003 留在窄栏里。切换动效：遮罩先盖住旧画面，停一小拍，再沿原路退回；侧栏走水平方向，页面、菜单和弹窗走竖直方向。状态变化用四个小方块接力亮一下，同一状态不反复播放。动效分完整/克制/停止三档，并跟随系统减少动态效果。",
+    "suitable_projects": [
+      "saas-tool",
+      "dashboard",
+      "ai-product",
+      "docs"
+    ],
+    "unsuitable_projects": [
+      "children",
+      "game",
+      "ecommerce"
+    ],
+    "project_tags": [
+      "industrial",
+      "high-contrast",
+      "bold-type",
+      "square",
+      "technical",
+      "light",
+      "tonal",
+      "enterprise",
+      "developer"
+    ],
+    "palette": {
+      "primary": "#2D6FDC",
+      "bg": "#FAFCFF",
+      "surface": "#FCFDFF",
+      "text": "#0E1217",
+      "muted": "#414853",
+      "danger": "#C92F33",
+      "success": "#33854A"
+    },
+    "palette_source": "direction-mapped",
+    "identity_colors": [],
+    "typography": {
+      "heading": "GRID（用于开屏、HARNESS 字样和大号数字）",
+      "body": "中文正文保留原来的字体和字号；SIGNAL 用于编号与辅助信息",
+      "scale": "大号数字与字标形成强对比，正文保持原字号"
+    },
+    "tokens": {
+      "radius": "按钮收方，输入框为矩形边框加切角",
+      "border": "硬边界；按钮悬停时 3px 厚角收拢；今日方块用细边框标出",
+      "shadow": "无常规投影，用残影、重影和色块遮罩代替",
+      "spacing": "侧栏 113px；经典侧栏四按钮为紧凑 2×2 田字排列；token 活动图为 18 列 × 7 行"
+    },
+    "components": {
+      "button": "收方，悬停时四角 3px 厚角收拢，按下从中心填满再外扩一圈轮廓；经典侧栏四按钮为 2×2 紧凑排列，新会话保持高亮",
+      "input": "矩形边框加切角，聚焦时边线接上、厚角落位、右上角小灯亮起，正文和光标留在原处",
+      "sidebar": "113px，两列色条错位排列，每工作区带编号与识别色，悬停或键盘聚焦展开会话卡片；收起后保留数字选择",
+      "token_activity": "18 列 × 7 行活动图，一格一天显示最近 18 周，今日细边框标出，空白日期灰色，超过 100 万/1000 万/5000 万界限换色",
+      "menu": "模型菜单与调色盘弹窗打开时盖住再揭开，关闭原路收回，转场后撤掉临时图层；MORE 菜单用实色背景"
+    },
+    "performance_notes": "动效有完整/克制/停止三档并跟随系统减少动态效果，停止时保留静态 Max 标识与静态状态标记；转场做完即撤掉临时图层；字体与 SVG 内置，皮肤资源可离线加载。",
+    "notes": "palette 由色彩方向映射生成（neutral/vivid/high），色值为算法产出，建议在调色器里复核对比度。",
+    "related_effects": [
+      "effect-a12211",
+      "effect-c14a11",
+      "effect-916516",
+      "effect-93370b",
+      "effect-12f041",
+      "high-max-4e96",
+      "effect-41db6b"
+    ],
+    "confidence": 0.6,
+    "created_at": "2026-10-28",
+    "updated_at": "2026-10-28"
+  },
+  {
+    "id": "pending-ea17ba2f",
+    "name": "终末地风格",
+    "sources": [
+      {
+        "type": "bilibili-search",
+        "url": "https://github.com/hhikr/endfield-ui-skill",
+        "upstream": "hhikr (hhikr (0))",
+        "video": "BV1jwnM6iEsH"
+      }
+    ],
+    "original_prompt": "",
+    "prompt_type": "frontend",
+    "frontend_prompt": "浅色底配黑字，只用一种亮色作为强调色（默认黄色）。可点击的按钮切掉一个角。标题上方放一行拉宽的英文小字，下方是粗体中文。列表每一行都带编号。背景只放淡淡的斜线或等高线纹理。动画短而干脆，入场时间轴全程不超过 1 秒。强调色、纸色、切角大小、底纹和密度可以按产品调整，但编号、切角、宽体字段、细线这些固定规则不变。",
+    "suitable_projects": [
+      "dashboard",
+      "marketing",
+      "saas-tool",
+      "docs",
+      "portfolio"
+    ],
+    "unsuitable_projects": [
+      "children",
+      "game",
+      "ecommerce"
+    ],
+    "project_tags": [
+      "industrial",
+      "light",
+      "high-contrast",
+      "technical",
+      "systematic",
+      "zero-radius",
+      "宽字距大写标签",
+      "企业科技官网",
+      "明暗反转分段"
+    ],
+    "palette": {
+      "primary": "#607598",
+      "bg": "#FAFCFF",
+      "surface": "#FCFDFF",
+      "text": "#0E1217",
+      "muted": "#414853",
+      "danger": "#C92F33",
+      "success": "#33854A"
+    },
+    "palette_source": "direction-mapped",
+    "identity_colors": [],
+    "typography": {
+      "heading": "标题上方为拉宽的英文小字，下方为粗体中文",
+      "body": "正文使用细体无衬线字体",
+      "scale": "标题与正文层级分明，列表行带编号"
+    },
+    "tokens": {
+      "radius": "按钮切掉一个角，其余部件以直角为主",
+      "border": "细线分隔",
+      "shadow": "none",
+      "spacing": "疏密可调，分紧凑、标准、宽松三档"
+    },
+    "components": {
+      "button": "可点击按钮切掉一个角，悬停时黄色擦入、亮边扫过，按下有反馈"
+    },
+    "performance_notes": "所有动效在系统开启减少动态效果时直接跳到结束状态；GIF 帧率较低，曲线手感以浏览器实际运行为准。",
+    "notes": "palette 由色彩方向映射生成（neutral/muted/high），色值为算法产出，建议在调色器里复核对比度。",
+    "related_effects": [
+      "effect-f83a55",
+      "effect-034a91",
+      "effect-8b5752",
+      "effect-8b86c7",
+      "effect-b30e3f",
+      "effect-eda13c",
+      "effect-fac157",
+      "effect-016579",
+      "effect-a89161",
+      "effect-7c53e6",
+      "effect-09b612",
+      "effect-94137c",
+      "effect-75c616",
+      "effect-ffc043",
+      "effect-54f729",
+      "effect-2d33b0",
+      "effect-f60c62",
+      "effect-605a5a",
+      "effect-21a589",
+      "effect-1820c1",
+      "effect-8eb53a",
+      "effect-3cc910",
+      "effect-9b5ab6"
+    ],
+    "confidence": 0.6,
+    "created_at": "2026-10-28",
+    "updated_at": "2026-10-28"
+  }
+]

@@ -1,0 +1,395 @@
+[
+  {
+    "id": "effect-1",
+    "name": "横向条纹遮罩扫描加载",
+    "tech_stack": [],
+    "description": "在灰度城市照片上叠加横向条纹遮罩，做出扫描加载的视觉效果，用于首页首屏。",
+    "code_snippet": "",
+    "performance_notes": "",
+    "related_styles": [
+      "pending-83e763fe"
+    ]
+  },
+  {
+    "id": "shader",
+    "name": "互动 shader 卡片",
+    "tech_stack": [
+      "shader"
+    ],
+    "description": "以 shader 渲染作为卡片的核心视觉，并支持用户交互，用于活动邀请、会员中心、个人网站等场景。",
+    "code_snippet": "",
+    "performance_notes": "",
+    "related_styles": [
+      "superopc-shader"
+    ]
+  },
+  {
+    "id": "webgl-3d",
+    "name": "WebGL 沉浸式 3D 展厅",
+    "tech_stack": [
+      "WebGL"
+    ],
+    "description": "用 WebGL 搭建混凝土展厅式的 3D 场景，项目卡片作为悬浮实体装置陈列，品牌案例置于舞台中央，形成可漫游的布景仓库。",
+    "code_snippet": "",
+    "performance_notes": "",
+    "related_styles": [
+      "webgl"
+    ]
+  },
+  {
+    "id": "effect-2",
+    "name": "镜头推进与滚动视差",
+    "tech_stack": [],
+    "description": "滚动时驱动柔和的镜头推进与光影反射，并叠加滚动视差，让卡片随镜头滑动切换，营造电影级动效与线下观展感。",
+    "code_snippet": "",
+    "performance_notes": "",
+    "related_styles": [
+      "webgl"
+    ]
+  },
+  {
+    "id": "effect-1-2",
+    "name": "字形节点动画",
+    "tech_stack": [],
+    "description": "通过动态呈现字形路径与锚点，让字体结构被“看见”，实现轻盈流畅的节奏感。",
+    "code_snippet": "",
+    "performance_notes": "",
+    "related_styles": [
+      "instagram"
+    ]
+  },
+  {
+    "id": "effect-a12211",
+    "name": "往返遮罩转场",
+    "tech_stack": [],
+    "description": "遮罩先盖住旧画面，停一小拍，再沿原路退回；侧栏走水平方向，页面、菜单和弹窗走竖直方向，整页切换时旧页面留到色板完全覆盖再露出新页面。",
+    "code_snippet": "",
+    "performance_notes": "转场做完就撤掉临时图层",
+    "related_styles": [
+      "marathon-like-deepseek-harness-skin"
+    ]
+  },
+  {
+    "id": "effect-c14a11",
+    "name": "开屏色板铺展",
+    "tech_stack": [],
+    "description": "开屏时色板从下方铺上来，横线走完，整块向上退去。",
+    "code_snippet": "",
+    "performance_notes": "",
+    "related_styles": [
+      "marathon-like-deepseek-harness-skin"
+    ]
+  },
+  {
+    "id": "effect-916516",
+    "name": "按钮厚角与中心填充反馈",
+    "tech_stack": [],
+    "description": "悬停时四角 3px 厚角收拢，按下时从中心填满，再外扩一圈轮廓。",
+    "code_snippet": "",
+    "performance_notes": "",
+    "related_styles": [
+      "marathon-like-deepseek-harness-skin"
+    ]
+  },
+  {
+    "id": "effect-93370b",
+    "name": "工作区编号扫描校准",
+    "tech_stack": [],
+    "description": "大号数字切换时做一次扫描校准，名称直接更新，数字动起来而旁边文字保持安静。",
+    "code_snippet": "",
+    "performance_notes": "",
+    "related_styles": [
+      "marathon-like-deepseek-harness-skin"
+    ]
+  },
+  {
+    "id": "effect-12f041",
+    "name": "状态四方块信号",
+    "tech_stack": [],
+    "description": "状态变化用四个小方块接力亮一下，同一状态不会反复播放。",
+    "code_snippet": "",
+    "performance_notes": "",
+    "related_styles": [
+      "marathon-like-deepseek-harness-skin"
+    ]
+  },
+  {
+    "id": "high-max-4e96",
+    "name": "High→Max 蓄力动效",
+    "tech_stack": [],
+    "description": "从 High 往 Max 推时震动和残影逐渐变强，到 Max 后持续，拖回 High 收住；三种随机选型：同频震颤（滑块与轨道发紧、短距离双层残影）、残像追赶（残影拉长、速度线展开）、错帧暴走（轨道分片错位、重影撕开边缘），幅度随位置增加。",
+    "code_snippet": "",
+    "performance_notes": "动效分完整/克制/停止三档，停止时保留静态 Max 标识",
+    "related_styles": [
+      "marathon-like-deepseek-harness-skin"
+    ]
+  },
+  {
+    "id": "effect-41db6b",
+    "name": "工作区色条状态动画",
+    "tech_stack": [],
+    "description": "色条跟随原生会话状态循环提示：工作中是流动斜纹加扫描线，等待确认是黑框慢闪，完成未查看时扫过一道亮光并显示 ✓。",
+    "code_snippet": "",
+    "performance_notes": "动效设为停止时只保留静态标记",
+    "related_styles": [
+      "marathon-like-deepseek-harness-skin"
+    ]
+  },
+  {
+    "id": "effect-f83a55",
+    "name": "三色条扫过",
+    "tech_stack": [],
+    "description": "页面首次访问时三色条横向扫过，时长 600 毫秒，使用 ease 曲线。",
+    "code_snippet": "",
+    "performance_notes": "",
+    "related_styles": [
+      "pending-ea17ba2f"
+    ]
+  },
+  {
+    "id": "effect-034a91",
+    "name": "字标推入",
+    "tech_stack": [],
+    "description": "展示页字标推入，时长 620 毫秒，第二行晚 140 毫秒，使用 mech 曲线。",
+    "code_snippet": "",
+    "performance_notes": "",
+    "related_styles": [
+      "pending-ea17ba2f"
+    ]
+  },
+  {
+    "id": "effect-8b5752",
+    "name": "马克笔划过",
+    "tech_stack": [],
+    "description": "展示页马克笔划过效果，晚 420 毫秒开始，持续 420 毫秒，使用 mech 曲线。",
+    "code_snippet": "",
+    "performance_notes": "",
+    "related_styles": [
+      "pending-ea17ba2f"
+    ]
+  },
+  {
+    "id": "effect-8b86c7",
+    "name": "乱码后落定",
+    "tech_stack": [],
+    "description": "打开页面时文字先显示乱码再落定为正确内容，时长 600 毫秒，每个元素错开不超过 40 毫秒，线性曲线。",
+    "code_snippet": "",
+    "performance_notes": "",
+    "related_styles": [
+      "pending-ea17ba2f"
+    ]
+  },
+  {
+    "id": "effect-b30e3f",
+    "name": "通电",
+    "tech_stack": [],
+    "description": "打开控制台时看板逐行通电亮起，时长 520 毫秒，每行晚 100 毫秒，使用 mech 曲线。",
+    "code_snippet": "",
+    "performance_notes": "",
+    "related_styles": [
+      "pending-ea17ba2f"
+    ]
+  },
+  {
+    "id": "effect-eda13c",
+    "name": "逐行亮起",
+    "tech_stack": [],
+    "description": "切换列表内容时列表逐行亮起，时长 320 毫秒，每行晚 38 毫秒，使用 snap 曲线。",
+    "code_snippet": "",
+    "performance_notes": "",
+    "related_styles": [
+      "pending-ea17ba2f"
+    ]
+  },
+  {
+    "id": "effect-fac157",
+    "name": "圆盘组装",
+    "tech_stack": [],
+    "description": "打开控制台时圆盘分段组装，时长 360 毫秒，每段晚 45 毫秒，使用 snap 曲线。",
+    "code_snippet": "",
+    "performance_notes": "",
+    "related_styles": [
+      "pending-ea17ba2f"
+    ]
+  },
+  {
+    "id": "effect-016579",
+    "name": "按钮黄色擦入与按下",
+    "tech_stack": [],
+    "description": "按钮悬停或聚焦时黄色擦入、亮边扫过，时长 280 毫秒，使用 mech 曲线；按下反馈 100 毫秒。",
+    "code_snippet": "",
+    "performance_notes": "",
+    "related_styles": [
+      "pending-ea17ba2f"
+    ]
+  },
+  {
+    "id": "effect-a89161",
+    "name": "列表行色条落下并右移",
+    "tech_stack": [],
+    "description": "列表行悬停或按下时色条落下，时长 200 毫秒，整行右移 250 毫秒，使用 snap 曲线。",
+    "code_snippet": "",
+    "performance_notes": "",
+    "related_styles": [
+      "pending-ea17ba2f"
+    ]
+  },
+  {
+    "id": "effect-7c53e6",
+    "name": "页签伸开",
+    "tech_stack": [],
+    "description": "悬停看板页签时页签伸开，时长 400 毫秒，使用 mech 曲线。",
+    "code_snippet": "",
+    "performance_notes": "",
+    "related_styles": [
+      "pending-ea17ba2f"
+    ]
+  },
+  {
+    "id": "effect-09b612",
+    "name": "墨色灌满",
+    "tech_stack": [],
+    "description": "悬停空心大编号时墨色灌满，数字同时乱码落定，时长 450 毫秒，使用 mech 曲线。",
+    "code_snippet": "",
+    "performance_notes": "",
+    "related_styles": [
+      "pending-ea17ba2f"
+    ]
+  },
+  {
+    "id": "effect-94137c",
+    "name": "保存处理中到完成",
+    "tech_stack": [],
+    "description": "保存时进入 aria-busy 处理中状态，完成后擦过一次，时长 600 毫秒，使用 mech 曲线。",
+    "code_snippet": "",
+    "performance_notes": "",
+    "related_styles": [
+      "pending-ea17ba2f"
+    ]
+  },
+  {
+    "id": "effect-75c616",
+    "name": "分段进度",
+    "tech_stack": [],
+    "description": "进度按格跳动而非平滑过渡，未知进度时循环，完成即停。",
+    "code_snippet": "",
+    "performance_notes": "",
+    "related_styles": [
+      "pending-ea17ba2f"
+    ]
+  },
+  {
+    "id": "effect-ffc043",
+    "name": "圆盘锁定与黄底灌满",
+    "tech_stack": [],
+    "description": "悬停圆盘某段时括住该段、光束连到中心、读数换成该段，时长 300 毫秒，使用 mech 曲线；悬停看板大数字时黄底灌满，时长 220 毫秒，使用 mech 曲线。",
+    "code_snippet": "",
+    "performance_notes": "",
+    "related_styles": [
+      "pending-ea17ba2f"
+    ]
+  },
+  {
+    "id": "effect-54f729",
+    "name": "提示擦入",
+    "tech_stack": [],
+    "description": "出错或需要注意时提示擦入，时长 280 毫秒，使用 mech 曲线，不抖动。",
+    "code_snippet": "",
+    "performance_notes": "",
+    "related_styles": [
+      "pending-ea17ba2f"
+    ]
+  },
+  {
+    "id": "effect-2d33b0",
+    "name": "删除一行",
+    "tech_stack": [],
+    "description": "删除一行时向右擦掉，时长 200 毫秒，使用 mech 曲线；下面的行上移补位，时长 200 毫秒，使用 snap 曲线。",
+    "code_snippet": "",
+    "performance_notes": "",
+    "related_styles": [
+      "pending-ea17ba2f"
+    ]
+  },
+  {
+    "id": "effect-f60c62",
+    "name": "提示条",
+    "tech_stack": [],
+    "description": "提示条从左擦入，时长 280 毫秒，停留 2 秒后向右擦掉，时长 160 毫秒，使用 mech 曲线。",
+    "code_snippet": "",
+    "performance_notes": "",
+    "related_styles": [
+      "pending-ea17ba2f"
+    ]
+  },
+  {
+    "id": "effect-605a5a",
+    "name": "底部面板",
+    "tech_stack": [],
+    "description": "底部面板推入，时长 360 毫秒，退出 240 毫秒，遮罩淡入 200 毫秒，使用 mech 曲线，不弹跳。",
+    "code_snippet": "",
+    "performance_notes": "",
+    "related_styles": [
+      "pending-ea17ba2f"
+    ]
+  },
+  {
+    "id": "effect-21a589",
+    "name": "对话框",
+    "tech_stack": [],
+    "description": "对话框通电打开，时长 280 毫秒，关上 180 毫秒，使用 mech 曲线。",
+    "code_snippet": "",
+    "performance_notes": "",
+    "related_styles": [
+      "pending-ea17ba2f"
+    ]
+  },
+  {
+    "id": "effect-1820c1",
+    "name": "深浅揭幕",
+    "tech_stack": [],
+    "description": "从按钮处扩散一个圆揭开新主题，实现深浅色切换。",
+    "code_snippet": "",
+    "performance_notes": "",
+    "related_styles": [
+      "pending-ea17ba2f"
+    ]
+  },
+  {
+    "id": "effect-8eb53a",
+    "name": "换页快门",
+    "tech_stack": [
+      "@view-transition"
+    ],
+    "description": "同源跳转时使用 @view-transition 实现快门式换页过渡。",
+    "code_snippet": "",
+    "performance_notes": "",
+    "related_styles": [
+      "pending-ea17ba2f"
+    ]
+  },
+  {
+    "id": "effect-3cc910",
+    "name": "指针视差",
+    "tech_stack": [],
+    "description": "展示页中随指针移动产生视差效果。",
+    "code_snippet": "",
+    "performance_notes": "",
+    "related_styles": [
+      "pending-ea17ba2f"
+    ]
+  },
+  {
+    "id": "effect-9b5ab6",
+    "name": "背景等高线",
+    "tech_stack": [
+      "SVG"
+    ],
+    "description": "背景使用 SVG 等高线纹理，另有生成脚本，可替换为网格或斜线纹。",
+    "code_snippet": "",
+    "performance_notes": "",
+    "related_styles": [
+      "pending-ea17ba2f"
+    ]
+  }
+]

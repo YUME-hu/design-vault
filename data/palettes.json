@@ -1,0 +1,325 @@
+[
+  {
+    "id": "washed-soft-gray",
+    "name": "长期洗涤 · 柔和高级灰",
+    "category": "washed",
+    "colors": [
+      "#9C9CA4",
+      "#778590",
+      "#77839E",
+      "#3F4D67"
+    ]
+  },
+  {
+    "id": "washed-morandi-green",
+    "name": "长期洗涤 · 莫兰迪绿",
+    "category": "washed",
+    "colors": [
+      "#D8DCD6",
+      "#90A89F",
+      "#4A5752",
+      "#2B312D"
+    ]
+  },
+  {
+    "id": "washed-klein-blue",
+    "name": "长期洗涤 · 克莱因蓝",
+    "category": "washed",
+    "colors": [
+      "#002FA7",
+      "#1A1A1A",
+      "#F5F5F5"
+    ]
+  },
+  {
+    "id": "swiss-international",
+    "name": "瑞士国际 · Swiss",
+    "category": "classic",
+    "colors": [
+      "#FF0000",
+      "#FFFFFF",
+      "#000000",
+      "#4A4A4A",
+      "#E5E5E5"
+    ]
+  },
+  {
+    "id": "brutalist-mono",
+    "name": "粗野黑白 · Brutalist",
+    "category": "classic",
+    "colors": [
+      "#FFFFFF",
+      "#111111",
+      "#FF3B00",
+      "#DADADA"
+    ]
+  },
+  {
+    "id": "bauhaus-primary",
+    "name": "包豪斯 · Bauhaus",
+    "category": "classic",
+    "colors": [
+      "#E63946",
+      "#1D3557",
+      "#F1FAEE",
+      "#FFB703"
+    ]
+  },
+  {
+    "id": "morandi-quiet",
+    "name": "莫兰迪 · 静物",
+    "category": "classic",
+    "colors": [
+      "#B8B2A7",
+      "#7F8C8D",
+      "#A3B1A1",
+      "#5C5346"
+    ]
+  },
+  {
+    "id": "cream-warmth",
+    "name": "奶油暖阳 · Cream",
+    "category": "classic",
+    "colors": [
+      "#FDF6EC",
+      "#E8DCCB",
+      "#C8A97E",
+      "#3D3A34"
+    ]
+  },
+  {
+    "id": "neon-night",
+    "name": "深夜霓虹 · Neon",
+    "category": "modern",
+    "colors": [
+      "#0B0F1A",
+      "#1B2233",
+      "#4D6BFE",
+      "#00E5FF"
+    ]
+  },
+  {
+    "id": "paper-editorial",
+    "name": "纸质杂志 · Paper",
+    "category": "classic",
+    "colors": [
+      "#FBFBF9",
+      "#E7E3DA",
+      "#B9B2A4",
+      "#1F1D1A"
+    ]
+  },
+  {
+    "id": "silicon-valley-tech",
+    "name": "硅谷极简科技（Silicon Valley Tech）",
+    "category": "modern",
+    "colors": [
+      "#F7F8FA",
+      "#D5DBE3",
+      "#12161C",
+      "#0A84FF"
+    ]
+  },
+  {
+    "id": "nagai-surf-beach",
+    "name": "永井博·冲浪海滩",
+    "category": "nagai",
+    "colors": [
+      "#0267AD",
+      "#F1D1DA",
+      "#2AB4E1"
+    ]
+  },
+  {
+    "id": "nagai-palm-villa",
+    "name": "永井博·棕榈别墅",
+    "category": "nagai",
+    "colors": [
+      "#005A3C",
+      "#F6AEA7",
+      "#00599A"
+    ]
+  },
+  {
+    "id": "nagai-pink-pool",
+    "name": "永井博·粉色泳池",
+    "category": "nagai",
+    "colors": [
+      "#F68B7E",
+      "#1F4D34",
+      "#A7969C"
+    ]
+  },
+  {
+    "id": "nagai-golden-road",
+    "name": "永井博·金色公路",
+    "category": "nagai",
+    "colors": [
+      "#FCDE63",
+      "#806048",
+      "#1E4E31"
+    ]
+  },
+  {
+    "id": "pop-flat-illustration",
+    "name": "波普扁平插画",
+    "category": "pop",
+    "colors": [
+      "#001340",
+      "#006AD0",
+      "#F96700",
+      "#FECC51",
+      "#F92301"
+    ]
+  },
+  {
+    "id": "jewel-poseidon",
+    "name": "珠宝·波塞冬",
+    "category": "jewel",
+    "colors": [
+      "#1F2228",
+      "#374EA3",
+      "#F3F3F3"
+    ]
+  },
+  {
+    "id": "jewel-spectrolite",
+    "name": "珠宝·光谱石",
+    "category": "jewel",
+    "colors": [
+      "#838FDA",
+      "#59A2E6",
+      "#DDDDDF"
+    ]
+  },
+  {
+    "id": "jewel-rainbow-bridge",
+    "name": "珠宝·彩虹桥",
+    "category": "jewel",
+    "colors": [
+      "#70CEC6",
+      "#E9B762",
+      "#F3F3F3"
+    ]
+  },
+  {
+    "id": "jewel-star-movement",
+    "name": "珠宝·星动项链",
+    "category": "jewel",
+    "colors": [
+      "#D48851",
+      "#FFC5A2",
+      "#F3F3F3"
+    ]
+  },
+  {
+    "id": "jewel-dragon-slayer",
+    "name": "珠宝·屠龙手链",
+    "category": "jewel",
+    "colors": [
+      "#515930",
+      "#6A1300",
+      "#EAE8E9"
+    ]
+  },
+  {
+    "id": "jewel-macaron",
+    "name": "珠宝·珍宝珠",
+    "category": "jewel",
+    "colors": [
+      "#ECD1BB",
+      "#CADAE8",
+      "#F5C6CE"
+    ]
+  },
+  {
+    "id": "jewel-horus",
+    "name": "珠宝·荷鲁斯",
+    "category": "jewel",
+    "colors": [
+      "#917247",
+      "#CCB192",
+      "#F3F3F3"
+    ]
+  },
+  {
+    "id": "jewel-atlantis",
+    "name": "珠宝·亚特兰蒂斯",
+    "category": "jewel",
+    "colors": [
+      "#C0ACBA",
+      "#8F98C6",
+      "#F3F3F3"
+    ]
+  },
+  {
+    "id": "brand-coca-cola",
+    "name": "品牌·可口可乐",
+    "category": "brand",
+    "colors": [
+      "#E50012",
+      "#FFFFFF",
+      "#111111"
+    ]
+  },
+  {
+    "id": "brand-mcdonalds",
+    "name": "品牌·麦当劳",
+    "category": "brand",
+    "colors": [
+      "#F5B500",
+      "#C62721",
+      "#FFFFFF"
+    ]
+  },
+  {
+    "id": "brand-starbucks",
+    "name": "品牌·星巴克",
+    "category": "brand",
+    "colors": [
+      "#007042",
+      "#F3F3F3",
+      "#111111"
+    ]
+  },
+  {
+    "id": "brand-facebook",
+    "name": "品牌·Facebook",
+    "category": "brand",
+    "colors": [
+      "#39579F",
+      "#F5F5F5",
+      "#1C1E21"
+    ]
+  },
+  {
+    "id": "brand-hermes",
+    "name": "品牌·爱马仕",
+    "category": "brand",
+    "colors": [
+      "#EC6C00",
+      "#FFFFFF",
+      "#333333"
+    ]
+  },
+  {
+    "id": "brand-tiffany",
+    "name": "品牌·蒂芙尼",
+    "category": "brand",
+    "colors": [
+      "#81D8D0",
+      "#FFFFFF",
+      "#1A1A1A"
+    ]
+  },
+  {
+    "id": "brand-nissin",
+    "name": "品牌·统一老坛",
+    "category": "brand",
+    "colors": [
+      "#6B1583",
+      "#F5F5F5",
+      "#FFFFFF"
+    ]
+  }
+]
