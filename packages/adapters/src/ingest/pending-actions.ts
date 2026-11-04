@@ -1,6 +1,6 @@
 import { createHash } from "node:crypto";
 import { readComponentsFile, readDraftFile, readEffectsFile, readStylesFile, writeComponentsFile, writeDraftFile, writeEffectsFile, writeStylesFile } from "../data";
-import { componentSchema, effectSchema, slugSchema, stylesSchema, type ComponentItem, type Effect, type Style, type StyleSource } from "../schema";
+import { componentSchema, effectSchema, slugSchema, stylesSchema, type ComponentItem, type Effect, type PendingItem, type Style, type StyleSource } from "../schema";
 import { readPending, writePending } from "./pending-store";
 import { buildStyleFromPending } from "./pending-to-style";
 
@@ -125,10 +125,45 @@ function mergeSources(current: StyleSource[], incoming: StyleSource[]): StyleSou
   return merged;
 }
 
-/** 合并信源：把当前 pending 的 sources 追加到 duplicate_of 指向的风格，然后删除 pending */
+export type MergeTarget = { id: string; name: string; kind: "style" | "draft" };
+
+/** 解析合并目标：显式 id > duplicate_of > notes 里的「发现相似风格：X」 */
+export function resolveMergeTarget(
+  item: Pick<PendingItem, "duplicate_of" | "notes">,
+  targetId?: string,
+): MergeTarget | null {
+  const styles = readStylesFile();
+  const drafts = readDraftFile();
+
+  const byId = (id: string): MergeTarget | null => {
+    const style = styles.find((entry) => entry.id === id);
+    if (style) return { id: style.id, name: style.name, kind: "style" };
+    const draft = drafts.find((entry) => entry.id === id);
+    if (draft) return { id: draft.id, name: draft.name, kind: "draft" };
+    return null;
+  };
+
+  if (targetId) return byId(targetId);
+  if (item.duplicate_of) {
+    const found = byId(item.duplicate_of);
+    if (found) return found;
+  }
+
+  const match = item.notes.match(/发现相似风格：([^（\n]+)/);
+  const name = match?.[1]?.trim();
+  if (!name) return null;
+  const style = styles.find((entry) => entry.name === name);
+  if (style) return { id: style.id, name: style.name, kind: "style" };
+  const draft = drafts.find((entry) => entry.name === name);
+  if (draft) return { id: draft.id, name: draft.name, kind: "draft" };
+  return null;
+}
+
+/** 合并：sources 去重追加 + notes 追加，然后删除 pending（不动目标原有 confidence / extracted_effects） */
 export function mergePending(
   id: string,
-): { ok: true; targetId: string; added: number } | ActionFailure {
+  targetId?: string,
+): { ok: true; targetId: string; targetName: string; addedSources: number } | ActionFailure {
   const pending = readPending();
   const index = pending.findIndex((item) => item.id === id);
   if (index === -1) {
@@ -136,35 +171,62 @@ export function mergePending(
   }
 
   const item = pending[index];
-  if (!item.duplicate_of) {
-    return { ok: false, status: 400, error: "这条没有 duplicate_of，无法合并信源" };
+  const target = resolveMergeTarget(item, targetId);
+  if (!target) {
+    return {
+      ok: false,
+      status: 422,
+      error: "没有可用的合并目标（duplicate_of 或 notes 都解析不到已入库的风格）",
+    };
   }
 
-  const styleIndex = readStylesFile().findIndex((style) => style.id === item.duplicate_of);
-  const draftIndex = styleIndex === -1 ? readDraftFile().findIndex((style) => style.id === item.duplicate_of) : -1;
-
-  if (styleIndex === -1 && draftIndex === -1) {
-    return { ok: false, status: 404, error: `找不到目标风格 ${item.duplicate_of}` };
-  }
+  const mergedNote = [
+    item.notes?.trim() ? item.notes.trim() : "",
+    `合并自 pending：${item.name} · ${item.sources.map((source) => source.video || source.url).filter(Boolean).join(" / ") || "无链接"}`,
+  ]
+    .filter(Boolean)
+    .join("\n\n");
 
   try {
-    if (styleIndex >= 0) {
+    if (target.kind === "style") {
       const styles = readStylesFile();
-      const merged = mergeSources(styles[styleIndex].sources, item.sources);
+      const indexOfTarget = styles.findIndex((style) => style.id === target.id);
+      const merged = mergeSources(styles[indexOfTarget].sources, item.sources);
       const next = [...styles];
-      next[styleIndex] = { ...styles[styleIndex], sources: merged, updated_at: today() };
+      next[indexOfTarget] = {
+        ...styles[indexOfTarget],
+        sources: merged,
+        notes: [styles[indexOfTarget].notes, mergedNote].filter(Boolean).join("\n\n"),
+        updated_at: today(),
+      };
       writeStylesFile(stylesSchema.parse(next));
       writePending(pending.filter((_, itemIndex) => itemIndex !== index));
-      return { ok: true, targetId: item.duplicate_of, added: merged.length - styles[styleIndex].sources.length };
+      return {
+        ok: true,
+        targetId: target.id,
+        targetName: target.name,
+        addedSources: merged.length - styles[indexOfTarget].sources.length,
+      };
     }
 
     const drafts = readDraftFile();
-    const merged = mergeSources(drafts[draftIndex].sources, item.sources);
+    const indexOfTarget = drafts.findIndex((style) => style.id === target.id);
+    const merged = mergeSources(drafts[indexOfTarget].sources, item.sources);
     const next = [...drafts];
-    next[draftIndex] = { ...drafts[draftIndex], sources: merged, updated_at: today() };
+    next[indexOfTarget] = {
+      ...drafts[indexOfTarget],
+      sources: merged,
+      notes: [drafts[indexOfTarget].notes, mergedNote].filter(Boolean).join("\n\n"),
+      updated_at: today(),
+    };
     writeDraftFile(stylesSchema.parse(next));
     writePending(pending.filter((_, itemIndex) => itemIndex !== index));
-    return { ok: true, targetId: item.duplicate_of, added: merged.length - drafts[draftIndex].sources.length };
+    return {
+      ok: true,
+      targetId: target.id,
+      targetName: target.name,
+      addedSources: merged.length - drafts[indexOfTarget].sources.length,
+    };
   } catch (error) {
     return { ok: false, status: 500, error: `写入失败：${(error as Error).message}` };
   }

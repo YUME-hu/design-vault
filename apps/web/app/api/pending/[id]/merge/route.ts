@@ -3,10 +3,11 @@ import { revalidatePath } from "next/cache";
 import { mergePending } from "@design-vault/adapters/ingest/pending-actions";
 
 /** 合并信源：把当前 pending 的 sources 追加到 duplicate_of 指向的风格，然后删除 pending */
-export async function POST(_request: Request, context: { params: Promise<{ id: string }> }) {
+export async function POST(request: Request, context: { params: Promise<{ id: string }> }) {
   const { id } = await context.params;
+  const body = (await request.json().catch(() => null)) as { targetId?: string } | null;
 
-  const result = mergePending(id);
+  const result = mergePending(id, body?.targetId);
   if (!result.ok) {
     return NextResponse.json({ ok: false, error: result.error }, { status: result.status });
   }
@@ -18,6 +19,7 @@ export async function POST(_request: Request, context: { params: Promise<{ id: s
   return NextResponse.json({
     ok: true,
     targetId: result.targetId,
-    added: result.added,
+    targetName: result.targetName,
+    addedSources: result.addedSources,
   });
 }

@@ -10,9 +10,10 @@ import { useState } from "react";
  *   去调色（带着预填数据进调色器，保存时入库并清 pending）
  *   丢弃（直接从 pending 删除）
  */
-export function PendingActions({ id, duplicateOf, itemType }: { id: string; duplicateOf?: string | null; itemType?: string }) {
+export function PendingActions({ id, mergeTarget, itemType }: { id: string; mergeTarget?: { id: string; name: string } | null; itemType?: string }) {
   const router = useRouter();
   const [busy, setBusy] = useState<"approve" | "discard" | "merge" | null>(null);
+  const [confirmMerge, setConfirmMerge] = useState(false);
   const [error, setError] = useState("");
   const [approvedId, setApprovedId] = useState("");
 
@@ -66,7 +67,11 @@ export function PendingActions({ id, duplicateOf, itemType }: { id: string; dupl
     setBusy("merge");
     setError("");
     try {
-      const response = await fetch(`/api/pending/${id}/merge`, { method: "POST" });
+      const response = await fetch(`/api/pending/${id}/merge`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ targetId: mergeTarget?.id }),
+      });
       const data = (await response.json()) as { ok?: boolean; error?: string; targetId?: string };
       if (!response.ok || !data.ok) {
         setError(data.error ?? `合并失败（${response.status}）`);
@@ -118,16 +123,38 @@ export function PendingActions({ id, duplicateOf, itemType }: { id: string; dupl
         >
           去调色 →
         </Link>
-        {duplicateOf && (
-          <button
-            type="button"
-            data-testid="merge-pending"
-            onClick={merge}
-            disabled={busy !== null}
-            className="mono h-9 border border-charcoal bg-white px-3 text-[9px] uppercase tracking-[0.16em] text-charcoal hover:bg-charcoal hover:text-paper disabled:opacity-40"
-          >
-            {busy === "merge" ? "合并中…" : `合并信源 → ${duplicateOf}`}
-          </button>
+        {mergeTarget && (
+          confirmMerge ? (
+            <span className="mono flex flex-wrap items-center gap-2 border border-charcoal bg-paper px-2 py-1 text-[8px] text-charcoal">
+              合并到「{mergeTarget.name}」？
+              <button
+                type="button"
+                data-testid="merge-confirm"
+                onClick={merge}
+                disabled={busy !== null}
+                className="border border-charcoal bg-charcoal px-2 py-[2px] uppercase tracking-[0.12em] text-paper disabled:opacity-40"
+              >
+                {busy === "merge" ? "合并中…" : "确认合并"}
+              </button>
+              <button
+                type="button"
+                onClick={() => setConfirmMerge(false)}
+                className="underline underline-offset-2"
+              >
+                取消
+              </button>
+            </span>
+          ) : (
+            <button
+              type="button"
+              data-testid="merge-pending"
+              onClick={() => setConfirmMerge(true)}
+              disabled={busy !== null}
+              className="mono h-9 border border-charcoal bg-white px-3 text-[9px] uppercase tracking-[0.16em] text-charcoal hover:bg-charcoal hover:text-paper disabled:opacity-40"
+            >
+              合并到：{mergeTarget.name}
+            </button>
+          )
         )}
         <button
           type="button"

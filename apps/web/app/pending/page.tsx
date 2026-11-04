@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { PendingActions } from "@/components/pending/pending-actions";
 import { readPending } from "@design-vault/adapters/ingest/pending-store";
+import { resolveMergeTarget } from "@design-vault/adapters/ingest/pending-actions";
 import { cn } from "@design-vault/adapters/utils";
 
 export const metadata: Metadata = {
@@ -280,7 +281,7 @@ export default function PendingPage() {
                         </div>
                       ) : null}
 
-                      <PendingActions id={item.id} duplicateOf={item.duplicate_of} itemType={item.item_type} />
+                      <PendingActions id={item.id} mergeTarget={resolveMergeTarget(item)} itemType={item.item_type} />
                     </div>
                   </details>
                 </li>
