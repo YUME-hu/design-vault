@@ -42,3 +42,6 @@ yarn-error.log*
 pnpm-debug.log*
 .idea/
 .vscode/
+
+# 加密的 B 站登录凭证（永不入仓）
+data/secrets/
