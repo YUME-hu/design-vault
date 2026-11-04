@@ -9310,6 +9310,32 @@ select.dvp-field{
 		/** The full page selected by the navigation entry. */
 		function Page({ t }) {
 			const [vibeId, setVibeId] = (0, react.useState)(VIBES[0]?.id ?? "");
+			const [vaultStatus, setVaultStatus] = (0, react.useState)("loading");
+			const [vaultStyles, setVaultStyles] = (0, react.useState)([]);
+			const [vaultStyleId, setVaultStyleId] = (0, react.useState)("");
+			const [vaultError, setVaultError] = (0, react.useState)("");
+			(0, react.useEffect)(() => {
+				const base = window.localStorage.getItem("dvp.webBase") || "http://localhost:3000";
+				const controller = new AbortController();
+				const timer = setTimeout(() => controller.abort(), 3500);
+				fetch(`${base}/api/vault/styles-lite`, {
+					signal: controller.signal,
+					cache: "no-store"
+				}).then(async (response) => {
+					if (!response.ok) throw new Error(`HTTP ${response.status}`);
+					const data = await response.json();
+					if (!data.ok || !Array.isArray(data.styles)) throw new Error("响应格式不对");
+					setVaultStyles(data.styles);
+					setVaultStatus("ok");
+				}).catch((error) => {
+					setVaultStatus("fallback");
+					setVaultError(error.message);
+				}).finally(() => clearTimeout(timer));
+				return () => {
+					clearTimeout(timer);
+					controller.abort();
+				};
+			}, []);
 			const [seed, setSeed] = (0, react.useState)(DEFAULT_SEED);
 			const [controls, setControls] = (0, react.useState)(DEFAULT_CONTROLS);
 			const [source, setSource] = (0, react.useState)({ kind: "style" });
@@ -9332,7 +9358,7 @@ select.dvp-field{
 			const activeBank = source.kind === "bank" ? BANK_PALETTES.find((entry) => entry.id === source.id) : void 0;
 			/** Base colours for the source, then the user's chip edits on top. */
 			const palette = (0, react.useMemo)(() => {
-				const stylePalette = paletteFromStyle(vibe?.palette ?? {}, seed);
+				const stylePalette = paletteFromStyle((vaultStyles.find((item) => item.id === vaultStyleId) ?? null)?.palette ?? vibe?.palette ?? {}, seed);
 				if (source.kind === "bank" && activeBank) return {
 					...bankPalette(activeBank, seed),
 					...edits
@@ -9459,6 +9485,35 @@ select.dvp-field{
 					/* @__PURE__ */ (0, react_jsx_runtime.jsxs)("aside", {
 						className: "dvp-rail",
 						children: [
+							/* @__PURE__ */ (0, react_jsx_runtime.jsx)(Section, {
+								title: "Vault 服务",
+								children: vaultStatus === "ok" ? /* @__PURE__ */ (0, react_jsx_runtime.jsxs)(react_jsx_runtime.Fragment, { children: [/* @__PURE__ */ (0, react_jsx_runtime.jsxs)("select", {
+									className: "dvp-field",
+									value: vaultStyleId,
+									onChange: (event) => setVaultStyleId(event.target.value),
+									children: [/* @__PURE__ */ (0, react_jsx_runtime.jsxs)("option", {
+										value: "",
+										children: [
+											"静态快照（",
+											VIBES.length,
+											" 个）"
+										]
+									}), vaultStyles.map((item) => /* @__PURE__ */ (0, react_jsx_runtime.jsx)("option", {
+										value: item.id,
+										children: item.name
+									}, item.id))]
+								}), /* @__PURE__ */ (0, react_jsx_runtime.jsxs)("span", {
+									className: "dvp-label",
+									children: [
+										"已连接 localhost:3000 · ",
+										vaultStyles.length,
+										" 个风格"
+									]
+								})] }) : /* @__PURE__ */ (0, react_jsx_runtime.jsx)("span", {
+									className: "dvp-label",
+									children: vaultStatus === "loading" ? "正在连接 Web 服务…" : "未连接到 Web 服务，当前为静态快照"
+								})
+							}),
 							/* @__PURE__ */ (0, react_jsx_runtime.jsx)(Section, {
 								title: label("panel.vibe", "风格"),
 								children: /* @__PURE__ */ (0, react_jsx_runtime.jsx)(SelectField, {

@@ -361,6 +361,38 @@ type ExportSnapshot = { json: string; signature: string };
 /** The full page selected by the navigation entry. */
 function Page({ t }: { t?: (key: string) => string }) {
   const [vibeId, setVibeId] = useState<string>(VIBES[0]?.id ?? "");
+  const [vaultStatus, setVaultStatus] = useState<"loading" | "ok" | "fallback">("loading");
+  const [vaultStyles, setVaultStyles] = useState<
+    { id: string; name: string; palette: Record<string, string> }[]
+  >([]);
+  const [vaultStyleId, setVaultStyleId] = useState("");
+  const [vaultError, setVaultError] = useState("");
+
+  useEffect(() => {
+    const base = window.localStorage.getItem("dvp.webBase") || "http://localhost:3000";
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), 3500);
+    fetch(`${base}/api/vault/styles-lite`, { signal: controller.signal, cache: "no-store" })
+      .then(async (response) => {
+        if (!response.ok) throw new Error(`HTTP ${response.status}`);
+        const data = (await response.json()) as {
+          ok?: boolean;
+          styles?: { id: string; name: string; palette: Record<string, string> }[];
+        };
+        if (!data.ok || !Array.isArray(data.styles)) throw new Error("响应格式不对");
+        setVaultStyles(data.styles);
+        setVaultStatus("ok");
+      })
+      .catch((error) => {
+        setVaultStatus("fallback");
+        setVaultError((error as Error).message);
+      })
+      .finally(() => clearTimeout(timer));
+    return () => {
+      clearTimeout(timer);
+      controller.abort();
+    };
+  }, []);
   const [seed, setSeed] = useState<string>(DEFAULT_SEED);
   const [controls, setControls] = useState<ShapeControls>(DEFAULT_CONTROLS);
   const [source, setSource] = useState<PaletteSource>({ kind: "style" });
@@ -388,7 +420,8 @@ function Page({ t }: { t?: (key: string) => string }) {
 
   /** Base colours for the source, then the user's chip edits on top. */
   const palette = useMemo<PreviewPalette>(() => {
-    const stylePalette = paletteFromStyle(vibe?.palette ?? {}, seed);
+    const vaultStyle = vaultStyles.find((item) => item.id === vaultStyleId) ?? null;
+    const stylePalette = paletteFromStyle(vaultStyle?.palette ?? vibe?.palette ?? {}, seed);
     if (source.kind === "bank" && activeBank) {
       // Vendored archetypes carry their own roles; nothing is inferred.
       return { ...bankPalette(activeBank, seed), ...edits };
@@ -500,6 +533,32 @@ function Page({ t }: { t?: (key: string) => string }) {
       <style>{PANEL_CSS}</style>
 
       <aside className="dvp-rail">
+        <Section title="Vault 服务">
+          {vaultStatus === "ok" ? (
+            <>
+              <select
+                className="dvp-field"
+                value={vaultStyleId}
+                onChange={(event) => setVaultStyleId(event.target.value)}
+              >
+                <option value="">静态快照（{VIBES.length} 个）</option>
+                {vaultStyles.map((item) => (
+                  <option key={item.id} value={item.id}>
+                    {item.name}
+                  </option>
+                ))}
+              </select>
+              <span className="dvp-label">已连接 localhost:3000 · {vaultStyles.length} 个风格</span>
+            </>
+          ) : (
+            <span className="dvp-label">
+              {vaultStatus === "loading"
+                ? "正在连接 Web 服务…"
+                : "未连接到 Web 服务，当前为静态快照"}
+            </span>
+          )}
+        </Section>
+
         <Section title={label("panel.vibe", "风格")}>
           <SelectField value={vibeId} options={VIBE_OPTIONS} onChange={setVibeId} />
         </Section>
