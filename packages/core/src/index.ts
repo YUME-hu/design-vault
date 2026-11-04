@@ -8,3 +8,4 @@ export * from "./ingest/dedupe";
 export * from "./ingest/types";
 export * from "./ingest/palette-from-direction";
 export * from "./ingest/pending-to-style";
+export * from "./ingest/tags";
