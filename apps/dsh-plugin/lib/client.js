@@ -9314,23 +9314,34 @@ select.dvp-field{
 			const [vaultStyles, setVaultStyles] = (0, react.useState)([]);
 			const [vaultStyleId, setVaultStyleId] = (0, react.useState)("");
 			const [vaultError, setVaultError] = (0, react.useState)("");
+			const [vaultBase, setVaultBase] = (0, react.useState)("http://127.0.0.1:3000");
 			(0, react.useEffect)(() => {
-				const base = window.localStorage.getItem("dvp.webBase") || "http://localhost:3000";
+				const stored = window.localStorage.getItem("dvp.webBase");
+				const candidates = stored ? [stored] : ["http://127.0.0.1:3000", "http://localhost:3000"];
 				const controller = new AbortController();
-				const timer = setTimeout(() => controller.abort(), 3500);
-				fetch(`${base}/api/vault/styles-lite`, {
-					signal: controller.signal,
-					cache: "no-store"
-				}).then(async (response) => {
-					if (!response.ok) throw new Error(`HTTP ${response.status}`);
-					const data = await response.json();
-					if (!data.ok || !Array.isArray(data.styles)) throw new Error("响应格式不对");
-					setVaultStyles(data.styles);
-					setVaultStatus("ok");
-				}).catch((error) => {
+				const timer = setTimeout(() => controller.abort(), 4e3);
+				(async () => {
+					let lastError = "unknown";
+					for (const base of candidates) try {
+						const response = await fetch(`${base}/api/vault/styles-lite`, {
+							signal: controller.signal,
+							cache: "no-store"
+						});
+						if (!response.ok) throw new Error(`HTTP ${response.status}`);
+						const data = await response.json();
+						if (!data.ok || !Array.isArray(data.styles)) throw new Error("响应格式不对");
+						setVaultStyles(data.styles);
+						setVaultBase(base);
+						setVaultStatus("ok");
+						clearTimeout(timer);
+						return;
+					} catch (error) {
+						const err = error;
+						lastError = `${err.name}: ${err.message} (${base})`;
+					}
 					setVaultStatus("fallback");
-					setVaultError(error.message);
-				}).finally(() => clearTimeout(timer));
+					setVaultError(lastError);
+				})();
 				return () => {
 					clearTimeout(timer);
 					controller.abort();
@@ -9505,7 +9516,9 @@ select.dvp-field{
 								}), /* @__PURE__ */ (0, react_jsx_runtime.jsxs)("span", {
 									className: "dvp-label",
 									children: [
-										"已连接 localhost:3000 · ",
+										"已连接 ",
+										vaultBase.replace("http://", ""),
+										" · ",
 										vaultStyles.length,
 										" 个风格"
 									]
