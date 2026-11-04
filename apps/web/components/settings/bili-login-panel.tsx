@@ -136,6 +136,7 @@ export function BiliLoginPanel() {
       </div>
 
       {loggedIn ? (
+        <>
         <div className="mt-3 flex flex-wrap items-center gap-3">
           <p className="mono text-[10px] text-ink-soft">
             UID {status?.uid || "—"} · 过期 {status?.expiresAt ? status.expiresAt.slice(0, 10) : "未知"}
@@ -148,7 +149,30 @@ export function BiliLoginPanel() {
           >
             退出登录
           </button>
+          <button
+            type="button"
+            data-testid="bili-start"
+            onClick={start}
+            className="mono h-9 border border-charcoal px-4 text-[9px] uppercase tracking-[0.16em] text-charcoal hover:bg-charcoal hover:text-paper"
+          >
+            扫码登录（覆盖环境变量）
+          </button>
         </div>
+          {qr && (
+            <div className="mt-3 flex items-center gap-3">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src={qr} alt="B 站登录二维码" width={160} height={160} className="border border-hairline" />
+              <div>
+                <p data-testid="bili-qr-state" className="mono text-[10px] text-charcoal">
+                  {LABELS[state]}
+                </p>
+                <p className="mono mt-1 text-[9px] leading-relaxed text-ink-faded">
+                  扫码成功后会替换环境变量凭证，并加密保存。
+                </p>
+              </div>
+            </div>
+          )}
+        </>
       ) : (
         <div className="mt-3 flex flex-wrap items-start gap-4">
           <button
