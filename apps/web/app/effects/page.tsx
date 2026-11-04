@@ -61,7 +61,7 @@ export default async function EffectsPage({ searchParams }: PageProps) {
         {filtered.map((effect) => (
           <li key={effect.id} data-testid="effect-card" data-effect-id={effect.id} className="border-b border-charcoal p-4 last:border-b-0">
             <div className="flex flex-wrap items-baseline justify-between gap-2">
-              <h2 className="text-[15px] font-bold text-charcoal">{effect.name}</h2>
+              <Link href={`/effects/${effect.id}`} className="text-[15px] font-bold text-charcoal hover:underline">{effect.name}</Link>
               <Link href={`/effects?edit=${effect.id}`} className="mono text-[9px] underline underline-offset-4 hover:text-signal">编辑 →</Link>
             </div>
             <div className="mt-1 flex flex-wrap gap-1">

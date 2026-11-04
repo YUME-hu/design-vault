@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { CopyCode } from "@/components/components/copy-code";
+import { ComponentEditor } from "@/components/components/component-editor";
 import { getComponents, getStyles } from "@design-vault/adapters/data";
 
 export const dynamic = "force-dynamic";
@@ -31,7 +32,10 @@ export default async function ComponentDetailPage({ params }: PageProps) {
       </nav>
 
       <div className="mt-3 border-b border-charcoal pb-4">
-        <p className="label-strong">{component.category} · {component.framework} · CONF {component.confidence}</p>
+        <div className="flex flex-wrap items-start justify-between gap-3">
+          <p className="label-strong">{component.category} · {component.framework} · CONF {component.confidence}</p>
+          <ComponentEditor component={component} />
+        </div>
         <h1 className="mt-2 text-[26px] font-bold leading-tight text-charcoal">{component.name}</h1>
         <p className="mt-2 max-w-[70ch] text-[13px] leading-relaxed text-ink-soft">{component.description}</p>
       </div>
