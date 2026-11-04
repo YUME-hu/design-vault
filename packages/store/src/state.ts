@@ -46,6 +46,20 @@ export const ingestStateSchema = z
         z.object({ status: z.enum(["ok", "failed"]), at: z.string() }).strict(),
       )
       .default({}),
+    /** 收藏夹扫描游标：增量扫描用 pubtime 截止，lastPage 支持断点续扫 */
+    favorites: z
+      .record(
+        z.string(),
+        z
+          .object({
+            title: z.string().default(""),
+            lastScannedAt: z.string().default(""),
+            lastVideoPubtime: z.number().default(0),
+            lastPage: z.number().default(1),
+          })
+          .strict(),
+      )
+      .default({}),
   })
   .strict();
 
