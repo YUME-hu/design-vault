@@ -1,8 +1,9 @@
+import { configPath } from "@design-vault/store/paths";
 import fs from "node:fs";
 import path from "node:path";
 import type { Upstream } from "./types";
 
-const UPSTREAMS_FILE = path.join(process.cwd(), "config", "upstreams.json");
+const UPSTREAMS_FILE = configPath("upstreams.json");
 
 /**
  * 订阅配置：兼容两种写法

@@ -1,3 +1,4 @@
+import { dataPath } from "@design-vault/store/paths";
 import fs from "node:fs";
 import path from "node:path";
 import { z } from "zod";
@@ -17,7 +18,7 @@ export const DEFAULT_BASE_URL = "https://api.deepseek.com";
 /** 生成比普通 API 慢，单独放宽；其余外部请求默认 10s */
 export const LLM_TIMEOUT_MS = 30_000;
 
-export const USAGE_LOG_FILE = path.join(process.cwd(), "data", "llm-usage.log");
+export const USAGE_LOG_FILE = dataPath("llm-usage.log");
 
 export type UsageLogEntry = {
   ts: string;

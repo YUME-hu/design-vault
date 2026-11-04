@@ -11,33 +11,52 @@ importers:
       '@design-vault/adapters':
         specifier: workspace:*
         version: link:packages/adapters
+      adm-zip:
+        specifier: ^0.6.1
+        version: 0.6.1
+    devDependencies:
+      '@types/culori':
+        specifier: ^4.0.1
+        version: 4.0.1
+      '@types/node':
+        specifier: ^22.10.2
+        version: 22.20.5
+      playwright:
+        specifier: ^1.49.1
+        version: 1.64.1
+      sharp:
+        specifier: ^0.35.5
+        version: 0.35.5(@types/node@22.20.5)
+      tsx:
+        specifier: ^4.19.2
+        version: 4.23.15
+      typescript:
+        specifier: ^5.7.2
+        version: 5.9.3
+
+  apps/web:
+    dependencies:
+      '@design-vault/adapters':
+        specifier: workspace:*
+        version: link:../../packages/adapters
       '@design-vault/core':
         specifier: workspace:*
-        version: link:packages/core
+        version: link:../../packages/core
       '@design-vault/store':
         specifier: workspace:*
-        version: link:packages/store
-      '@ffmpeg-installer/ffmpeg':
-        specifier: ^1.1.0
-        version: 1.1.0
+        version: link:../../packages/store
       '@fontsource/noto-sans-sc':
         specifier: ^5.1.1
         version: 5.3.1
       '@fontsource/space-mono':
         specifier: ^5.1.1
         version: 5.3.0
-      adm-zip:
-        specifier: ^0.6.1
-        version: 0.6.1
       class-variance-authority:
         specifier: ^0.7.1
         version: 0.7.1
       clsx:
         specifier: ^2.1.1
         version: 2.1.1
-      culori:
-        specifier: ^4.0.2
-        version: 4.0.2
       lucide-react:
         specifier: ^0.468.0
         version: 0.468.0(react@19.3.1)
@@ -53,13 +72,7 @@ importers:
       tailwind-merge:
         specifier: ^2.6.0
         version: 2.6.1
-      zod:
-        specifier: ^3.25.76
-        version: 3.25.76
     devDependencies:
-      '@types/culori':
-        specifier: ^4.0.1
-        version: 4.0.1
       '@types/node':
         specifier: ^22.10.2
         version: 22.20.5
@@ -72,18 +85,12 @@ importers:
       autoprefixer:
         specifier: ^10.4.20
         version: 10.6.2(postcss@8.5.32)
-      playwright:
-        specifier: ^1.49.1
-        version: 1.64.1
       postcss:
         specifier: ^8.4.49
         version: 8.5.32
       tailwindcss:
         specifier: ^3.4.17
         version: 3.4.19(tsx@4.23.15)
-      tsx:
-        specifier: ^4.19.2
-        version: 4.23.15
       typescript:
         specifier: ^5.7.2
         version: 5.9.3
@@ -96,6 +103,24 @@ importers:
       '@design-vault/store':
         specifier: workspace:*
         version: link:../store
+      '@ffmpeg-installer/ffmpeg':
+        specifier: ^1.1.0
+        version: 1.1.0
+      clsx:
+        specifier: ^2.1.1
+        version: 2.1.1
+      playwright:
+        specifier: ^1.49.1
+        version: 1.64.1
+      sharp:
+        specifier: ^0.35.5
+        version: 0.35.5(@types/node@22.20.5)
+      tailwind-merge:
+        specifier: ^2.6.0
+        version: 2.6.1
+      zod:
+        specifier: ^3.25.76
+        version: 3.25.76
 
   packages/core:
     dependencies:
@@ -1135,8 +1160,7 @@ snapshots:
 
   '@fontsource/space-mono@5.3.0': {}
 
-  '@img/colour@1.1.0':
-    optional: true
+  '@img/colour@1.1.0': {}
 
   '@img/sharp-darwin-arm64@0.35.5':
     optionalDependencies:
@@ -1380,8 +1404,7 @@ snapshots:
 
   culori@4.0.2: {}
 
-  detect-libc@2.1.2:
-    optional: true
+  detect-libc@2.1.2: {}
 
   didyoumean@1.2.2: {}
 
@@ -1624,8 +1647,7 @@ snapshots:
 
   scheduler@0.28.0: {}
 
-  semver@7.8.6:
-    optional: true
+  semver@7.8.6: {}
 
   sharp@0.35.5(@types/node@22.20.5):
     dependencies:
@@ -1659,7 +1681,6 @@ snapshots:
       '@img/sharp-win32-ia32': 0.35.5
       '@img/sharp-win32-x64': 0.35.5
       '@types/node': 22.20.5
-    optional: true
 
   source-map-js@1.2.2: {}
 

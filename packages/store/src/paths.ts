@@ -1,3 +1,4 @@
+import fs from "node:fs";
 import path from "node:path";
 
 /**
@@ -5,9 +6,19 @@ import path from "node:path";
  * - DESIGN_VAULT_HOME 未配置时回退到 process.cwd()，clone 下来即可跑
  * - 一律 path.join，跨 Windows / macOS / Linux
  */
+export function workspaceRoot(start: string = process.cwd()): string {
+  let dir = path.resolve(start);
+  for (;;) {
+    if (fs.existsSync(path.join(dir, "pnpm-workspace.yaml"))) return dir;
+    const parent = path.dirname(dir);
+    if (parent === dir) return path.resolve(start);
+    dir = parent;
+  }
+}
+
 export function vaultHome(): string {
   const configured = process.env.DESIGN_VAULT_HOME?.trim();
-  return configured ? path.resolve(configured) : process.cwd();
+  return configured ? path.resolve(configured) : workspaceRoot();
 }
 
 export function dataDir(): string {

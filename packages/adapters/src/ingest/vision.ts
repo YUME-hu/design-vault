@@ -1,3 +1,4 @@
+import { vaultHome } from "@design-vault/store/paths";
 import { execFile } from "node:child_process";
 import { createRequire } from "node:module";
 import fs from "node:fs";
@@ -11,7 +12,7 @@ import { z } from "zod";
  * 所有重活都走依赖注入，verify:m3b 用 mock 拦掉 ffmpeg / 模型。
  */
 
-export const FRAMES_ROOT = path.join(process.cwd(), "data", "frames");
+export const FRAMES_ROOT = path.join(vaultHome(), "data", "frames");
 
 export function resolveFfmpeg(): string {
   if (process.env.FFMPEG_PATH) return process.env.FFMPEG_PATH;
@@ -29,7 +30,7 @@ export function resolveFfmpeg(): string {
   const binary = process.platform === "win32" ? "ffmpeg.exe" : "ffmpeg";
   const packages = ["win32-x64", "win32-ia32", "linux-x64", "linux-arm64", "darwin-x64", "darwin-arm64"];
   for (const name of packages) {
-    const candidate = path.join(process.cwd(), "node_modules", "@ffmpeg-installer", name, binary);
+    const candidate = path.join(vaultHome(), "node_modules", "@ffmpeg-installer", name, binary);
     if (fs.existsSync(candidate)) return candidate;
   }
 
