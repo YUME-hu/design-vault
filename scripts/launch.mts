@@ -168,17 +168,23 @@ async function main() {
   ensureBuild();
 
   const logFd = fs.openSync(LOG_FILE, "a");
-  const args = dev
-    ? ["pnpm", "--filter", "@design-vault/web", "dev"]
-    : ["pnpm", "--filter", "@design-vault/web", "start"];
+  const webDir = path.join(ROOT, "apps", "web");
+  const nextBin = [
+    path.join(webDir, "node_modules", "next", "dist", "bin", "next"),
+    path.join(ROOT, "node_modules", "next", "dist", "bin", "next"),
+  ].find((candidate) => fs.existsSync(candidate));
+  if (!nextBin) fail("找不到 Next.js 可执行文件，请先安装依赖");
 
   say(dev ? "正在后台启动开发服务…" : "正在后台启动 Web 服务…");
-  const child = spawn("corepack", args, {
-    cwd: ROOT,
+
+  // 直接 node 启动，不经 shell/cmd 包装：
+  // detached + 独立 stdio 让子进程脱离当前控制台，关掉黑框也不会被一并结束。
+  const child = spawn(process.execPath, [nextBin, dev ? "dev" : "start"], {
+    cwd: webDir,
     detached: true,
+    windowsHide: true,
     stdio: ["ignore", logFd, logFd],
-    shell: process.platform === "win32",
-    env: { ...process.env, PORT: String(port) },
+    env: { ...process.env, PORT: String(port), NODE_ENV: dev ? "development" : "production" },
   });
   child.unref();
   if (child.pid) fs.writeFileSync(PID_FILE, String(child.pid));

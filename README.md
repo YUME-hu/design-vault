@@ -13,7 +13,7 @@
 **只需要两步：**
 
 1. 装 [Node.js 22+](https://nodejs.org)（安装时保持默认选项即可）；
-2. 双击 `start.bat`（Windows）或执行 `./start.sh`（macOS / Linux）。
+2. 双击 `start-silent.vbs`（**推荐，全程无黑框**）或 `start.bat`（Windows）；macOS / Linux 执行 `./start.sh`。
 
 第一次启动会自动安装依赖并构建，**大约 1–3 分钟**，之后会自动打开浏览器：
 
@@ -28,6 +28,7 @@ node --import tsx scripts/launch.mts stop
 # 或 npm run stop
 ```
 
+- **关掉启动窗口不会停止服务**：Web 进程已彻底脱离控制台，在后台继续运行；
 - 日志：`.run/web.log`
 - 端口被占用：脚本会提示；可用 `PORT=3010 ./start.sh`（Windows：`set PORT=3010` 后运行）
 - 首次使用没有密钥也能打开页面，但抓取/分析需要先配置 `.env.local`（见下）
