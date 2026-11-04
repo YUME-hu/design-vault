@@ -124,14 +124,26 @@ function openBrowser(url: string) {
   }
 }
 
+function portOwner(): number {
+  if (process.platform !== "win32") return 0;
+  const result = spawnSync("netstat", ["-ano"], { encoding: "utf8", windowsHide: true });
+  for (const line of (result.stdout ?? "").split(/\r?\n/)) {
+    if (!/[:.]3000\s/.test(line) || !/LISTENING/i.test(line)) continue;
+    const parts = line.trim().split(/\s+/);
+    const pid = Number(parts[parts.length - 1]);
+    if (Number.isFinite(pid) && pid > 0) return pid;
+  }
+  return 0;
+}
+
 function stopServer() {
-  if (!fs.existsSync(PID_FILE)) {
+  const recorded = fs.existsSync(PID_FILE) ? Number(fs.readFileSync(PID_FILE, "utf8").trim()) : 0;
+  fs.rmSync(PID_FILE, { force: true });
+  const pid = recorded || portOwner();
+  if (!pid) {
     say("没有找到后台服务记录（可能没启动过）");
     return;
   }
-  const pid = Number(fs.readFileSync(PID_FILE, "utf8").trim());
-  fs.rmSync(PID_FILE, { force: true });
-  if (!pid) return;
   try {
     if (process.platform === "win32") {
       spawnSync("taskkill", ["/PID", String(pid), "/T", "/F"], { stdio: "ignore" });
@@ -190,32 +202,17 @@ async function main() {
     ].join("\r\n"),
   );
 
-  // Windows：用 WMI 创建进程，父进程是 WmiPrvSE，不在当前终端 / DSH 的 Job 里，
-  // 关掉黑框、甚至退出 DSH 都不会带走它。失败则退回 detached spawn。
-  let pid = 0;
-  if (process.platform === "win32") {
-    const command = `cmd.exe /c ""${bootPath}""`;
-    const script = `$r = Invoke-CimMethod -ClassName Win32_Process -MethodName Create -Arguments @{CommandLine='${command.replaceAll("'", "''")}'}; if ($r.ProcessId) { $r.ProcessId }`;
-    const result = spawnSync("powershell.exe", ["-NoProfile", "-NonInteractive", "-Command", script], {
-      encoding: "utf8",
-      windowsHide: true,
-      timeout: 20_000,
-    });
-    pid = Number((result.stdout ?? "").trim());
-    if (!Number.isFinite(pid) || pid <= 0) pid = 0;
-  }
-
-  if (!pid) {
-    const child = spawn(process.execPath, [nextBin, dev ? "dev" : "start"], {
-      cwd: webDir,
-      detached: true,
-      windowsHide: true,
-      stdio: "ignore",
-      env: { ...process.env, PORT: String(port), NODE_ENV: dev ? "development" : "production" },
-    });
-    child.unref();
-    pid = child.pid ?? 0;
-  }
+  // 直接用 node 启动 Next：windowsHide 让子进程没有控制台窗口，
+  // detached + unref 让它脱离当前终端（关掉黑框不会结束服务）。
+  const child = spawn(process.execPath, [nextBin, dev ? "dev" : "start"], {
+    cwd: webDir,
+    detached: true,
+    windowsHide: true,
+    stdio: "ignore",
+    env: { ...process.env, PORT: String(port), NODE_ENV: dev ? "development" : "production" },
+  });
+  child.unref();
+  const pid = child.pid ?? 0;
 
   if (pid) fs.writeFileSync(PID_FILE, String(pid));
 
