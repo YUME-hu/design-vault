@@ -39,7 +39,9 @@
     "verify:m6": "tsx scripts/verify-m6.mts",
     "verify:m7": "tsx scripts/verify-m7.mts",
     "verify:m8": "tsx scripts/verify-m8.mts",
-    "verify:m9": "tsx scripts/verify-m9.mts"
+    "verify:m9": "tsx scripts/verify-m9.mts",
+    "launch": "tsx scripts/launch.mts",
+    "stop": "tsx scripts/launch.mts stop"
   },
   "dependencies": {
     "@design-vault/adapters": "workspace:*",

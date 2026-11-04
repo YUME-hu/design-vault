@@ -1,1 +1,84 @@
-[]
+[
+  {
+    "id": "merge-test-target",
+    "name": "Merge Test Target",
+    "sources": [
+      {
+        "type": "extracted-draft",
+        "url": "https://example.com/merge-test",
+        "upstream": "测试目标",
+        "video": ""
+      },
+      {
+        "type": "bilibili-search",
+        "url": "https://github.com/example/merge-test",
+        "upstream": "测试 UP (1)",
+        "video": "BVtestMerge01"
+      }
+    ],
+    "original_prompt": "",
+    "prompt_type": "manual",
+    "frontend_prompt": "设计一套 NASA-Punk 工业控制台风格的前端界面（Web，RSC + Tailwind）。\n\n整体气质：像 1970 年代航天任务的纸质技术手册被搬上了屏幕——克制、精确、可信，带一点复古未来感。不是赛博朋克，不要霓虹发光。\n\n视觉规则（必须全部遵守）：\n1. 零圆角。所有卡片、按钮、输入框的 border-radius 一律为 0。\n2. 所有容器使用 1px 实线边框，颜色 #191919（炭黑），不使用阴影、不使用模糊、不使用 backdrop-filter。\n3. 底色 #ECE5D6（米白纸面），主文字 #191919。仅在强调处使用 #D63A2C（信号红），红色面积占比 < 5%。\n4. 卡片四个角中的左上与右下各放一个 4px × 4px 的炭黑实心方块作为铆钉装饰。\n5. 卡片顶部有一条 6px 高的 45° 黑/白警示斜纹带。\n6. 页面背景叠加 24px 网格的蓝图网格线，透明度 0.03。\n7. 等宽字体（Space Mono）用于所有标签、编号、数值、状态；标签全大写 + letter-spacing 0.22em。中文正文用 Noto Sans SC。\n8. 字号阶梯 12/14/16/20/28/40，只使用这几个档位。\n9. 按钮：直角、1px 炭黑边、透明底；Hover 时黑白反转（底 #191919 / 字 #ECE5D6），不加 transition、不加光效。\n10. 导航：等宽全大写 + tracking-widest，当前项左侧带一个 4px 宽的红色竖条。\n\n组件要求：\n- 卡片 = 白底（#FFFFFF）、1px 边、铆钉角标、顶部警示斜纹。\n- AI 终端区 = 背景 #191919、文字 #ECE5D6、无对话气泡、细线分割；每行前缀 [SYS_LOG // 时间戳]，行尾一个红色方块光标。\n- 头像 = 六边形裁切 + 黑白滤镜 + 硬件角标。\n\n性能约束：全图形用 CSS/SVG 实现，零外部图片；不使用大阴影、不使用高斯模糊；动效只用 120ms 以内的 opacity/transform。\n\n可访问性：正文与底色对比度 ≥ 7:1，红色仅用于非文字型强调或大字号，正文链接不得只用颜色区分。",
+    "suitable_projects": [
+      "portfolio",
+      "dashboard"
+    ],
+    "unsuitable_projects": [
+      "children",
+      "ecommerce"
+    ],
+    "project_tags": [
+      "industrial",
+      "retro-futurism",
+      "light",
+      "high-contrast",
+      "monospace",
+      "technical",
+      "zero-radius"
+    ],
+    "palette": {
+      "primary": "#D63A2C",
+      "bg": "#ECE5D6",
+      "surface": "#FFFFFF",
+      "text": "#191919",
+      "muted": "#4C5A68",
+      "info": "#21467A",
+      "warning": "#D45814",
+      "sand": "#DBA972"
+    },
+    "palette_source": "manual",
+    "identity_colors": [
+      "#4C5A68",
+      "#7A7F4E",
+      "#D2A85E",
+      "#A8432F"
+    ],
+    "typography": {
+      "heading": "Space Mono",
+      "body": "Noto Sans SC",
+      "scale": "12/14/16/20/28/40，标题全大写 tracking-widest"
+    },
+    "tokens": {
+      "radius": "0",
+      "border": "1px solid #191919",
+      "shadow": "none",
+      "spacing": "4/8/12/16/24/32/48",
+      "grid": "blueprint grid, opacity 0.03",
+      "hazard_stripe": "6px 45° black/white stripes on card top",
+      "rivet": "4px solid black square, top-left & bottom-right"
+    },
+    "components": {
+      "button": "直角，1px 炭黑边，Hover 黑白反转，无 transition 光效",
+      "card": "白底，1px 边，铆钉角标，顶部警示斜纹",
+      "nav": "等宽全大写，tracking-widest",
+      "ai_terminal": "背景 #191919，文字 #ECE5D6，无气泡，细线分割，[SYS_LOG // 时间戳] + 红色方块光标",
+      "avatar": "六边形裁切 + 黑白滤镜 + 硬件角标"
+    },
+    "performance_notes": "全图形 CSS/SVG 实现，零外部图片；移除 backdrop-filter、大面积阴影、模糊",
+    "notes": "测试用合并目标，验证完可删除\n\n发现相似风格：Merge Test Target（可合并）\n\n合并自 pending：Merge Test Candidate · BVtestMerge01",
+    "related_effects": [],
+    "confidence": 0.5,
+    "created_at": "2026-11-04",
+    "updated_at": "2026-11-04"
+  }
+]
