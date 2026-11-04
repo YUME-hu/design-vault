@@ -1,12 +1,14 @@
+import { getBiliCookie } from "../auth/session";
 import { buildCookie, extractSessdata, getBuvid3, getUserName } from "./bilibili";
 
 /** 添加订阅时用 SESSDATA 查一次真实昵称；查不到就明确报错，不写脏 UID */
 export async function lookupUpstreamName(
   uid: string,
 ): Promise<{ ok: true; name: string } | { ok: false; error: string }> {
-  const sessdata = extractSessdata(process.env.BILIBILI_SESSDATA ?? "");
+  const bili = getBiliCookie();
+  const sessdata = extractSessdata(bili.cookie);
   if (!sessdata) {
-    return { ok: false, error: "缺少 BILIBILI_SESSDATA，无法查询昵称" };
+    return { ok: false, error: "缺少 B 站登录凭证（扫码或配置 BILIBILI_SESSDATA）" };
   }
 
   try {

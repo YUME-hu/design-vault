@@ -11,3 +11,4 @@ export * from "./ingest/pending-to-style";
 export * from "./ingest/tags";
 export * from "./search/types";
 export * from "./search/parse";
+export * from "./auth/bili-qr";

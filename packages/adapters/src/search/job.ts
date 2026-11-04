@@ -1,3 +1,4 @@
+import { getBiliCookie, clearExpiredBiliSession } from "../auth/session";
 import crypto from "node:crypto";
 import { fetchReadme } from "../ingest/github";
 import { checkDuplicate } from "../ingest/dedupe-store";
@@ -42,9 +43,14 @@ export function getExtractJob(id: string): ExtractJob | null {
 export function startSearchExtract(
   video: SearchVideo,
 ): { ok: true; jobId: string } | { ok: false; status: number; error: string } {
-  const sessdata = extractSessdata(process.env.BILIBILI_SESSDATA ?? "");
+  const bili = getBiliCookie();
+  const sessdata = extractSessdata(bili.cookie);
   if (!sessdata) {
-    return { ok: false, status: 400, error: "缺少 BILIBILI_SESSDATA，无法提取视频信息" };
+    return {
+      ok: false,
+      status: 400,
+      error: "缺少 B 站登录凭证（请在 /settings 扫码，或在 .env.local 配置 BILIBILI_SESSDATA）",
+    };
   }
   const apiKey = process.env.DEEPSEEK_API_KEY ?? "";
   if (!apiKey) {

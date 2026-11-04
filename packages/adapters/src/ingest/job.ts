@@ -1,3 +1,4 @@
+import { getBiliCookie, clearExpiredBiliSession } from "../auth/session";
 import crypto from "node:crypto";
 import { sleep } from "./http";
 import { appendPending } from "./pending-store";
@@ -74,9 +75,14 @@ export function startIngest(options: { upstreams?: string[] } = {}): StartResult
     return { ok: false, status: 400, error: "config/upstreams.json 里没有 UP 主" };
   }
 
-  const sessdata = extractSessdata(process.env.BILIBILI_SESSDATA ?? "");
+  const bili = getBiliCookie();
+  const sessdata = extractSessdata(bili.cookie);
   if (!sessdata) {
-    return { ok: false, status: 400, error: "缺少 BILIBILI_SESSDATA（请在 .env.local 配置）" };
+    return {
+      ok: false,
+      status: 400,
+      error: "缺少 B 站登录凭证（请在 /settings 扫码，或在 .env.local 配置 BILIBILI_SESSDATA）",
+    };
   }
   const apiKey = process.env.DEEPSEEK_API_KEY ?? "";
   if (!apiKey) {

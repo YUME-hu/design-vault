@@ -1,3 +1,4 @@
+import { getBiliCookie, clearExpiredBiliSession } from "@design-vault/adapters/auth/session";
 import { NextResponse } from "next/server";
 import { z } from "zod";
 import { buildCookie, extractSessdata, getBuvid3, searchVideos } from "@design-vault/adapters/ingest/bilibili";
@@ -24,10 +25,11 @@ export async function POST(request: Request) {
     );
   }
 
-  const sessdata = extractSessdata(process.env.BILIBILI_SESSDATA ?? "");
+  const bili = getBiliCookie();
+  const sessdata = extractSessdata(bili.cookie);
   if (!sessdata) {
     return NextResponse.json(
-      { ok: false, error: "缺少 BILIBILI_SESSDATA，无法搜索" },
+      { ok: false, error: "缺少 B 站登录凭证（请在 /settings 扫码，或配置 BILIBILI_SESSDATA）" },
       { status: 400 },
     );
   }
@@ -41,6 +43,7 @@ export async function POST(request: Request) {
     return NextResponse.json({ ok: true, results: parseSearchPayload(json) });
   } catch (error) {
     if (error instanceof SessionExpiredError) {
+      clearExpiredBiliSession();
       return NextResponse.json(
         { ok: false, error: "SESSDATA 已过期，请更新 .env.local 后重试" },
         { status: 401 },

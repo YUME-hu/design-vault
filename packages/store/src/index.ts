@@ -4,3 +4,4 @@ export * from "./collections";
 export * from "./pending";
 export * from "./state";
 export * from "./upstreams";
+export * from "./secrets";
