@@ -20,6 +20,7 @@ export default [
     platform: 'node',
     dts: false,
     clean: true,
+    deps: { alwaysBundle: ['@design-vault/core'] },
     outputOptions: { entryFileNames: 'index.js' }
   },
   {
@@ -34,10 +35,10 @@ export default [
     // hence the explicit opt-back-in.
     deps: {
       neverBundle: ['react', 'react/jsx-runtime'],
-      alwaysBundle: ['culori'],
+      alwaysBundle: ['culori', '@design-vault/core', 'zod'],
       // Fail the build if anything else starts being bundled: a new dependency
       // would be externalised by default and miss the shell's module table.
-      onlyBundle: ['culori'],
+      onlyBundle: ['culori', '@design-vault/core', 'zod'],
     },
     dts: false,
     clean: false,

@@ -1,11 +1,249 @@
+import { z } from "zod";
 import { formatHex, oklch, rgb } from "culori";
 import { readFile } from "node:fs/promises";
 import { join } from "node:path";
-import { z } from "zod/v3";
+// \0rolldown/runtime.js
+var __defProp = Object.defineProperty;
+var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
+var __getOwnPropNames = Object.getOwnPropertyNames;
+var __hasOwnProp = Object.prototype.hasOwnProperty;
+var __exportAll = (all, no_symbols) => {
+	let target = {};
+	for (var name in all) __defProp(target, name, {
+		get: all[name],
+		enumerable: true
+	});
+	if (!no_symbols) __defProp(target, Symbol.toStringTag, { value: "Module" });
+	return target;
+};
+var __copyProps = (to, from, except, desc) => {
+	if (from && typeof from === "object" || typeof from === "function") for (var keys = __getOwnPropNames(from), i = 0, n = keys.length, key; i < n; i++) {
+		key = keys[i];
+		if (!__hasOwnProp.call(to, key) && key !== except) __defProp(to, key, {
+			get: ((k) => from[k]).bind(null, key),
+			enumerable: !(desc = __getOwnPropDesc(from, key)) || desc.enumerable
+		});
+	}
+	return to;
+};
+var __reExport = (target, mod, secondTarget) => (__copyProps(target, mod, "default"), secondTarget && __copyProps(secondTarget, mod, "default"));
 // src/shared/constants.ts
 /** Package name; must equal package.json `name` (the client bundle id). */
 const NAME = "design-vault-plugin";
-// src/shared/color.ts
+const hexColorSchema = z.string().regex(/^#(?:[0-9a-fA-F]{3}|[0-9a-fA-F]{6})$/, "必须是 #RGB / #RRGGBB 形式的十六进制色值");
+const slugSchema = z.string().min(2).max(80).regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/, "id 必须是 kebab-case（小写字母/数字/连字符）");
+const isoDateSchema = z.string().regex(/^\d{4}-\d{2}-\d{2}$/, "日期格式必须为 YYYY-MM-DD");
+const projectTypeSchema = z.enum([
+	"portfolio",
+	"dashboard",
+	"ecommerce",
+	"editorial",
+	"marketing",
+	"blog",
+	"docs",
+	"saas-tool",
+	"ai-product",
+	"game",
+	"children",
+	"data-viz"
+]);
+const styleSourceSchema = z.object({
+	/** extracted-draft：从官方设计文档/官方分发包里提取的草案，人工确认后才进正式库 */
+	type: z.enum([
+		"manual",
+		"bilibili",
+		"bilibili-search",
+		"reference",
+		"skill-library",
+		"github",
+		"ref",
+		"extracted-draft"
+	]),
+	/** 空字符串表示没有来源链接；有值就必须是合法 URL（草案必须能溯源到官方文档） */
+	url: z.union([z.literal(""), z.string().url()]).default(""),
+	upstream: z.string().default(""),
+	video: z.string().default("")
+}).strict();
+/** 一条记录可以挂多个信源（合并后的风格尤其需要） */
+const styleSourcesSchema = z.array(styleSourceSchema).min(1);
+/** 语义色槽：核心 5 色必填，其余语义色按风格需要追加。 */
+const paletteSchema = z.object({
+	primary: hexColorSchema,
+	bg: hexColorSchema,
+	surface: hexColorSchema,
+	text: hexColorSchema,
+	muted: hexColorSchema,
+	info: hexColorSchema.optional(),
+	warning: hexColorSchema.optional(),
+	danger: hexColorSchema.optional(),
+	success: hexColorSchema.optional()
+}).catchall(hexColorSchema);
+const typographySchema = z.object({
+	heading: z.string().min(1),
+	body: z.string().min(1),
+	mono: z.string().min(1).optional(),
+	scale: z.string().min(1)
+}).strict();
+/** 设计令牌：核心 4 项必填，其余键按风格自由追加。 */
+const tokensSchema = z.object({
+	radius: z.string().min(1),
+	border: z.string().min(1),
+	shadow: z.string().min(1),
+	spacing: z.string().min(1)
+}).catchall(z.string().min(1));
+const styleSchema = z.object({
+	id: slugSchema,
+	name: z.string().min(1),
+	/** 一条风格可以有多个信源（UP 主视频 / 官方文档 / 手动） */
+	sources: styleSourcesSchema,
+	original_prompt: z.string().default(""),
+	prompt_type: z.enum([
+		"image-generation",
+		"frontend",
+		"manual"
+	]),
+	frontend_prompt: z.string().min(1, "前端提示词不能为空：这是这个库最核心的可复制资产"),
+	suitable_projects: z.array(projectTypeSchema),
+	unsuitable_projects: z.array(projectTypeSchema),
+	project_tags: z.array(z.string().min(1)),
+	palette: paletteSchema,
+	palette_source: z.enum([
+		"manual",
+		"radix",
+		"tailwind",
+		"bilibili-search",
+		"official-docs",
+		"direction-mapped"
+	]),
+	identity_colors: z.array(hexColorSchema),
+	typography: typographySchema,
+	tokens: tokensSchema,
+	components: z.record(z.string(), z.string().min(1)),
+	performance_notes: z.string().default(""),
+	/** 人工备注：例如草案里某个槽位是映射值、需要复核对比度 */
+	notes: z.string().default(""),
+	related_effects: z.array(z.string()).default([]),
+	confidence: z.number().min(0).max(1),
+	created_at: isoDateSchema,
+	updated_at: isoDateSchema
+}).strict();
+z.array(styleSchema);
+const HEX_IN_TEXT = /#[0-9a-fA-F]{3,8}\b/;
+/**
+* 色彩方向：只允许语义描述，禁止 HEX。
+* DeepSeek 的约束、pending 的校验、verify:m2a 的断言都用这一份。
+*/
+const colorDirectionSchema = z.object({
+	temperature: z.enum([
+		"warm",
+		"cool",
+		"neutral"
+	]),
+	saturation: z.enum([
+		"muted",
+		"balanced",
+		"vivid"
+	]),
+	contrast: z.enum([
+		"low",
+		"medium",
+		"high"
+	]),
+	semantic_hint: z.string().min(1).max(80)
+}).strict().superRefine((value, ctx) => {
+	if (HEX_IN_TEXT.test(value.semantic_hint)) ctx.addIssue({
+		code: z.ZodIssueCode.custom,
+		message: "色彩方向里不允许出现 HEX 色值",
+		path: ["semantic_hint"]
+	});
+});
+const pendingItemSchema = z.object({
+	id: z.string().min(8),
+	status: z.literal("pending"),
+	created_at: isoDateSchema,
+	confidence: z.number().min(0).max(1),
+	/** 采集链路的原始来源（可能合并多条：同一个风格被多个视频提到） */
+	sources: styleSourcesSchema,
+	/** 中等相似时指向已存在的风格 id，审核页可一键合并信源 */
+	duplicate_of: z.string().nullable().default(null),
+	upstream_name: z.string().default(""),
+	video_title: z.string().default(""),
+	/** 命名与去重用的名字（LLM 风格名，取不到时退回视频标题） */
+	name: z.string().min(1),
+	candidate: styleSchema.partial().default({}),
+	color_direction: colorDirectionSchema.nullable().default(null),
+	reasoning: z.string().default(""),
+	notes: z.string().default(""),
+	/** 原始响应：LLM 原文；未调用模型时为空 */
+	extracted_effects: z.array(z.object({
+		name: z.string().min(1),
+		tech_stack: z.array(z.string()).default([]),
+		description: z.string().min(1),
+		code_snippet: z.string().default(""),
+		performance_notes: z.string().default("")
+	}).strict()).default([]),
+	raw_response: z.string().default("")
+}).strict();
+z.array(pendingItemSchema);
+z.object({
+	upstream: z.string().default(""),
+	video: z.string().default(""),
+	repo: z.string().default("")
+}).strict();
+const effectSchema = z.object({
+	id: slugSchema,
+	name: z.string().min(1),
+	tech_stack: z.array(z.string().min(1)).default([]),
+	description: z.string().min(1),
+	code_snippet: z.string().default(""),
+	performance_notes: z.string().default(""),
+	related_styles: z.array(z.string()).default([])
+}).strict();
+z.array(effectSchema);
+const refTokensSchema = z.object({
+	colors: z.array(z.object({
+		hex: hexColorSchema,
+		weight: z.number().min(0).max(1).default(0)
+	})).default([]),
+	fonts: z.array(z.string().min(1)).default([]),
+	spacing: z.array(z.string().min(1)).default([]),
+	border_radius: z.array(z.string().min(1)).default([]),
+	shadows: z.array(z.string().min(1)).default([]),
+	css_variables: z.record(z.string()).default({})
+}).strict();
+const refSchema = z.object({
+	id: slugSchema,
+	url: z.string().url(),
+	title: z.string().default(""),
+	screenshot: z.string().min(1),
+	design_tokens: refTokensSchema.default({
+		colors: [],
+		fonts: [],
+		spacing: [],
+		border_radius: [],
+		shadows: [],
+		css_variables: {}
+	}),
+	ai_analysis: z.object({
+		name: z.string().min(1),
+		summary: z.string().default(""),
+		color_direction: colorDirectionSchema,
+		layout: z.string().default(""),
+		components: z.array(z.string()).default([])
+	}).strict().nullable().default(null),
+	generated_code: z.string().default(""),
+	capture_warning: z.string().default(""),
+	extracted: z.object({
+		dominant_colors: z.array(hexColorSchema),
+		fonts: z.array(z.string().min(1))
+	}).strict().optional(),
+	my_tags: z.array(z.string().min(1)),
+	/** 核心字段：没有「我为什么喜欢它」，参考库就退化成书签夹。 */
+	why_i_like_it: z.string().trim().min(4, "why_i_like_it 不能为空：参考库必须写下「为什么喜欢」"),
+	linked_style_id: z.string().nullable().default(null)
+}).strict();
+z.array(refSchema);
+// ../../packages/core/src/color.ts
 /**
 * 颜色引擎：纯函数，不碰 DOM、不碰 fs。
 *
@@ -28,19 +266,19 @@ const SCALE_STEPS = [
 	800,
 	900
 ];
-const HEX_PATTERN$1 = /^#(?:[0-9a-fA-F]{3}|[0-9a-fA-F]{6})$/;
+const HEX_PATTERN = /^#(?:[0-9a-fA-F]{3}|[0-9a-fA-F]{6})$/;
 /** 名义亮度曲线：oklch L 从 0.97（50）到 0.25（900），步长恒定 */
 const NOMINAL_LIGHTEST = .97;
 const DELTA_L = .08;
 const L_MIN = .08;
 const L_MAX = .995;
 function isHexColor(value) {
-	return HEX_PATTERN$1.test(value.trim());
+	return HEX_PATTERN.test(value.trim());
 }
 /** 归一化成 #RRGGBB（大写）；非法输入返回 null */
 function normalizeHex(value) {
 	const trimmed = value.trim();
-	if (!HEX_PATTERN$1.test(trimmed)) return null;
+	if (!HEX_PATTERN.test(trimmed)) return null;
 	let hex = trimmed.slice(1);
 	if (hex.length === 3) hex = hex.split("").map((char) => char + char).join("");
 	return `#${hex.toUpperCase()}`;
@@ -235,6 +473,42 @@ function buildScales(palette) {
 	}
 	return scales;
 }
+z.object({
+	projectType: projectTypeSchema,
+	targetUser: z.enum([
+		"consumer",
+		"enterprise",
+		"developer",
+		"creator",
+		"internal"
+	]),
+	keywords: z.array(z.enum([
+		"minimal",
+		"industrial",
+		"editorial",
+		"high-contrast",
+		"systematic",
+		"friendly",
+		"data-dense",
+		"bold-type",
+		"rounded",
+		"retro-futurism",
+		"technical",
+		"clean"
+	])).max(6).default([]),
+	pageType: z.enum([
+		"landing",
+		"app",
+		"article",
+		"catalog",
+		"form"
+	]),
+	colorMode: z.enum([
+		"light",
+		"dark",
+		"any"
+	])
+}).strict();
 // src/host/design-config.ts
 /**
 * Turn one vault style into a `DesignConfig`: the deterministic artefact a
@@ -278,219 +552,10 @@ function buildDesignConfig(style, options = {}) {
 function renderDesignConfig(config) {
 	return `${JSON.stringify(config, null, 2)}\n`;
 }
-const hexColorSchema = z.string().regex(/^#(?:[0-9a-fA-F]{3}|[0-9a-fA-F]{6})$/, "必须是 #RGB / #RRGGBB 形式的十六进制色值");
-const slugSchema = z.string().min(2).max(80).regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/, "id 必须是 kebab-case（小写字母/数字/连字符）");
-const isoDateSchema = z.string().regex(/^\d{4}-\d{2}-\d{2}$/, "日期格式必须为 YYYY-MM-DD");
-const projectTypeSchema = z.enum([
-	"portfolio",
-	"dashboard",
-	"ecommerce",
-	"editorial",
-	"marketing",
-	"blog",
-	"docs",
-	"saas-tool",
-	"ai-product",
-	"game",
-	"children",
-	"data-viz"
-]);
-const styleSourceSchema = z.object({
-	/** extracted-draft：从官方设计文档/官方分发包里提取的草案，人工确认后才进正式库 */
-	type: z.enum([
-		"manual",
-		"bilibili",
-		"bilibili-search",
-		"reference",
-		"skill-library",
-		"github",
-		"ref",
-		"extracted-draft"
-	]),
-	/** 空字符串表示没有来源链接；有值就必须是合法 URL（草案必须能溯源到官方文档） */
-	url: z.union([z.literal(""), z.string().url()]).default(""),
-	upstream: z.string().default(""),
-	video: z.string().default("")
-}).strict();
-/** 一条记录可以挂多个信源（合并后的风格尤其需要） */
-const styleSourcesSchema = z.array(styleSourceSchema).min(1);
-/** 语义色槽：核心 5 色必填，其余语义色按风格需要追加。 */
-const paletteSchema = z.object({
-	primary: hexColorSchema,
-	bg: hexColorSchema,
-	surface: hexColorSchema,
-	text: hexColorSchema,
-	muted: hexColorSchema,
-	info: hexColorSchema.optional(),
-	warning: hexColorSchema.optional(),
-	danger: hexColorSchema.optional(),
-	success: hexColorSchema.optional()
-}).catchall(hexColorSchema);
-const typographySchema = z.object({
-	heading: z.string().min(1),
-	body: z.string().min(1),
-	mono: z.string().min(1).optional(),
-	scale: z.string().min(1)
-}).strict();
-/** 设计令牌：核心 4 项必填，其余键按风格自由追加。 */
-const tokensSchema = z.object({
-	radius: z.string().min(1),
-	border: z.string().min(1),
-	shadow: z.string().min(1),
-	spacing: z.string().min(1)
-}).catchall(z.string().min(1));
-const styleSchema = z.object({
-	id: slugSchema,
-	name: z.string().min(1),
-	/** 一条风格可以有多个信源（UP 主视频 / 官方文档 / 手动） */
-	sources: styleSourcesSchema,
-	original_prompt: z.string().default(""),
-	prompt_type: z.enum([
-		"image-generation",
-		"frontend",
-		"manual"
-	]),
-	frontend_prompt: z.string().min(1, "前端提示词不能为空：这是这个库最核心的可复制资产"),
-	suitable_projects: z.array(projectTypeSchema),
-	unsuitable_projects: z.array(projectTypeSchema),
-	project_tags: z.array(z.string().min(1)),
-	palette: paletteSchema,
-	palette_source: z.enum([
-		"manual",
-		"radix",
-		"tailwind",
-		"bilibili-search",
-		"official-docs",
-		"direction-mapped"
-	]),
-	identity_colors: z.array(hexColorSchema),
-	typography: typographySchema,
-	tokens: tokensSchema,
-	components: z.record(z.string(), z.string().min(1)),
-	performance_notes: z.string().default(""),
-	/** 人工备注：例如草案里某个槽位是映射值、需要复核对比度 */
-	notes: z.string().default(""),
-	related_effects: z.array(z.string()).default([]),
-	confidence: z.number().min(0).max(1),
-	created_at: isoDateSchema,
-	updated_at: isoDateSchema
-}).strict();
-const stylesSchema = z.array(styleSchema);
-const HEX_IN_TEXT = /#[0-9a-fA-F]{3,8}\b/;
-/**
-* 色彩方向：只允许语义描述，禁止 HEX。
-* DeepSeek 的约束、pending 的校验、verify:m2a 的断言都用这一份。
-*/
-const colorDirectionSchema = z.object({
-	temperature: z.enum([
-		"warm",
-		"cool",
-		"neutral"
-	]),
-	saturation: z.enum([
-		"muted",
-		"balanced",
-		"vivid"
-	]),
-	contrast: z.enum([
-		"low",
-		"medium",
-		"high"
-	]),
-	semantic_hint: z.string().min(1).max(80)
-}).strict().superRefine((value, ctx) => {
-	if (HEX_IN_TEXT.test(value.semantic_hint)) ctx.addIssue({
-		code: z.ZodIssueCode.custom,
-		message: "色彩方向里不允许出现 HEX 色值",
-		path: ["semantic_hint"]
-	});
-});
-const pendingItemSchema = z.object({
-	id: z.string().min(8),
-	status: z.literal("pending"),
-	created_at: isoDateSchema,
-	confidence: z.number().min(0).max(1),
-	/** 采集链路的原始来源（可能合并多条：同一个风格被多个视频提到） */
-	sources: styleSourcesSchema,
-	/** 中等相似时指向已存在的风格 id，审核页可一键合并信源 */
-	duplicate_of: z.string().nullable().default(null),
-	upstream_name: z.string().default(""),
-	video_title: z.string().default(""),
-	/** 命名与去重用的名字（LLM 风格名，取不到时退回视频标题） */
-	name: z.string().min(1),
-	candidate: styleSchema.partial().default({}),
-	color_direction: colorDirectionSchema.nullable().default(null),
-	reasoning: z.string().default(""),
-	notes: z.string().default(""),
-	/** 原始响应：LLM 原文；未调用模型时为空 */
-	extracted_effects: z.array(z.object({
-		name: z.string().min(1),
-		tech_stack: z.array(z.string()).default([]),
-		description: z.string().min(1),
-		code_snippet: z.string().default(""),
-		performance_notes: z.string().default("")
-	}).strict()).default([]),
-	raw_response: z.string().default("")
-}).strict();
-z.array(pendingItemSchema);
-z.object({
-	upstream: z.string().default(""),
-	video: z.string().default(""),
-	repo: z.string().default("")
-}).strict();
-const effectSchema = z.object({
-	id: slugSchema,
-	name: z.string().min(1),
-	tech_stack: z.array(z.string().min(1)).default([]),
-	description: z.string().min(1),
-	code_snippet: z.string().default(""),
-	performance_notes: z.string().default(""),
-	related_styles: z.array(z.string()).default([])
-}).strict();
-z.array(effectSchema);
-const refTokensSchema = z.object({
-	colors: z.array(z.object({
-		hex: hexColorSchema,
-		weight: z.number().min(0).max(1).default(0)
-	})).default([]),
-	fonts: z.array(z.string().min(1)).default([]),
-	spacing: z.array(z.string().min(1)).default([]),
-	border_radius: z.array(z.string().min(1)).default([]),
-	shadows: z.array(z.string().min(1)).default([]),
-	css_variables: z.record(z.string()).default({})
-}).strict();
-const refSchema = z.object({
-	id: slugSchema,
-	url: z.string().url(),
-	title: z.string().default(""),
-	screenshot: z.string().min(1),
-	design_tokens: refTokensSchema.default({
-		colors: [],
-		fonts: [],
-		spacing: [],
-		border_radius: [],
-		shadows: [],
-		css_variables: {}
-	}),
-	ai_analysis: z.object({
-		name: z.string().min(1),
-		summary: z.string().default(""),
-		color_direction: colorDirectionSchema,
-		layout: z.string().default(""),
-		components: z.array(z.string()).default([])
-	}).strict().nullable().default(null),
-	generated_code: z.string().default(""),
-	capture_warning: z.string().default(""),
-	extracted: z.object({
-		dominant_colors: z.array(hexColorSchema),
-		fonts: z.array(z.string().min(1))
-	}).strict().optional(),
-	my_tags: z.array(z.string().min(1)),
-	/** 核心字段：没有「我为什么喜欢它」，参考库就退化成书签夹。 */
-	why_i_like_it: z.string().trim().min(4, "why_i_like_it 不能为空：参考库必须写下「为什么喜欢」"),
-	linked_style_id: z.string().nullable().default(null)
-}).strict();
-z.array(refSchema);
+// src/shared/schema.ts
+var schema_exports = /* @__PURE__ */ __exportAll({});
+import * as import__design_vault_core_schema from "@design-vault/core/schema";
+__reExport(schema_exports, import__design_vault_core_schema);
 /** Resolve the vault root: explicit argument, then env, then the local default. */
 function vaultRoot(override) {
 	return override ?? process.env.DESIGN_VAULT_ROOT ?? "D:\\design-vault";
@@ -508,7 +573,7 @@ async function readVaultStyles(root) {
 	const raw = await readFile(file, "utf8");
 	const parsed = JSON.parse(raw);
 	if (!Array.isArray(parsed)) throw new Error(`${file}: expected a JSON array of styles, got ${typeof parsed}`);
-	const whole = stylesSchema.safeParse(parsed);
+	const whole = schema_exports.stylesSchema.safeParse(parsed);
 	if (whole.success) return {
 		file,
 		styles: whole.data,
@@ -517,7 +582,7 @@ async function readVaultStyles(root) {
 	const styles = [];
 	const rejected = [];
 	parsed.forEach((row, index) => {
-		const one = stylesSchema.element.safeParse(row);
+		const one = schema_exports.stylesSchema.element.safeParse(row);
 		if (one.success) styles.push(one.data);
 		else rejected.push({
 			index,
