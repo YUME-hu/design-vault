@@ -9315,7 +9315,9 @@ select.dvp-field{
 			const [vaultStyleId, setVaultStyleId] = (0, react.useState)("");
 			const [vaultError, setVaultError] = (0, react.useState)("");
 			const [vaultBase, setVaultBase] = (0, react.useState)("http://127.0.0.1:3000");
+			const [vaultOrigin, setVaultOrigin] = (0, react.useState)("");
 			(0, react.useEffect)(() => {
+				setVaultOrigin(window.location.origin);
 				const stored = window.localStorage.getItem("dvp.webBase");
 				const candidates = stored ? [stored] : ["http://127.0.0.1:3000", "http://localhost:3000"];
 				const controller = new AbortController();

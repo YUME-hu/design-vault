@@ -368,8 +368,10 @@ function Page({ t }: { t?: (key: string) => string }) {
   const [vaultStyleId, setVaultStyleId] = useState("");
   const [vaultError, setVaultError] = useState("");
   const [vaultBase, setVaultBase] = useState("http://127.0.0.1:3000");
+  const [vaultOrigin, setVaultOrigin] = useState("");
 
   useEffect(() => {
+    setVaultOrigin(window.location.origin);
     const stored = window.localStorage.getItem("dvp.webBase");
     const candidates = stored ? [stored] : ["http://127.0.0.1:3000", "http://localhost:3000"];
     const controller = new AbortController();
