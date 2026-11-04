@@ -369,13 +369,26 @@ function Page({ t }: { t?: (key: string) => string }) {
   const [vaultError, setVaultError] = useState("");
   const [vaultBase, setVaultBase] = useState("http://127.0.0.1:3000");
   const [vaultOrigin, setVaultOrigin] = useState("");
+  const [retryKey, setRetryKey] = useState(0);
+  const desktopShell =
+    window.location.protocol === "dsh-app:" || vaultOrigin.startsWith("dsh-app://");
 
   useEffect(() => {
     setVaultOrigin(window.location.origin);
+    // 桌面版 DSH 的 CSP 禁止 dsh-app:// 发起 http 请求，直接使用内置快照，避免无谓的 4 秒超时。
+    if (
+      window.location.protocol === "dsh-app:" ||
+      window.location.origin.startsWith("dsh-app://")
+    ) {
+      setVaultStatus("fallback");
+      return;
+    }
     const stored = window.localStorage.getItem("dvp.webBase");
     const candidates = stored ? [stored] : ["http://127.0.0.1:3000", "http://localhost:3000"];
     const controller = new AbortController();
     const timer = setTimeout(() => controller.abort(), 4000);
+    setVaultStatus("loading");
+    setVaultError("");
 
     void (async () => {
       let lastError = "unknown";
@@ -409,7 +422,7 @@ function Page({ t }: { t?: (key: string) => string }) {
       clearTimeout(timer);
       controller.abort();
     };
-  }, []);
+  }, [retryKey]);
   const [seed, setSeed] = useState<string>(DEFAULT_SEED);
   const [controls, setControls] = useState<ShapeControls>(DEFAULT_CONTROLS);
   const [source, setSource] = useState<PaletteSource>({ kind: "style" });
@@ -574,12 +587,28 @@ function Page({ t }: { t?: (key: string) => string }) {
               <span className="dvp-label">
                 {vaultStatus === "loading"
                   ? "正在连接 Web 服务…"
-                  : "未连接到 Web 服务，当前为静态快照"}
+                  : desktopShell
+                    ? "当前使用内置快照（最新数据请在浏览器中打开 DSH 获取）"
+                    : "未连接到 Web 服务，当前为静态快照"}
               </span>
-              {vaultStatus === "fallback" && (
-                <span className="dvp-label" style={{ color: "#B3261E", wordBreak: "break-all" }}>
-                  origin: {vaultOrigin || "unknown"} · {vaultError || "no error detail"}
+              {desktopShell && (
+                <span className="dvp-label" style={{ opacity: 0.7 }}>
+                  若需读取最新入库风格，请在浏览器中打开 DSH 使用。
                 </span>
+              )}
+              {!desktopShell && vaultStatus === "fallback" && (
+                <>
+                  <button
+                    type="button"
+                    className="dvp-btn dvp-btn--ghost"
+                    onClick={() => setRetryKey((value) => value + 1)}
+                  >
+                    重试连接
+                  </button>
+                  <span className="dvp-label" style={{ color: "#B3261E", wordBreak: "break-all" }}>
+                    {vaultError || "no error detail"}
+                  </span>
+                </>
               )}
             </>
           )}

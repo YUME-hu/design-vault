@@ -40,3 +40,9 @@ npm works too: `npm install && npm run verify`.
 ## License
 
 MIT
+
+## Vault data source
+
+- **Desktop app (dsh-app://)**：DSH 桌面端的 CSP 不允许插件向 http://localhost:3000 发起请求，插件使用打包的静态快照（内置 VIBES 调色板）。需要读取最新入库风格时，请在浏览器中打开 DSH。
+- **Browser mode**：在浏览器打开 DSH 时，插件会请求 http://127.0.0.1:3000/api/vault/styles-lite（失败再试 localhost），成功后侧栏出现「静态快照 / 远程风格」下拉。
+- 数据来源：src/client/index.tsx 的 Vault 服务区块；Web 端路由 apps/web/app/api/vault/styles-lite/route.ts。

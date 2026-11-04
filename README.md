@@ -154,6 +154,8 @@ corepack pnpm --filter design-vault-plugin verify
 
 把构建产物安装进 DSH 的方式见 `apps/dsh-plugin/README.md`。
 
+> 桌面版 DSH 的 CSP 禁止插件请求 `http://localhost:3000`，因此桌面端使用内置静态快照；需要读取最新入库风格时，请在浏览器中打开 DSH（浏览器模式会请求 `/api/vault/styles-lite`）。
+
 ---
 
 ## 常见问题

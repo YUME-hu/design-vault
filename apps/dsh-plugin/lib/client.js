@@ -9316,12 +9316,20 @@ select.dvp-field{
 			const [vaultError, setVaultError] = (0, react.useState)("");
 			const [vaultBase, setVaultBase] = (0, react.useState)("http://127.0.0.1:3000");
 			const [vaultOrigin, setVaultOrigin] = (0, react.useState)("");
+			const [retryKey, setRetryKey] = (0, react.useState)(0);
+			const desktopShell = window.location.protocol === "dsh-app:" || vaultOrigin.startsWith("dsh-app://");
 			(0, react.useEffect)(() => {
 				setVaultOrigin(window.location.origin);
+				if (window.location.protocol === "dsh-app:" || window.location.origin.startsWith("dsh-app://")) {
+					setVaultStatus("fallback");
+					return;
+				}
 				const stored = window.localStorage.getItem("dvp.webBase");
 				const candidates = stored ? [stored] : ["http://127.0.0.1:3000", "http://localhost:3000"];
 				const controller = new AbortController();
 				const timer = setTimeout(() => controller.abort(), 4e3);
+				setVaultStatus("loading");
+				setVaultError("");
 				(async () => {
 					let lastError = "unknown";
 					for (const base of candidates) try {
@@ -9348,7 +9356,7 @@ select.dvp-field{
 					clearTimeout(timer);
 					controller.abort();
 				};
-			}, []);
+			}, [retryKey]);
 			const [seed, setSeed] = (0, react.useState)(DEFAULT_SEED);
 			const [controls, setControls] = (0, react.useState)(DEFAULT_CONTROLS);
 			const [source, setSource] = (0, react.useState)({ kind: "style" });
@@ -9524,22 +9532,30 @@ select.dvp-field{
 										vaultStyles.length,
 										" 个风格"
 									]
-								})] }) : /* @__PURE__ */ (0, react_jsx_runtime.jsxs)(react_jsx_runtime.Fragment, { children: [/* @__PURE__ */ (0, react_jsx_runtime.jsx)("span", {
-									className: "dvp-label",
-									children: vaultStatus === "loading" ? "正在连接 Web 服务…" : "未连接到 Web 服务，当前为静态快照"
-								}), vaultStatus === "fallback" && /* @__PURE__ */ (0, react_jsx_runtime.jsxs)("span", {
-									className: "dvp-label",
-									style: {
-										color: "#B3261E",
-										wordBreak: "break-all"
-									},
-									children: [
-										"origin: ",
-										vaultOrigin || "unknown",
-										" · ",
-										vaultError || "no error detail"
-									]
-								})] })
+								})] }) : /* @__PURE__ */ (0, react_jsx_runtime.jsxs)(react_jsx_runtime.Fragment, { children: [
+									/* @__PURE__ */ (0, react_jsx_runtime.jsx)("span", {
+										className: "dvp-label",
+										children: vaultStatus === "loading" ? "正在连接 Web 服务…" : desktopShell ? "当前使用内置快照（最新数据请在浏览器中打开 DSH 获取）" : "未连接到 Web 服务，当前为静态快照"
+									}),
+									desktopShell && /* @__PURE__ */ (0, react_jsx_runtime.jsx)("span", {
+										className: "dvp-label",
+										style: { opacity: .7 },
+										children: "若需读取最新入库风格，请在浏览器中打开 DSH 使用。"
+									}),
+									!desktopShell && vaultStatus === "fallback" && /* @__PURE__ */ (0, react_jsx_runtime.jsxs)(react_jsx_runtime.Fragment, { children: [/* @__PURE__ */ (0, react_jsx_runtime.jsx)("button", {
+										type: "button",
+										className: "dvp-btn dvp-btn--ghost",
+										onClick: () => setRetryKey((value) => value + 1),
+										children: "重试连接"
+									}), /* @__PURE__ */ (0, react_jsx_runtime.jsx)("span", {
+										className: "dvp-label",
+										style: {
+											color: "#B3261E",
+											wordBreak: "break-all"
+										},
+										children: vaultError || "no error detail"
+									})] })
+								] })
 							}),
 							/* @__PURE__ */ (0, react_jsx_runtime.jsx)(Section, {
 								title: label("panel.vibe", "风格"),
