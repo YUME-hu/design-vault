@@ -570,11 +570,18 @@ function Page({ t }: { t?: (key: string) => string }) {
               </span>
             </>
           ) : (
-            <span className="dvp-label">
-              {vaultStatus === "loading"
-                ? "正在连接 Web 服务…"
-                : "未连接到 Web 服务，当前为静态快照"}
-            </span>
+            <>
+              <span className="dvp-label">
+                {vaultStatus === "loading"
+                  ? "正在连接 Web 服务…"
+                  : "未连接到 Web 服务，当前为静态快照"}
+              </span>
+              {vaultStatus === "fallback" && (
+                <span className="dvp-label" style={{ color: "#B3261E", wordBreak: "break-all" }}>
+                  origin: {vaultOrigin || "unknown"} · {vaultError || "no error detail"}
+                </span>
+              )}
+            </>
           )}
         </Section>
 

@@ -7,7 +7,11 @@ const CORS_METHODS = "GET, OPTIONS";
 function corsHeaders(origin: string | null): Record<string, string> {
   const allowed =
     origin === "null" ||
-    (origin !== null && /^https?:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/.test(origin));
+    origin === "file://" ||
+    (origin !== null &&
+      (/^https?:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/.test(origin) ||
+        origin.startsWith("dsh-app://") ||
+        origin.startsWith("file://")));
   return {
     ...(allowed ? { "Access-Control-Allow-Origin": origin! } : {}),
     "Access-Control-Allow-Methods": CORS_METHODS,

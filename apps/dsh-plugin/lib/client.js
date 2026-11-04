@@ -9524,10 +9524,22 @@ select.dvp-field{
 										vaultStyles.length,
 										" 个风格"
 									]
-								})] }) : /* @__PURE__ */ (0, react_jsx_runtime.jsx)("span", {
+								})] }) : /* @__PURE__ */ (0, react_jsx_runtime.jsxs)(react_jsx_runtime.Fragment, { children: [/* @__PURE__ */ (0, react_jsx_runtime.jsx)("span", {
 									className: "dvp-label",
 									children: vaultStatus === "loading" ? "正在连接 Web 服务…" : "未连接到 Web 服务，当前为静态快照"
-								})
+								}), vaultStatus === "fallback" && /* @__PURE__ */ (0, react_jsx_runtime.jsxs)("span", {
+									className: "dvp-label",
+									style: {
+										color: "#B3261E",
+										wordBreak: "break-all"
+									},
+									children: [
+										"origin: ",
+										vaultOrigin || "unknown",
+										" · ",
+										vaultError || "no error detail"
+									]
+								})] })
 							}),
 							/* @__PURE__ */ (0, react_jsx_runtime.jsx)(Section, {
 								title: label("panel.vibe", "风格"),
