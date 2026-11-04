@@ -10,6 +10,7 @@ type Video = {
   cover: string;
   duration: number;
   pubtime: number;
+  ingested?: boolean;
 };
 type Cursor = { title: string; lastScannedAt: string; lastVideoPubtime: number; lastPage: number };
 type BatchResult = { bvid: string; title: string; status: string; message: string };
@@ -35,7 +36,6 @@ export function FavExplorer() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [job, setJob] = useState<BatchJob | null>(null);
-  const [force, setForce] = useState(false);
 
   const cursor = mediaId ? cursors[mediaId] : undefined;
 
@@ -61,11 +61,12 @@ export function FavExplorer() {
     })();
   }, []);
 
-  async function load(media: string, nextPage: number, incremental: boolean) {
+  async function load(media: string, nextPage: number) {
     setLoading(true);
     setError("");
     try {
-      const since = incremental ? (cursors[media]?.lastVideoPubtime ?? 0) : 0;
+      // 保守策略：始终拉最新一页，不用 pubtime 游标过滤，未勾选的视频下次仍然出现
+      const since = 0;
       const response = await fetch(
         `/api/favorites/${encodeURIComponent(media)}?page=${nextPage}&since=${since}`,
         { cache: "no-store" },
@@ -98,7 +99,7 @@ export function FavExplorer() {
     setPage(1);
     setVideos([]);
     setSelected(new Set());
-    if (id) await load(id, 1, !force);
+    if (id) await load(id, 1);
   }
 
   function toggle(bvid: string) {
@@ -146,15 +147,13 @@ export function FavExplorer() {
         if (payload.job.status !== "running") {
           clearInterval(timer);
           if (mediaId) {
-            const maxPubtime = Math.max(0, ...videos.map((video) => video.pubtime));
+            // 只记录操作时间，不推进 pubtime 游标（未勾选的视频下次仍要出现）
             await fetch(`/api/favorites/${encodeURIComponent(mediaId)}`, {
               method: "POST",
               headers: { "Content-Type": "application/json" },
               body: JSON.stringify({
                 title: folders.find((folder) => folder.id === mediaId)?.title ?? "",
                 lastScannedAt: new Date().toISOString(),
-                lastVideoPubtime: maxPubtime,
-                lastPage: page,
               }),
             });
           }
@@ -185,11 +184,6 @@ export function FavExplorer() {
           </select>
         </label>
 
-        <label className="mono flex items-center gap-2 text-[9px] uppercase tracking-[0.1em] text-ink-soft">
-          <input type="checkbox" checked={force} onChange={(event) => setForce(event.target.checked)} />
-          全量重扫
-        </label>
-
         <button
           type="button"
           data-testid="fav-extract"
@@ -218,7 +212,7 @@ export function FavExplorer() {
       <div className="mt-3 flex items-center justify-between">
         <button
           type="button"
-          onClick={() => setSelected(new Set(videos.map((video) => video.bvid)))}
+          onClick={() => setSelected(new Set(videos.filter((video) => !video.ingested).map((video) => video.bvid)))}
           className="mono text-[9px] uppercase tracking-[0.12em] text-ink-soft underline underline-offset-4"
         >
           全选本页
@@ -237,7 +231,8 @@ export function FavExplorer() {
                 type="checkbox"
                 checked={selected.has(video.bvid)}
                 onChange={() => toggle(video.bvid)}
-                className="mt-1"
+                disabled={Boolean(video.ingested)}
+                className="mt-1 disabled:opacity-30"
                 aria-label={`选择 ${video.title}`}
               />
               {video.cover && (
@@ -245,7 +240,14 @@ export function FavExplorer() {
                 <img src={video.cover} alt="" referrerPolicy="no-referrer" className="h-[48px] w-[84px] border border-hairline object-cover" />
               )}
               <div className="min-w-0 flex-1">
-                <p className="line-clamp-1 text-[12px] font-bold text-charcoal">{video.title}</p>
+                <p className={`line-clamp-1 text-[12px] font-bold ${video.ingested ? "text-ink-faded" : "text-charcoal"}`}>
+                  {video.title}
+                  {video.ingested && (
+                    <span className="mono ml-2 border border-hairline-strong px-1 py-[1px] text-[7px] uppercase tracking-[0.1em] text-ink-faded">
+                      已提取
+                    </span>
+                  )}
+                </p>
                 <p className="mono mt-1 text-[9px] text-ink-faded">
                   {video.author || "—"} · {video.bvid}
                 </p>
@@ -266,7 +268,7 @@ export function FavExplorer() {
       {hasMore && (
         <button
           type="button"
-          onClick={() => void load(mediaId, page + 1, !force)}
+          onClick={() => void load(mediaId, page + 1)}
           disabled={loading}
           className="mono mt-3 h-9 w-full border border-charcoal px-4 text-[9px] uppercase tracking-[0.16em] text-charcoal disabled:opacity-40"
         >
