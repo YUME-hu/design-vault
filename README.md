@@ -117,17 +117,15 @@ corepack pnpm typecheck        # 根 + web 类型检查
 corepack pnpm validate         # 数据 schema 与一致性
 ```
 
-验收（14 套，共 253 项，全部幂等）：
+验收（14 套，共 253 项；全部隔离在临时 Vault 中，不会写真实 data/）：
 
 ```bash
-node scripts/verify-m0.mjs
-npm run verify:m1a && npm run verify:m1b
-npx tsx scripts/verify-m2a.mts && npx tsx scripts/verify-m2b.mts
-npx tsx scripts/verify-m3a.mts && npx tsx scripts/verify-m3b.mts
-npx tsx scripts/verify-m4a.mts && npx tsx scripts/verify-m4b.mts
-npx tsx scripts/verify-m5.mts && npx tsx scripts/verify-m6.mts
-npx tsx scripts/verify-m7.mts && npx tsx scripts/verify-m8.mts && npx tsx scripts/verify-m9.mts
+npm run verify:all          # 推荐：临时副本 + 隔离端口 3100，跑完自动恢复
+npm run verify:all -- m0 m9 # 只跑指定套件
 ```
+
+- 单独运行 `node scripts/verify-m0.mjs` 会被守卫拒绝（除非设置 `ALLOW_REAL_DATA=1`）；
+- 隔离实现：`scripts/verify-all.mts` 备份 `data/` 与 `config/`、复制副本、跑完 finally 恢复；异常退出后下次启动会自动恢复。
 
 Monorepo 结构：
 

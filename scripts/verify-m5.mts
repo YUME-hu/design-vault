@@ -1,3 +1,10 @@
+// REAL DATA GUARD：只允许通过 npm run verify:all（隔离 Vault）运行。
+// 直接运行会触碰真实 data/，必须显式设置 ALLOW_REAL_DATA=1 才放行。
+if (!process.env.DESIGN_VAULT_HOME && process.env.ALLOW_REAL_DATA !== "1") {
+  console.error("拒绝直接运行：请使用 npm run verify:all（隔离临时 Vault）。若确需直接跑，设置 ALLOW_REAL_DATA=1。");
+  process.exit(1);
+}
+
 import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
