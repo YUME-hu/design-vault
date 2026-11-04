@@ -1,9 +1,7 @@
-import fs from "node:fs";
-import os from "node:os";
-import path, { join } from "node:path";
-import { readFile } from "node:fs/promises";
 import { z } from "zod";
 import { formatHex, oklch, rgb } from "culori";
+import { readFile } from "node:fs/promises";
+import { join } from "node:path";
 // \0rolldown/runtime.js
 var __defProp = Object.defineProperty;
 var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
@@ -32,93 +30,6 @@ var __reExport = (target, mod, secondTarget) => (__copyProps(target, mod, "defau
 // src/shared/constants.ts
 /** Package name; must equal package.json `name` (the client bundle id). */
 const NAME = "design-vault-plugin";
-// src/shared/schema.ts
-var schema_exports = /* @__PURE__ */ __exportAll({});
-import * as import__design_vault_core_schema from "@design-vault/core/schema";
-__reExport(schema_exports, import__design_vault_core_schema);
-/** Resolve the vault root: explicit argument, then env, then the local default. */
-function vaultRoot(override) {
-	return override ?? process.env.DESIGN_VAULT_ROOT ?? "D:\\design-vault";
-}
-/**
-* Read `data/styles.json` from the vault.
-*
-* A single bad row must not hide the other fourteen, so the whole-array parse is
-* tried first and rows are re-checked one by one when it fails.
-*
-* @param root - vault root; defaults to {@link vaultRoot}.
-*/
-async function readVaultStyles(root) {
-	const file = join(vaultRoot(root), "data", "styles.json");
-	const raw = await readFile(file, "utf8");
-	const parsed = JSON.parse(raw);
-	if (!Array.isArray(parsed)) throw new Error(`${file}: expected a JSON array of styles, got ${typeof parsed}`);
-	const whole = schema_exports.stylesSchema.safeParse(parsed);
-	if (whole.success) return {
-		file,
-		styles: whole.data,
-		rejected: []
-	};
-	const styles = [];
-	const rejected = [];
-	parsed.forEach((row, index) => {
-		const one = schema_exports.stylesSchema.element.safeParse(row);
-		if (one.success) styles.push(one.data);
-		else rejected.push({
-			index,
-			message: one.error.issues[0]?.message ?? "invalid style"
-		});
-	});
-	return {
-		file,
-		styles,
-		rejected
-	};
-}
-/** Minimal text list: one line per style, stable stored order, no truncation. */
-function renderStyleList(styles) {
-	return [`${styles.length} style${styles.length === 1 ? "" : "s"}`, ...styles.map((style, index) => {
-		return `${String(index + 1).padStart(2, " ")}. ${style.name} (${style.id}) primary=${style.palette.primary}`;
-	})].join("\n");
-}
-// src/host/ping.ts
-const PING_PATH = "/plugins/design-vault/ping";
-/** M10b spike：验证宿主能否注册 HTTP 路由、客户端能否同源访问 */
-function pingHandler(req, res) {
-	const url = new URL(req.url ?? "/", "http://127.0.0.1");
-	const count = Math.min(Math.max(Number(url.searchParams.get("n") ?? "0") || 0, 0), 500);
-	const styles = readVaultStyles();
-	const body = {
-		ok: true,
-		plugin: NAME,
-		vault: vaultRoot(),
-		styles: Array.isArray(styles) ? styles.length : 0,
-		n: count,
-		items: Array.from({ length: count }, (_, index) => ({
-			index,
-			bvid: `BVspike${String(index).padStart(4, "0")}`,
-			title: `spike payload ${index}`
-		})),
-		at: (/* @__PURE__ */ new Date()).toISOString()
-	};
-	res.writeHead(200, {
-		"Content-Type": "application/json; charset=utf-8",
-		"Cache-Control": "no-store"
-	});
-	res.end(JSON.stringify(body));
-}
-/** 在宿主注册 ping 路由；返回 disposer（webServer 不可用时为 null） */
-function registerPing(ctx) {
-	if (!ctx.webServer) {
-		ctx.logger?.warn?.(`[${NAME}] webServer unavailable, ping route skipped`);
-		return null;
-	}
-	return ctx.webServer.register({
-		kind: "exact",
-		path: PING_PATH,
-		handler: pingHandler
-	});
-}
 const hexColorSchema = z.string().regex(/^#(?:[0-9a-fA-F]{3}|[0-9a-fA-F]{6})$/, "必须是 #RGB / #RRGGBB 形式的十六进制色值");
 const slugSchema = z.string().min(2).max(80).regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/, "id 必须是 kebab-case（小写字母/数字/连字符）");
 const isoDateSchema = z.string().regex(/^\d{4}-\d{2}-\d{2}$/, "日期格式必须为 YYYY-MM-DD");
@@ -713,12 +624,64 @@ function buildDesignConfig(style, options = {}) {
 function renderDesignConfig(config) {
 	return `${JSON.stringify(config, null, 2)}\n`;
 }
+// src/shared/schema.ts
+var schema_exports = /* @__PURE__ */ __exportAll({});
+import * as import__design_vault_core_schema from "@design-vault/core/schema";
+__reExport(schema_exports, import__design_vault_core_schema);
+/** Resolve the vault root: explicit argument, then env, then the local default. */
+function vaultRoot(override) {
+	return override ?? process.env.DESIGN_VAULT_ROOT ?? "D:\\design-vault";
+}
+/**
+* Read `data/styles.json` from the vault.
+*
+* A single bad row must not hide the other fourteen, so the whole-array parse is
+* tried first and rows are re-checked one by one when it fails.
+*
+* @param root - vault root; defaults to {@link vaultRoot}.
+*/
+async function readVaultStyles(root) {
+	const file = join(vaultRoot(root), "data", "styles.json");
+	const raw = await readFile(file, "utf8");
+	const parsed = JSON.parse(raw);
+	if (!Array.isArray(parsed)) throw new Error(`${file}: expected a JSON array of styles, got ${typeof parsed}`);
+	const whole = schema_exports.stylesSchema.safeParse(parsed);
+	if (whole.success) return {
+		file,
+		styles: whole.data,
+		rejected: []
+	};
+	const styles = [];
+	const rejected = [];
+	parsed.forEach((row, index) => {
+		const one = schema_exports.stylesSchema.element.safeParse(row);
+		if (one.success) styles.push(one.data);
+		else rejected.push({
+			index,
+			message: one.error.issues[0]?.message ?? "invalid style"
+		});
+	});
+	return {
+		file,
+		styles,
+		rejected
+	};
+}
+/** Minimal text list: one line per style, stable stored order, no truncation. */
+function renderStyleList(styles) {
+	return [`${styles.length} style${styles.length === 1 ? "" : "s"}`, ...styles.map((style, index) => {
+		return `${String(index + 1).padStart(2, " ")}. ${style.name} (${style.id}) primary=${style.palette.primary}`;
+	})].join("\n");
+}
 // src/host/index.ts
 /**
 * Host half of design-vault-plugin.
 *
 * Keep this file free of browser APIs: it runs in the DSH Host process.
-* Replace the example with the service, tool or route this plugin owns.
+* Read-only vault access plus the deterministic `DesignConfig` builder.
+*
+* 注意：宿主侧不注册任何 HTTP 路由，也不访问宿主 HTTP 服务；Client 通过本机
+* Web（localhost:3000）的 /api/vault/styles-lite 取数。
 *
 * @module design-vault-plugin/host
 */
@@ -729,41 +692,9 @@ const inject = [];
 /**
 * @param ctx - the Host Cordis context.
 */
-function debug(line) {
-	try {
-		fs.appendFileSync(path.join(os.tmpdir(), "dsh-design-vault-host.log"), `${(/* @__PURE__ */ new Date()).toISOString()} ${line}\n`);
-	} catch {}
-}
 function apply(ctx) {
-	debug(`apply webServer=${Boolean(ctx.webServer)} inject=${typeof ctx.inject}`);
 	ctx.effect(() => {
 		ctx.logger?.info?.(`[${NAME}] host half loaded`);
 	}, `${NAME}: host`);
-	ctx.effect(() => {
-		let dispose = null;
-		let tries = 0;
-		const timer = setInterval(() => {
-			if (dispose) return;
-			if (ctx.webServer) {
-				debug("webServer ready, registering ping");
-				try {
-					dispose = registerPing(ctx);
-					debug(`ping registered=${Boolean(dispose)}`);
-					ctx.logger?.info?.(`[${NAME}] ping route registered`);
-				} catch (error) {
-					ctx.logger?.warn?.(`[${NAME}] ping route failed: ${error.message}`);
-				}
-				clearInterval(timer);
-				return;
-			}
-			tries += 1;
-			if (tries % 10 === 0) debug(`wait #${tries} webServer=${Boolean(ctx.webServer)}`);
-			if (tries >= 60) clearInterval(timer);
-		}, 1e3);
-		return () => {
-			clearInterval(timer);
-			dispose?.();
-		};
-	}, `${NAME}: ping route`);
 }
-export { PING_PATH, apply, buildDesignConfig, inject, name, pingHandler, readVaultStyles, registerPing, renderDesignConfig, renderStyleList, vaultRoot };
+export { apply, buildDesignConfig, inject, name, readVaultStyles, renderDesignConfig, renderStyleList, vaultRoot };
