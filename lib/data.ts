@@ -1,92 +1,15 @@
-import fs from "node:fs";
-import type { StyleStage } from "../packages/core/src/types";
-import path from "node:path";
 import { cache } from "react";
-import type { z } from "zod";
-import {
-  effectsSchema,
-  pendingSchema,
-  refsSchema,
-  stylesSchema,
-  type Effect,
-  type PendingItem,
-  type Ref,
-  type Style,
-} from "./schema";
+import type { Style } from "../packages/core/src/schema";
+import type { StyleStage } from "../packages/core/src/types";
+import * as collections from "../packages/store/src/collections";
+import { readPending } from "../packages/store/src/pending";
 
 /**
- * 数据访问层：M0/M1a 直接用 fs 读写 data/*.json，不接数据库。
- * 读的时候一律过 zod：宁可整页报错，也不要把脏数据渲染成一个"看起来能用"的假象。
+ * Web 侧的数据访问层：底层读写全部来自 @design-vault/store，
+ * 这里只保留 React cache 与派生查询（详情 / 推荐池 / 标签统计）。
  */
 
-const DATA_DIR = path.join(process.cwd(), "data");
-
-export const STYLES_FILE = "styles.json";
-export const DRAFT_FILE = "styles.draft.json";
-
-export class DataValidationError extends Error {
-  constructor(
-    readonly file: string,
-    readonly issues: z.ZodIssue[],
-  ) {
-    const detail = issues
-      .map((issue) => `  · ${issue.path.join(".") || "(root)"}: ${issue.message}`)
-      .join("\n");
-    super(`data/${file} 未通过 zod 校验：\n${detail}`);
-    this.name = "DataValidationError";
-  }
-}
-
-function readCollection<T>(file: string, schema: z.ZodType<T, z.ZodTypeDef, unknown>): T {
-  const fullPath = path.join(DATA_DIR, file);
-  // Windows 编辑器（记事本 / PowerShell）可能写入 UTF-8 BOM，JSON.parse 不认
-  const raw = fs.readFileSync(fullPath, "utf8").replace(/^\uFEFF/, "");
-
-  let json: unknown;
-  try {
-    json = JSON.parse(raw);
-  } catch (error) {
-    throw new Error(`data/${file} 不是合法 JSON：${(error as Error).message}`);
-  }
-
-  const result = schema.safeParse(json);
-  if (!result.success) {
-    throw new DataValidationError(file, result.error.issues);
-  }
-  return result.data;
-}
-
-/** 先写临时文件再 rename：避免写一半崩掉留下半截 JSON。 */
-function writeJsonAtomic(file: string, data: unknown): void {
-  const fullPath = path.join(DATA_DIR, file);
-  const tempPath = `${fullPath}.tmp`;
-  fs.writeFileSync(tempPath, `${JSON.stringify(data, null, 2)}\n`, "utf8");
-  fs.renameSync(tempPath, fullPath);
-}
-
-// ---------- 风格库：已确认 ----------
-
-/** 不走缓存：写操作前要用磁盘上的最新状态。 */
-export const readStylesFile = (): Style[] => readCollection(STYLES_FILE, stylesSchema);
-
-export const getStyles = cache((): Style[] => readStylesFile());
-
-export function writeStylesFile(styles: Style[]): void {
-  writeJsonAtomic(STYLES_FILE, styles);
-}
-
-// ---------- 风格库：草案 ----------
-
-export const readDraftFile = (): Style[] => readCollection(DRAFT_FILE, stylesSchema);
-
-export const getDraftStyles = cache((): Style[] => readDraftFile());
-
-export function writeDraftFile(drafts: Style[]): void {
-  writeJsonAtomic(DRAFT_FILE, drafts);
-}
-
-// ---------- 统一取记录（详情页 / 推荐池共用）----------
-
+export * from "../packages/store/src/collections";
 export type { StyleStage };
 
 export type StyleRecord = {
@@ -95,6 +18,12 @@ export type StyleRecord = {
   /** 在当前分区里的序号（001 起） */
   index: number;
 };
+
+export const getStyles = cache((): Style[] => collections.readStylesFile());
+export const getDraftStyles = cache((): Style[] => collections.readDraftFile());
+export const getEffects = cache(() => collections.readEffectsFile());
+export const getRefs = cache(() => collections.readRefsFile());
+export const getPending = cache(() => readPending());
 
 /** 已确认优先；找不到再去草案里找。 */
 export const getStyleRecord = cache((id: string): StyleRecord | undefined => {
@@ -148,26 +77,6 @@ export function getAllTags(): { tag: string; count: number }[] {
     .map(([tag, count]) => ({ tag, count }))
     .sort((a, b) => b.count - a.count || a.tag.localeCompare(b.tag));
 }
-
-// ---------- 其余三个库（M0 只读取、只占位）----------
-
-export const EFFECTS_FILE = "effects.json";
-export const readEffectsFile = (): Effect[] => readCollection(EFFECTS_FILE, effectsSchema);
-export const getEffects = cache((): Effect[] => readEffectsFile());
-export function writeEffectsFile(effects: Effect[]): void {
-  writeJsonAtomic(EFFECTS_FILE, effects);
-}
-
-export const REFS_FILE = "refs.json";
-export const readRefsFile = (): Ref[] => readCollection(REFS_FILE, refsSchema);
-export const getRefs = cache((): Ref[] => readRefsFile());
-export function writeRefsFile(refs: Ref[]): void {
-  writeJsonAtomic(REFS_FILE, refs);
-}
-
-export const getPending = cache((): PendingItem[] =>
-  readCollection("pending.json", pendingSchema),
-);
 
 /** 顶部状态栏用的库体量读数。 */
 export function getVaultCounts() {
