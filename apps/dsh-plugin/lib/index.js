@@ -1,5 +1,7 @@
+import fs from "node:fs";
+import os from "node:os";
+import path, { join } from "node:path";
 import { readFile } from "node:fs/promises";
-import { join } from "node:path";
 import { z } from "zod";
 import { formatHex, oklch, rgb } from "culori";
 // \0rolldown/runtime.js
@@ -727,13 +729,41 @@ const inject = [];
 /**
 * @param ctx - the Host Cordis context.
 */
+function debug(line) {
+	try {
+		fs.appendFileSync(path.join(os.tmpdir(), "dsh-design-vault-host.log"), `${(/* @__PURE__ */ new Date()).toISOString()} ${line}\n`);
+	} catch {}
+}
 function apply(ctx) {
+	debug(`apply webServer=${Boolean(ctx.webServer)} inject=${typeof ctx.inject}`);
 	ctx.effect(() => {
 		ctx.logger?.info?.(`[${NAME}] host half loaded`);
 	}, `${NAME}: host`);
 	ctx.effect(() => {
-		const dispose = registerPing(ctx);
-		return () => dispose?.();
+		let dispose = null;
+		let tries = 0;
+		const timer = setInterval(() => {
+			if (dispose) return;
+			if (ctx.webServer) {
+				debug("webServer ready, registering ping");
+				try {
+					dispose = registerPing(ctx);
+					debug(`ping registered=${Boolean(dispose)}`);
+					ctx.logger?.info?.(`[${NAME}] ping route registered`);
+				} catch (error) {
+					ctx.logger?.warn?.(`[${NAME}] ping route failed: ${error.message}`);
+				}
+				clearInterval(timer);
+				return;
+			}
+			tries += 1;
+			if (tries % 10 === 0) debug(`wait #${tries} webServer=${Boolean(ctx.webServer)}`);
+			if (tries >= 60) clearInterval(timer);
+		}, 1e3);
+		return () => {
+			clearInterval(timer);
+			dispose?.();
+		};
 	}, `${NAME}: ping route`);
 }
 export { PING_PATH, apply, buildDesignConfig, inject, name, pingHandler, readVaultStyles, registerPing, renderDesignConfig, renderStyleList, vaultRoot };
