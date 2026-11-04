@@ -9,3 +9,5 @@ export * from "./ingest/types";
 export * from "./ingest/palette-from-direction";
 export * from "./ingest/pending-to-style";
 export * from "./ingest/tags";
+export * from "./search/types";
+export * from "./search/parse";
