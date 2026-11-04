@@ -15,6 +15,11 @@ if (fs.existsSync(envFile)) {
 }
 
 const nextConfig: NextConfig = {
+  serverExternalPackages: [
+    "@ffmpeg-installer/ffmpeg",
+    "sharp",
+    "playwright",
+  ],
   outputFileTracingRoot: repoRoot,
   transpilePackages: [
     "@design-vault/core",

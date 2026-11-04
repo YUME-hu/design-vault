@@ -68,6 +68,24 @@ function currentCommit(): string {
   }
 }
 
+function ensureDataDir() {
+  const dataDir = path.join(ROOT, "data");
+  fs.mkdirSync(dataDir, { recursive: true });
+  const defaults: Record<string, string> = {
+    "styles.json": "[]\n",
+    "styles.draft.json": "[]\n",
+    "pending.json": "[]\n",
+    "effects.json": "[]\n",
+    "components.json": "[]\n",
+    "refs.json": "[]\n",
+    "ingest-state.json": "{}\n",
+  };
+  for (const [file, body] of Object.entries(defaults)) {
+    const full = path.join(dataDir, file);
+    if (!fs.existsSync(full)) fs.writeFileSync(full, body, "utf8");
+  }
+}
+
 function ensureBuild() {
   if (dev) return;
   const stampFile = path.join(RUN_DIR, "build.commit");
@@ -177,6 +195,7 @@ async function main() {
   if (!hasCommand("node")) fail("没有检测到 Node.js，请先安装 Node 22+");
 
   ensureDependencies();
+  ensureDataDir();
   ensureBuild();
 
   const webDir = path.join(ROOT, "apps", "web");

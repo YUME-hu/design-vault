@@ -33,7 +33,16 @@ export function readCollection<T>(
     raw = fs.readFileSync(fullPath, "utf8").replace(/^\uFEFF/, "");
   } catch (error) {
     if ((error as NodeJS.ErrnoException).code === "ENOENT") {
-      throw new Error(`data/${file} 不存在（${fullPath}）`);
+      // 纯净环境（首次 clone / 空 Vault）没有集合文件是正常的：
+      // 静默创建空数组并返回，绝不让 Next 的预渲染崩溃。
+      try {
+        fs.mkdirSync(baseDir, { recursive: true });
+        fs.writeFileSync(fullPath, "[]\n", "utf8");
+      } catch {
+        // 只读文件系统等场景：仍然返回空集合
+      }
+      const empty = schema.safeParse([]);
+      return (empty.success ? empty.data : ([] as unknown as T));
     }
     fail("读取", fullPath, error);
   }
