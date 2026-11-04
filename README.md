@@ -28,8 +28,10 @@ node --import tsx scripts/launch.mts stop
 # 或 npm run stop
 ```
 
-- **关掉启动窗口不会停止服务**：Web 进程已彻底脱离控制台，在后台继续运行；
+- **关掉启动窗口 / 退出 DSH 都不会停止服务**：Web 进程由 WMI 创建，父进程是 WmiPrvSE，完全脱离终端与 DSH 的 Job；
+- 停止服务：双击 `stop-silent.vbs`（或 `npm run stop`）；
 - 日志：`.run/web.log`
+- 自动化验证：`npx tsx scripts/test-detach.mts`（杀掉父进程后检查服务仍存活）
 - 端口被占用：脚本会提示；可用 `PORT=3010 ./start.sh`（Windows：`set PORT=3010` 后运行）
 - 首次使用没有密钥也能打开页面，但抓取/分析需要先配置 `.env.local`（见下）
 

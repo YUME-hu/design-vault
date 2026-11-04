@@ -167,7 +167,6 @@ async function main() {
   ensureDependencies();
   ensureBuild();
 
-  const logFd = fs.openSync(LOG_FILE, "a");
   const webDir = path.join(ROOT, "apps", "web");
   const nextBin = [
     path.join(webDir, "node_modules", "next", "dist", "bin", "next"),
@@ -177,17 +176,48 @@ async function main() {
 
   say(dev ? "正在后台启动开发服务…" : "正在后台启动 Web 服务…");
 
-  // 直接 node 启动，不经 shell/cmd 包装：
-  // detached + 独立 stdio 让子进程脱离当前控制台，关掉黑框也不会被一并结束。
-  const child = spawn(process.execPath, [nextBin, dev ? "dev" : "start"], {
-    cwd: webDir,
-    detached: true,
-    windowsHide: true,
-    stdio: ["ignore", logFd, logFd],
-    env: { ...process.env, PORT: String(port), NODE_ENV: dev ? "development" : "production" },
-  });
-  child.unref();
-  if (child.pid) fs.writeFileSync(PID_FILE, String(child.pid));
+  // 启动脚本写到 .run/boot.cmd：WMI 创建进程时无法传 cwd/env，统一在这里设置。
+  const bootPath = path.join(RUN_DIR, "boot.cmd");
+  fs.writeFileSync(
+    bootPath,
+    [
+      "@echo off",
+      `cd /d "${webDir}"`,
+      `set "PORT=${port}"`,
+      `set "NODE_ENV=${dev ? "development" : "production"}"`,
+      `"${process.execPath}" "${nextBin}" ${dev ? "dev" : "start"} >> "${LOG_FILE}" 2>&1`,
+      "",
+    ].join("\r\n"),
+  );
+
+  // Windows：用 WMI 创建进程，父进程是 WmiPrvSE，不在当前终端 / DSH 的 Job 里，
+  // 关掉黑框、甚至退出 DSH 都不会带走它。失败则退回 detached spawn。
+  let pid = 0;
+  if (process.platform === "win32") {
+    const command = `cmd.exe /c ""${bootPath}""`;
+    const script = `$r = Invoke-CimMethod -ClassName Win32_Process -MethodName Create -Arguments @{CommandLine='${command.replaceAll("'", "''")}'}; if ($r.ProcessId) { $r.ProcessId }`;
+    const result = spawnSync("powershell.exe", ["-NoProfile", "-NonInteractive", "-Command", script], {
+      encoding: "utf8",
+      windowsHide: true,
+      timeout: 20_000,
+    });
+    pid = Number((result.stdout ?? "").trim());
+    if (!Number.isFinite(pid) || pid <= 0) pid = 0;
+  }
+
+  if (!pid) {
+    const child = spawn(process.execPath, [nextBin, dev ? "dev" : "start"], {
+      cwd: webDir,
+      detached: true,
+      windowsHide: true,
+      stdio: "ignore",
+      env: { ...process.env, PORT: String(port), NODE_ENV: dev ? "development" : "production" },
+    });
+    child.unref();
+    pid = child.pid ?? 0;
+  }
+
+  if (pid) fs.writeFileSync(PID_FILE, String(pid));
 
   const healthy = await waitForHealth();
   if (!healthy) {
