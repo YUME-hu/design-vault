@@ -1,4 +1,5 @@
 import fs from "node:fs";
+import type { StyleStage } from "../packages/core/src/types";
 import path from "node:path";
 import { cache } from "react";
 import type { z } from "zod";
@@ -86,7 +87,7 @@ export function writeDraftFile(drafts: Style[]): void {
 
 // ---------- 统一取记录（详情页 / 推荐池共用）----------
 
-export type StyleStage = "confirmed" | "draft";
+export type { StyleStage };
 
 export type StyleRecord = {
   style: Style;
