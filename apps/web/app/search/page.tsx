@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { SearchConsole } from "@/components/search/search-console";
+import { SearchWorkspace } from "@/components/search/search-workspace";
 import { ffmpegStatus } from "@design-vault/adapters/ingest/vision";
 
 export const metadata: Metadata = {
@@ -47,7 +47,7 @@ export default function SearchPage() {
         </p>
       )}
 
-      <SearchConsole />
+      <SearchWorkspace />
 
       <p className="mono mt-6 border-t border-hairline pt-3 text-[9px] uppercase leading-relaxed tracking-[0.14em] text-ink-faded">
         B 站搜索与视频详情请求间 1–3s 随机延迟 · 提取复用 README / CC 字幕链路 · 无文本则不入库
