@@ -16,9 +16,28 @@ export function workspaceRoot(start: string = process.cwd()): string {
   }
 }
 
+export function vaultPointer(): string {
+  const file = path.join(workspaceRoot(), ".design-vault-home");
+  try {
+    if (!fs.existsSync(file)) return "";
+    const value = fs.readFileSync(file, "utf8").trim();
+    return value ? path.resolve(value) : "";
+  } catch {
+    return "";
+  }
+}
+
+export function vaultHomeSource(): "env" | "pointer" | "workspace" {
+  if (process.env.DESIGN_VAULT_HOME?.trim()) return "env";
+  if (vaultPointer()) return "pointer";
+  return "workspace";
+}
+
 export function vaultHome(): string {
   const configured = process.env.DESIGN_VAULT_HOME?.trim();
-  return configured ? path.resolve(configured) : workspaceRoot();
+  if (configured) return path.resolve(configured);
+  const pointer = vaultPointer();
+  return pointer || workspaceRoot();
 }
 
 export function dataDir(): string {

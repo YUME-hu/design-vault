@@ -1,3 +1,4 @@
+import { getDeepSeekKey } from "../auth/api-keys";
 import crypto from "node:crypto";
 import { clearExpiredBiliSession, getBiliCookie } from "../auth/session";
 import { fetchReadme } from "../ingest/github";
@@ -115,7 +116,7 @@ export function startSearchExtract(
       error: "缺少 B 站登录凭证（请在 /settings 扫码，或在 .env.local 配置 BILIBILI_SESSDATA）",
     };
   }
-  const apiKey = process.env.DEEPSEEK_API_KEY ?? "";
+  const apiKey = getDeepSeekKey();
   if (!apiKey) {
     return { ok: false, status: 400, error: "缺少 DEEPSEEK_API_KEY，无法分析文本" };
   }

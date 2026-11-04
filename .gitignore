@@ -45,3 +45,6 @@ pnpm-debug.log*
 
 # 加密的 B 站登录凭证（永不入仓）
 data/secrets/
+
+# Vault 路径指针（本地配置）
+.design-vault-home

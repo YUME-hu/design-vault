@@ -1,3 +1,4 @@
+import crypto from "node:crypto";
 import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
@@ -82,6 +83,44 @@ record(
 );
 
 fs.rmSync(home, { recursive: true, force: true });
+
+
+// 5) 加密密钥优先级与掩码
+const secrets = await import("@design-vault/store/secrets");
+const keys = await import("@design-vault/adapters/auth/api-keys");
+const keyHome = fs.mkdtempSync(path.join(os.tmpdir(), "dv-m7-keys-"));
+process.env.DESIGN_VAULT_HOME = keyHome;
+process.env.DESIGN_VAULT_SECRET = crypto.randomBytes(32).toString("base64");
+process.env.DEEPSEEK_API_KEY = "sk-env-placeholder-0000";
+secrets.saveNamedSecret("deepseek", "sk-encrypted-value-1234");
+record(
+  "加密保存的 DeepSeek Key 优先于环境变量",
+  keys.getDeepSeekKey() === "sk-encrypted-value-1234" && keys.deepSeekKeySource() === "encrypted",
+  keys.getDeepSeekKey().slice(0, 6) + "…",
+);
+secrets.deleteNamedSecret("deepseek");
+record(
+  "删除加密 Key 后回退环境变量",
+  keys.getDeepSeekKey() === "sk-env-placeholder-0000" && keys.deepSeekKeySource() === "env",
+);
+record("掩码只暴露尾号", secrets.maskSecret("sk-abcdef123456").last4 === "3456");
+delete process.env.DEEPSEEK_API_KEY;
+
+// 6) Vault 指针优先级
+const paths = await import("@design-vault/store/paths");
+const vaultA = fs.mkdtempSync(path.join(os.tmpdir(), "dv-vault-a-"));
+const vaultB = fs.mkdtempSync(path.join(os.tmpdir(), "dv-vault-b-"));
+process.chdir(vaultA);
+fs.writeFileSync(path.join(vaultA, "pnpm-workspace.yaml"), "packages: []\n");
+process.env.DESIGN_VAULT_HOME = vaultB;
+record("环境变量优先于指针文件", paths.vaultHome() === vaultB && paths.vaultHomeSource() === "env");
+
+delete process.env.DESIGN_VAULT_HOME;
+fs.writeFileSync(path.join(vaultA, ".design-vault-home"), vaultB + "\n");
+record("指针文件优先于仓库根", paths.vaultHome() === vaultB && paths.vaultHomeSource() === "pointer");
+
+fs.rmSync(path.join(vaultA, ".design-vault-home"));
+record("无 env / 无指针时回退 workspace 根", paths.vaultHome() === vaultA && paths.vaultHomeSource() === "workspace");
 
 const failed = results.filter((item) => !item.ok);
 console.log("");

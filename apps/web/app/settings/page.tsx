@@ -1,10 +1,24 @@
 import type { Metadata } from "next";
 import { BiliLoginPanel } from "@/components/settings/bili-login-panel";
+import { SettingsPanels } from "@/components/settings/settings-panels";
+import { getDeepSeekKey, deepSeekKeySource } from "@design-vault/adapters/auth/api-keys";
+import { maskSecret } from "@design-vault/store/secrets";
+import { vaultHome, vaultHomeSource } from "@design-vault/store/paths";
+import { readUpstreams } from "@design-vault/adapters/ingest/config";
+import { readIngestState } from "@design-vault/store/state";
 
 export const metadata: Metadata = { title: "设置" };
 export const dynamic = "force-dynamic";
 
 export default function SettingsPage() {
+  const key = getDeepSeekKey();
+  const masked = maskSecret(key);
+  const state = readIngestState();
+  const upstreams = readUpstreams().map((upstream) => ({
+    uid: upstream.uid,
+    name: state.upstreams[upstream.uid]?.name ?? upstream.name ?? "",
+    lastCheckedAt: state.upstreams[upstream.uid]?.lastCheckedAt ?? "",
+  }));
   const hasSecret = Boolean(process.env.DESIGN_VAULT_SECRET?.trim());
 
   return (
@@ -28,6 +42,11 @@ export default function SettingsPage() {
       )}
 
       <BiliLoginPanel />
+      <SettingsPanels
+        deepseek={{ ...masked, source: deepSeekKeySource() }}
+        vault={{ path: vaultHome(), source: vaultHomeSource() }}
+        upstreams={upstreams}
+      />
     </div>
   );
 }

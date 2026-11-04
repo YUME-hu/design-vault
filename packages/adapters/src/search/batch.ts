@@ -1,3 +1,4 @@
+import { getDeepSeekKey } from "../auth/api-keys";
 import crypto from "node:crypto";
 import { getBiliCookie } from "../auth/session";
 import { extractSessdata } from "../ingest/bilibili";
@@ -42,7 +43,7 @@ export function startBatch(
   if (!sessdata) {
     return { ok: false, status: 400, error: "缺少 B 站登录凭证（请先扫码）" };
   }
-  const apiKey = process.env.DEEPSEEK_API_KEY ?? "";
+  const apiKey = getDeepSeekKey();
   if (!apiKey) {
     return { ok: false, status: 400, error: "缺少 DEEPSEEK_API_KEY，无法分析" };
   }

@@ -1,3 +1,4 @@
+import { getDeepSeekKey } from "@design-vault/adapters/auth/api-keys";
 import type { Metadata } from "next";
 import { SubscriptionConsole } from "@/components/subscriptions/subscription-console";
 import { readUpstreams } from "@design-vault/adapters/ingest/config";
@@ -26,7 +27,7 @@ export default function SubscriptionsPage() {
 
   const config = {
     hasSessdata: Boolean(process.env.BILIBILI_SESSDATA),
-    hasDeepseek: Boolean(process.env.DEEPSEEK_API_KEY),
+    hasDeepseek: Boolean(getDeepSeekKey()),
     hasGithubToken: Boolean(process.env.GITHUB_TOKEN),
   };
 

@@ -1,3 +1,4 @@
+import { getDeepSeekKey } from "../auth/api-keys";
 import { dataPath } from "@design-vault/store/paths";
 import fs from "node:fs";
 import path from "node:path";
@@ -378,7 +379,7 @@ export async function analyzeImage(
   imagePath: string,
   options: { apiKey?: string; model?: string; baseUrl?: string } = {},
 ): Promise<unknown> {
-  const apiKey = options.apiKey ?? process.env.DEEPSEEK_API_KEY ?? "";
+  const apiKey = options.apiKey ?? getDeepSeekKey();
   const model = options.model ?? process.env.VISION_MODEL?.trim() ?? "deepseek-flash";
   const baseUrl = (options.baseUrl?.trim() || process.env.DEEPSEEK_BASE_URL?.trim() || DEFAULT_BASE_URL).replace(/\/$/, "");
   const base64 = (await import("node:fs")).readFileSync(imagePath).toString("base64");
