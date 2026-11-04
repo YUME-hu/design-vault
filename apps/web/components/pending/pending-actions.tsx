@@ -10,17 +10,21 @@ import { useState } from "react";
  *   去调色（带着预填数据进调色器，保存时入库并清 pending）
  *   丢弃（直接从 pending 删除）
  */
-export function PendingActions({ id, duplicateOf }: { id: string; duplicateOf?: string | null }) {
+export function PendingActions({ id, duplicateOf, itemType }: { id: string; duplicateOf?: string | null; itemType?: string }) {
   const router = useRouter();
   const [busy, setBusy] = useState<"approve" | "discard" | "merge" | null>(null);
   const [error, setError] = useState("");
   const [approvedId, setApprovedId] = useState("");
 
-  async function approve() {
+  async function approve(as: "style" | "effect" | "component") {
     setBusy("approve");
     setError("");
     try {
-      const response = await fetch(`/api/pending/${id}/approve`, { method: "POST" });
+      const response = await fetch(`/api/pending/${id}/approve`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ as }),
+      });
       const data = (await response.json()) as {
         ok?: boolean;
         id?: string;
@@ -83,11 +87,29 @@ export function PendingActions({ id, duplicateOf }: { id: string; duplicateOf?: 
         <button
           type="button"
           data-testid="approve-pending"
-          onClick={approve}
+          onClick={() => approve("style")}
           disabled={busy !== null}
           className="mono h-9 border border-charcoal bg-charcoal px-3 text-[9px] uppercase tracking-[0.16em] text-paper hover:border-signal hover:bg-signal disabled:opacity-40"
         >
-          {busy === "approve" ? "入库中…" : "通过并入库"}
+          {busy === "approve" ? "入库中…" : "存入风格库"}
+        </button>
+        <button
+          type="button"
+          data-testid="approve-effect"
+          onClick={() => approve("effect")}
+          disabled={busy !== null}
+          className="mono h-9 border border-charcoal px-3 text-[9px] uppercase tracking-[0.16em] text-charcoal hover:bg-charcoal hover:text-paper disabled:opacity-40"
+        >
+          存入动效库
+        </button>
+        <button
+          type="button"
+          data-testid="approve-component"
+          onClick={() => approve("component")}
+          disabled={busy !== null}
+          className="mono h-9 border border-charcoal px-3 text-[9px] uppercase tracking-[0.16em] text-charcoal hover:bg-charcoal hover:text-paper disabled:opacity-40"
+        >
+          存入组件库
         </button>
         <Link
           href={`/library/new?pending=${id}`}

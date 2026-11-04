@@ -124,7 +124,13 @@ export default function PendingPage() {
                           <span className="mono border border-hairline-strong px-1.5 py-[1px] text-[8px] uppercase tracking-[0.12em] text-ink-faded">
                             {item.status}
                           </span>
-                          {item.duplicate_of && (
+                          <span
+                        data-testid="item-type"
+                        className="mono border border-charcoal px-1.5 py-[1px] text-[8px] uppercase tracking-[0.12em] text-charcoal"
+                      >
+                        {item.item_type === "component" ? "组件" : item.item_type === "effect" ? "动效" : "风格"}
+                      </span>
+                      {item.duplicate_of && (
                             <span
                               data-testid="duplicate-badge"
                               className="mono border border-signal px-1.5 py-[1px] text-[8px] uppercase tracking-[0.12em] text-signal"
@@ -274,7 +280,7 @@ export default function PendingPage() {
                         </div>
                       ) : null}
 
-                      <PendingActions id={item.id} duplicateOf={item.duplicate_of} />
+                      <PendingActions id={item.id} duplicateOf={item.duplicate_of} itemType={item.item_type} />
                     </div>
                   </details>
                 </li>
