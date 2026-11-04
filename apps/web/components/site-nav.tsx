@@ -9,7 +9,7 @@ type NavItem = {
   href: string;
   zh: string;
   en: string;
-  milestone: "M0" | "M1a" | "M2a" | "M3a" | "M4" | "M4a" | "M4b" | "V2";
+  milestone: "M0" | "M1a" | "M2a" | "M3a" | "M4" | "M4a" | "M4b" | "V2" | "V2.2";
   ready: boolean;
 };
 
@@ -21,7 +21,8 @@ const NAV_ITEMS: NavItem[] = [
   { index: "05", href: "/refs", zh: "参考库", en: "Refs", milestone: "M4b", ready: true },
   { index: "06", href: "/subscriptions", zh: "订阅", en: "Feeds", milestone: "M2a", ready: true },
   { index: "07", href: "/search", zh: "搜索", en: "Search", milestone: "M3a", ready: true },
-  { index: "08", href: "/settings", zh: "设置", en: "Settings", milestone: "V2", ready: true },
+  { index: "08", href: "/components", zh: "组件库", en: "Components", milestone: "V2.2", ready: true },
+  { index: "09", href: "/settings", zh: "设置", en: "Settings", milestone: "V2", ready: true },
 ];
 
 function isActive(pathname: string, href: string) {
