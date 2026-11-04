@@ -8,6 +8,7 @@
  */
 
 import { NAME } from "../shared/constants.ts";
+import { registerPing } from "./ping.ts";
 
 /**
  * Read-only vault access plus the deterministic `DesignConfig` builder.
@@ -16,6 +17,7 @@ import { NAME } from "../shared/constants.ts";
  */
 export { buildDesignConfig, renderDesignConfig, type DesignConfig } from "./design-config.ts";
 export { readVaultStyles, renderStyleList, vaultRoot, type VaultStyles } from "./vault-reader.ts";
+export { PING_PATH, pingHandler, registerPing } from "./ping.ts";
 
 /** Cordis plugin name; must equal the package name so the client bundle id matches. */
 export const name = NAME;
@@ -30,4 +32,10 @@ export function apply(ctx: any): void {
   ctx.effect(() => {
     ctx.logger?.info?.(`[${NAME}] host half loaded`);
   }, `${NAME}: host`);
+
+  // M10b spike：注册一个只读 ping 路由，验证宿主 HTTP 能力
+  ctx.effect(() => {
+    const dispose = registerPing(ctx);
+    return () => dispose?.();
+  }, `${NAME}: ping route`);
 }

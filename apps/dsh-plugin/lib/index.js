@@ -1,7 +1,7 @@
-import { z } from "zod";
-import { formatHex, oklch, rgb } from "culori";
 import { readFile } from "node:fs/promises";
 import { join } from "node:path";
+import { z } from "zod";
+import { formatHex, oklch, rgb } from "culori";
 // \0rolldown/runtime.js
 var __defProp = Object.defineProperty;
 var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
@@ -30,6 +30,93 @@ var __reExport = (target, mod, secondTarget) => (__copyProps(target, mod, "defau
 // src/shared/constants.ts
 /** Package name; must equal package.json `name` (the client bundle id). */
 const NAME = "design-vault-plugin";
+// src/shared/schema.ts
+var schema_exports = /* @__PURE__ */ __exportAll({});
+import * as import__design_vault_core_schema from "@design-vault/core/schema";
+__reExport(schema_exports, import__design_vault_core_schema);
+/** Resolve the vault root: explicit argument, then env, then the local default. */
+function vaultRoot(override) {
+	return override ?? process.env.DESIGN_VAULT_ROOT ?? "D:\\design-vault";
+}
+/**
+* Read `data/styles.json` from the vault.
+*
+* A single bad row must not hide the other fourteen, so the whole-array parse is
+* tried first and rows are re-checked one by one when it fails.
+*
+* @param root - vault root; defaults to {@link vaultRoot}.
+*/
+async function readVaultStyles(root) {
+	const file = join(vaultRoot(root), "data", "styles.json");
+	const raw = await readFile(file, "utf8");
+	const parsed = JSON.parse(raw);
+	if (!Array.isArray(parsed)) throw new Error(`${file}: expected a JSON array of styles, got ${typeof parsed}`);
+	const whole = schema_exports.stylesSchema.safeParse(parsed);
+	if (whole.success) return {
+		file,
+		styles: whole.data,
+		rejected: []
+	};
+	const styles = [];
+	const rejected = [];
+	parsed.forEach((row, index) => {
+		const one = schema_exports.stylesSchema.element.safeParse(row);
+		if (one.success) styles.push(one.data);
+		else rejected.push({
+			index,
+			message: one.error.issues[0]?.message ?? "invalid style"
+		});
+	});
+	return {
+		file,
+		styles,
+		rejected
+	};
+}
+/** Minimal text list: one line per style, stable stored order, no truncation. */
+function renderStyleList(styles) {
+	return [`${styles.length} style${styles.length === 1 ? "" : "s"}`, ...styles.map((style, index) => {
+		return `${String(index + 1).padStart(2, " ")}. ${style.name} (${style.id}) primary=${style.palette.primary}`;
+	})].join("\n");
+}
+// src/host/ping.ts
+const PING_PATH = "/plugins/design-vault/ping";
+/** M10b spike：验证宿主能否注册 HTTP 路由、客户端能否同源访问 */
+function pingHandler(req, res) {
+	const url = new URL(req.url ?? "/", "http://127.0.0.1");
+	const count = Math.min(Math.max(Number(url.searchParams.get("n") ?? "0") || 0, 0), 500);
+	const styles = readVaultStyles();
+	const body = {
+		ok: true,
+		plugin: NAME,
+		vault: vaultRoot(),
+		styles: Array.isArray(styles) ? styles.length : 0,
+		n: count,
+		items: Array.from({ length: count }, (_, index) => ({
+			index,
+			bvid: `BVspike${String(index).padStart(4, "0")}`,
+			title: `spike payload ${index}`
+		})),
+		at: (/* @__PURE__ */ new Date()).toISOString()
+	};
+	res.writeHead(200, {
+		"Content-Type": "application/json; charset=utf-8",
+		"Cache-Control": "no-store"
+	});
+	res.end(JSON.stringify(body));
+}
+/** 在宿主注册 ping 路由；返回 disposer（webServer 不可用时为 null） */
+function registerPing(ctx) {
+	if (!ctx.webServer) {
+		ctx.logger?.warn?.(`[${NAME}] webServer unavailable, ping route skipped`);
+		return null;
+	}
+	return ctx.webServer.register({
+		kind: "exact",
+		path: PING_PATH,
+		handler: pingHandler
+	});
+}
 const hexColorSchema = z.string().regex(/^#(?:[0-9a-fA-F]{3}|[0-9a-fA-F]{6})$/, "必须是 #RGB / #RRGGBB 形式的十六进制色值");
 const slugSchema = z.string().min(2).max(80).regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/, "id 必须是 kebab-case（小写字母/数字/连字符）");
 const isoDateSchema = z.string().regex(/^\d{4}-\d{2}-\d{2}$/, "日期格式必须为 YYYY-MM-DD");
@@ -182,6 +269,42 @@ const pendingItemSchema = z.object({
 		code_snippet: z.string().default(""),
 		performance_notes: z.string().default("")
 	}).strict()).default([]),
+	/** AI 判定的产物类型；人工可在审核页用 as 覆盖 */
+	item_type: z.enum([
+		"style",
+		"effect",
+		"component"
+	]).default("style"),
+	component_candidate: z.object({
+		name: z.string().min(1),
+		category: z.enum([
+			"navigation",
+			"hero",
+			"card",
+			"form",
+			"button",
+			"table",
+			"feedback",
+			"overlay",
+			"layout",
+			"animation",
+			"other"
+		]).default("other"),
+		description: z.string().default(""),
+		framework: z.enum(["react", "html"]).default("react"),
+		code: z.string().default(""),
+		dependencies: z.array(z.string()).default([]),
+		states: z.array(z.object({
+			name: z.string(),
+			description: z.string().default("")
+		}).strict()).default([])
+	}).strict().nullable().default(null),
+	effect_candidate: z.object({
+		name: z.string().min(1),
+		tech_stack: z.array(z.string()).default([]),
+		description: z.string().default(""),
+		code_snippet: z.string().default("")
+	}).strict().nullable().default(null),
 	raw_response: z.string().default("")
 }).strict();
 z.array(pendingItemSchema);
@@ -200,6 +323,41 @@ const effectSchema = z.object({
 	related_styles: z.array(z.string()).default([])
 }).strict();
 z.array(effectSchema);
+const COMPONENT_CATEGORIES = [
+	"navigation",
+	"hero",
+	"card",
+	"form",
+	"button",
+	"table",
+	"feedback",
+	"overlay",
+	"layout",
+	"animation",
+	"other"
+];
+const componentSchema = z.object({
+	id: slugSchema,
+	name: z.string().min(1),
+	category: z.enum(COMPONENT_CATEGORIES),
+	description: z.string().min(1),
+	framework: z.enum(["react", "html"]).default("react"),
+	/** 允许空串：已登记、待补代码 */
+	code: z.string().default(""),
+	dependencies: z.array(z.string()).default([]),
+	states: z.array(z.object({
+		name: z.string(),
+		description: z.string().default("")
+	}).strict()).default([]),
+	related_styles: z.array(z.string()).default([]),
+	related_effects: z.array(z.string()).default([]),
+	sources: styleSourcesSchema,
+	notes: z.string().default(""),
+	confidence: z.number().min(0).max(1),
+	created_at: isoDateSchema,
+	updated_at: isoDateSchema
+}).strict();
+z.array(componentSchema);
 const refTokensSchema = z.object({
 	colors: z.array(z.object({
 		hex: hexColorSchema,
@@ -509,6 +667,7 @@ z.object({
 		"any"
 	])
 }).strict();
+new Set(COMPONENT_CATEGORIES);
 // src/host/design-config.ts
 /**
 * Turn one vault style into a `DesignConfig`: the deterministic artefact a
@@ -552,55 +711,6 @@ function buildDesignConfig(style, options = {}) {
 function renderDesignConfig(config) {
 	return `${JSON.stringify(config, null, 2)}\n`;
 }
-// src/shared/schema.ts
-var schema_exports = /* @__PURE__ */ __exportAll({});
-import * as import__design_vault_core_schema from "@design-vault/core/schema";
-__reExport(schema_exports, import__design_vault_core_schema);
-/** Resolve the vault root: explicit argument, then env, then the local default. */
-function vaultRoot(override) {
-	return override ?? process.env.DESIGN_VAULT_ROOT ?? "D:\\design-vault";
-}
-/**
-* Read `data/styles.json` from the vault.
-*
-* A single bad row must not hide the other fourteen, so the whole-array parse is
-* tried first and rows are re-checked one by one when it fails.
-*
-* @param root - vault root; defaults to {@link vaultRoot}.
-*/
-async function readVaultStyles(root) {
-	const file = join(vaultRoot(root), "data", "styles.json");
-	const raw = await readFile(file, "utf8");
-	const parsed = JSON.parse(raw);
-	if (!Array.isArray(parsed)) throw new Error(`${file}: expected a JSON array of styles, got ${typeof parsed}`);
-	const whole = schema_exports.stylesSchema.safeParse(parsed);
-	if (whole.success) return {
-		file,
-		styles: whole.data,
-		rejected: []
-	};
-	const styles = [];
-	const rejected = [];
-	parsed.forEach((row, index) => {
-		const one = schema_exports.stylesSchema.element.safeParse(row);
-		if (one.success) styles.push(one.data);
-		else rejected.push({
-			index,
-			message: one.error.issues[0]?.message ?? "invalid style"
-		});
-	});
-	return {
-		file,
-		styles,
-		rejected
-	};
-}
-/** Minimal text list: one line per style, stable stored order, no truncation. */
-function renderStyleList(styles) {
-	return [`${styles.length} style${styles.length === 1 ? "" : "s"}`, ...styles.map((style, index) => {
-		return `${String(index + 1).padStart(2, " ")}. ${style.name} (${style.id}) primary=${style.palette.primary}`;
-	})].join("\n");
-}
 // src/host/index.ts
 /**
 * Host half of design-vault-plugin.
@@ -621,5 +731,9 @@ function apply(ctx) {
 	ctx.effect(() => {
 		ctx.logger?.info?.(`[${NAME}] host half loaded`);
 	}, `${NAME}: host`);
+	ctx.effect(() => {
+		const dispose = registerPing(ctx);
+		return () => dispose?.();
+	}, `${NAME}: ping route`);
 }
-export { apply, buildDesignConfig, inject, name, readVaultStyles, renderDesignConfig, renderStyleList, vaultRoot };
+export { PING_PATH, apply, buildDesignConfig, inject, name, pingHandler, readVaultStyles, registerPing, renderDesignConfig, renderStyleList, vaultRoot };

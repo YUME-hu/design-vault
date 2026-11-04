@@ -4444,6 +4444,42 @@ window.__ModuleLoader__.load({
 				code_snippet: stringType().default(""),
 				performance_notes: stringType().default("")
 			}).strict()).default([]),
+			/** AI 判定的产物类型；人工可在审核页用 as 覆盖 */
+			item_type: enumType([
+				"style",
+				"effect",
+				"component"
+			]).default("style"),
+			component_candidate: objectType({
+				name: stringType().min(1),
+				category: enumType([
+					"navigation",
+					"hero",
+					"card",
+					"form",
+					"button",
+					"table",
+					"feedback",
+					"overlay",
+					"layout",
+					"animation",
+					"other"
+				]).default("other"),
+				description: stringType().default(""),
+				framework: enumType(["react", "html"]).default("react"),
+				code: stringType().default(""),
+				dependencies: arrayType(stringType()).default([]),
+				states: arrayType(objectType({
+					name: stringType(),
+					description: stringType().default("")
+				}).strict()).default([])
+			}).strict().nullable().default(null),
+			effect_candidate: objectType({
+				name: stringType().min(1),
+				tech_stack: arrayType(stringType()).default([]),
+				description: stringType().default(""),
+				code_snippet: stringType().default("")
+			}).strict().nullable().default(null),
 			raw_response: stringType().default("")
 		}).strict());
 		objectType({
@@ -4459,6 +4495,40 @@ window.__ModuleLoader__.load({
 			code_snippet: stringType().default(""),
 			performance_notes: stringType().default(""),
 			related_styles: arrayType(stringType()).default([])
+		}).strict());
+		const COMPONENT_CATEGORIES = [
+			"navigation",
+			"hero",
+			"card",
+			"form",
+			"button",
+			"table",
+			"feedback",
+			"overlay",
+			"layout",
+			"animation",
+			"other"
+		];
+		arrayType(objectType({
+			id: slugSchema,
+			name: stringType().min(1),
+			category: enumType(COMPONENT_CATEGORIES),
+			description: stringType().min(1),
+			framework: enumType(["react", "html"]).default("react"),
+			/** 允许空串：已登记、待补代码 */
+			code: stringType().default(""),
+			dependencies: arrayType(stringType()).default([]),
+			states: arrayType(objectType({
+				name: stringType(),
+				description: stringType().default("")
+			}).strict()).default([]),
+			related_styles: arrayType(stringType()).default([]),
+			related_effects: arrayType(stringType()).default([]),
+			sources: styleSourcesSchema,
+			notes: stringType().default(""),
+			confidence: numberType().min(0).max(1),
+			created_at: isoDateSchema,
+			updated_at: isoDateSchema
 		}).strict());
 		const refTokensSchema = objectType({
 			colors: arrayType(objectType({
@@ -7577,6 +7647,7 @@ window.__ModuleLoader__.load({
 				"any"
 			])
 		}).strict();
+		new Set(COMPONENT_CATEGORIES);
 		// src/shared/guidance.ts
 		const GUIDANCE = {
 			version: "1.0.0",
