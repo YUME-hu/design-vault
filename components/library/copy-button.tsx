@@ -2,8 +2,8 @@
 
 import { useState } from "react";
 import { Button, type ButtonProps } from "@/components/ui/button";
-import { copyText } from "@/lib/clipboard";
-import { cn } from "@/lib/utils";
+import { copyText } from "@design-vault/adapters/clipboard";
+import { cn } from "@design-vault/adapters/utils";
 
 type CopyButtonProps = {
   text: string;

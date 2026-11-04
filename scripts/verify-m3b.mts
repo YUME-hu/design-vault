@@ -4,10 +4,10 @@ import os from "node:os";
 import path from "node:path";
 import sharp from "sharp";
 import { execSync } from "node:child_process";
-import { extractVideo } from "../lib/search/extract";
-import { makeMontage, runVisionFallback, FRAMES_ROOT } from "../lib/ingest/vision";
-import { appendPending, readPending } from "../lib/ingest/pending-store";
-import { pendingItemSchema, pendingSchema, type PendingItem } from "../lib/schema";
+import { extractVideo } from "@design-vault/adapters/search/extract";
+import { makeMontage, runVisionFallback, FRAMES_ROOT } from "@design-vault/adapters/ingest/vision";
+import { appendPending, readPending } from "@design-vault/adapters/ingest/pending-store";
+import { pendingItemSchema, pendingSchema, type PendingItem } from "@design-vault/adapters/schema";
 
 const BASE = process.env.VERIFY_BASE_URL ?? "http://localhost:3000";
 const PENDING = path.join(process.cwd(), "data", "pending.json");

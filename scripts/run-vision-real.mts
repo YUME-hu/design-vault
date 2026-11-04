@@ -5,11 +5,11 @@
 import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
-import { appendPending } from "../lib/ingest/pending-store";
-import { analyzeImage } from "../lib/ingest/deepseek";
-import { FRAMES_ROOT, resolveFfmpeg, runProcess, runVisionFallback } from "../lib/ingest/vision";
-import { buildCookie, extractSessdata, getBuvid3, getPlayUrl } from "../lib/ingest/bilibili";
-import { pendingItemSchema } from "../lib/schema";
+import { appendPending } from "@design-vault/adapters/ingest/pending-store";
+import { analyzeImage } from "@design-vault/adapters/ingest/deepseek";
+import { FRAMES_ROOT, resolveFfmpeg, runProcess, runVisionFallback } from "@design-vault/adapters/ingest/vision";
+import { buildCookie, extractSessdata, getBuvid3, getPlayUrl } from "@design-vault/adapters/ingest/bilibili";
+import { pendingItemSchema } from "@design-vault/adapters/schema";
 
 const bvid = process.argv[2] ?? "BV1oFnQ6dEG4";
 const env = fs.readFileSync(".env.local", "utf8");

@@ -2,8 +2,8 @@ import { chromium } from "playwright";
 import fs from "node:fs";
 import path from "node:path";
 import { execSync } from "node:child_process";
-import { refSchema } from "../lib/schema";
-import { normalizeUrl } from "../lib/url";
+import { refSchema } from "@design-vault/adapters/schema";
+import { normalizeUrl } from "@design-vault/adapters/url";
 
 const BASE = process.env.VERIFY_BASE_URL ?? "http://localhost:3000";
 const REFS = path.join(process.cwd(), "data", "refs.json");

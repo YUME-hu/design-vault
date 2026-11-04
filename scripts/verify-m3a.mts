@@ -3,12 +3,12 @@ import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
 import { execSync } from "node:child_process";
-import { parseSearchPayload } from "../lib/search/parse";
-import { extractVideo } from "../lib/search/extract";
-import { similarity, classify } from "../lib/ingest/dedupe";
-import { mergePending } from "../lib/ingest/pending-actions";
-import { appendPending, readPending } from "../lib/ingest/pending-store";
-import { pendingSchema, styleSchema, type PendingItem } from "../lib/schema";
+import { parseSearchPayload } from "@design-vault/adapters/search/parse";
+import { extractVideo } from "@design-vault/adapters/search/extract";
+import { similarity, classify } from "@design-vault/adapters/ingest/dedupe";
+import { mergePending } from "@design-vault/adapters/ingest/pending-actions";
+import { appendPending, readPending } from "@design-vault/adapters/ingest/pending-store";
+import { pendingSchema, styleSchema, type PendingItem } from "@design-vault/adapters/schema";
 
 const BASE = process.env.VERIFY_BASE_URL ?? "http://localhost:3000";
 const PENDING = path.join(process.cwd(), "data", "pending.json");

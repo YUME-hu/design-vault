@@ -2,7 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { cn } from "@/lib/utils";
+import { cn } from "@design-vault/adapters/utils";
 
 type UpstreamRow = { uid: string; name: string; lastCheckedAt: string };
 

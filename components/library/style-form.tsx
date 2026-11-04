@@ -3,11 +3,11 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { normalizeUrl } from "@/lib/url";
+import { normalizeUrl } from "@design-vault/adapters/url";
 import { PaletteEditor } from "@/components/editor/palette-editor";
-import { PROJECT_TYPES, PROJECT_TYPE_LABELS, type ProjectType, type Style } from "@/lib/schema";
-import { isHexColor, normalizeHex } from "@/lib/color";
-import { cn } from "@/lib/utils";
+import { PROJECT_TYPES, PROJECT_TYPE_LABELS, type ProjectType, type Style } from "@design-vault/adapters/schema";
+import { isHexColor, normalizeHex } from "@design-vault/adapters/color";
+import { cn } from "@design-vault/adapters/utils";
 
 const INPUT =
   "mono h-9 w-full min-w-0 border border-hairline-strong bg-paper px-2 text-[11px] text-charcoal placeholder:text-ink-faded focus:border-charcoal focus:outline-none";

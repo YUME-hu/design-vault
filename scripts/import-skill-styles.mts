@@ -6,10 +6,10 @@
  */
 import fs from "node:fs";
 import path from "node:path";
-import { readDraftFile, readStylesFile } from "../lib/data";
-import { readPending, appendPending } from "../lib/ingest/pending-store";
-import { findSimilar, type SimilarCandidate } from "../lib/ingest/dedupe";
-import { pendingItemSchema, type PendingItem } from "../lib/schema";
+import { readDraftFile, readStylesFile } from "@design-vault/adapters/data";
+import { readPending, appendPending } from "@design-vault/adapters/ingest/pending-store";
+import { findSimilar, type SimilarCandidate } from "@design-vault/adapters/ingest/dedupe";
+import { pendingItemSchema, type PendingItem } from "@design-vault/adapters/schema";
 
 const CSV = path.join(process.cwd(), "data", ".skill-styles.csv");
 const raw = fs.readFileSync(CSV, "utf8").replace(/^\uFEFF/, "");

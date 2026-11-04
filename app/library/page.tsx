@@ -2,9 +2,9 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { DraftList } from "@/components/library/draft-list";
 import { LibraryExplorer, type LibraryRecord } from "@/components/library/library-explorer";
-import { getAllTags, getDraftStyles, getStyles } from "@/lib/data";
-import { orderedPaletteEntries } from "@/lib/export";
-import { cn } from "@/lib/utils";
+import { getAllTags, getDraftStyles, getStyles } from "@design-vault/adapters/data";
+import { orderedPaletteEntries } from "@design-vault/adapters/export";
+import { cn } from "@design-vault/adapters/utils";
 
 export const metadata: Metadata = {
   title: "风格库",

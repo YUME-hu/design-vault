@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { cn } from "@/lib/utils";
+import { cn } from "@design-vault/adapters/utils";
 
 type Props = {
   id: string;

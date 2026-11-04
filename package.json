@@ -50,7 +50,10 @@
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
     "tailwind-merge": "^2.6.0",
-    "zod": "^3.25.76"
+    "zod": "^3.25.76",
+    "@design-vault/adapters": "workspace:*",
+    "@design-vault/core": "workspace:*",
+    "@design-vault/store": "workspace:*"
   },
   "devDependencies": {
     "@types/culori": "^4.0.1",

@@ -2,10 +2,10 @@ import { chromium } from "playwright";
 import fs from "node:fs";
 import path from "node:path";
 import { execSync } from "node:child_process";
-import { mapEffects } from "../lib/ingest/deepseek";
-import { approvePending } from "../lib/ingest/pending-actions";
-import { readEffectsFile } from "../lib/data";
-import { pendingItemSchema } from "../lib/schema";
+import { mapEffects } from "@design-vault/adapters/ingest/deepseek";
+import { approvePending } from "@design-vault/adapters/ingest/pending-actions";
+import { readEffectsFile } from "@design-vault/adapters/data";
+import { pendingItemSchema } from "@design-vault/adapters/schema";
 
 const BASE = process.env.VERIFY_BASE_URL ?? "http://localhost:3000";
 const E = path.join(process.cwd(), "data", "effects.json");

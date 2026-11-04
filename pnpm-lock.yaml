@@ -8,6 +8,15 @@ importers:
 
   .:
     dependencies:
+      '@design-vault/adapters':
+        specifier: workspace:*
+        version: link:packages/adapters
+      '@design-vault/core':
+        specifier: workspace:*
+        version: link:packages/core
+      '@design-vault/store':
+        specifier: workspace:*
+        version: link:packages/store
       '@ffmpeg-installer/ffmpeg':
         specifier: ^1.1.0
         version: 1.1.0
@@ -78,6 +87,15 @@ importers:
       typescript:
         specifier: ^5.7.2
         version: 5.9.3
+
+  packages/adapters:
+    dependencies:
+      '@design-vault/core':
+        specifier: workspace:*
+        version: link:../core
+      '@design-vault/store':
+        specifier: workspace:*
+        version: link:../store
 
   packages/core:
     dependencies:

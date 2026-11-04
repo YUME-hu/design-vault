@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
-import { getExtractJob, startSearchExtract } from "@/lib/search/job";
+import { getExtractJob, startSearchExtract } from "@design-vault/adapters/search/job";
 
 /** 单视频提取：POST 启动任务，GET 轮询进度 */
 export async function POST(request: Request) {

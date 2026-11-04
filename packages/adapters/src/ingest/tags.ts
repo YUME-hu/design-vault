@@ -1,6 +1,6 @@
 import { getDraftStyles, getStyles } from "../data";
 import { BRAND_KEYWORDS } from "../recommend";
-import { mergeAllowedTags } from "../../packages/core/src/ingest/tags";
+import { mergeAllowedTags } from "../../../core/src/ingest/tags";
 
 /**
  * project_tags 的可选枚举：现有风格里出现过的标签 + 推荐用的品牌关键词。

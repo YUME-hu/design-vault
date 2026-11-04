@@ -6,7 +6,7 @@
  */
 import fs from "node:fs";
 import path from "node:path";
-import { getSnapshot, startIngest } from "../lib/ingest/job";
+import { getSnapshot, startIngest } from "@design-vault/adapters/ingest/job";
 
 // 手动加载 .env.local（脚本不该依赖框架的 env 注入）
 const envFile = path.join(process.cwd(), ".env.local");

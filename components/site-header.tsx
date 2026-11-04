@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { getVaultCounts } from "@/lib/data";
+import { getVaultCounts } from "@design-vault/adapters/data";
 
 const pad = (value: number) => String(value).padStart(3, "0");
 

@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { ConfirmDraftButton } from "@/components/library/confirm-draft-button";
-import { orderedPaletteEntries } from "@/lib/export";
-import type { Style } from "@/lib/schema";
+import { orderedPaletteEntries } from "@design-vault/adapters/export";
+import type { Style } from "@design-vault/adapters/schema";
 
 function hostOf(url: string): string {
   try {

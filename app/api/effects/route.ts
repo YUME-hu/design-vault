@@ -1,8 +1,8 @@
 import { NextResponse } from "next/server";
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
-import { readEffectsFile, writeEffectsFile } from "@/lib/data";
-import { effectSchema } from "@/lib/schema";
+import { readEffectsFile, writeEffectsFile } from "@design-vault/adapters/data";
+import { effectSchema } from "@design-vault/adapters/schema";
 
 const payloadSchema = z.object({
   id: z.string().optional(),

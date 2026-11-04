@@ -1,6 +1,6 @@
 import * as React from "react";
 import { cva, type VariantProps } from "class-variance-authority";
-import { cn } from "@/lib/utils";
+import { cn } from "@design-vault/adapters/utils";
 
 /**
  * shadcn/ui 的 Button，但换成了 NASA-Punk 的物理规格：

@@ -1,5 +1,5 @@
 import * as React from "react";
-import { cn } from "@/lib/utils";
+import { cn } from "@design-vault/adapters/utils";
 
 /** 白底 + 1px 炭黑边 + 左上/右下铆钉，卡片就是一块控制台面板。 */
 export const Card = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(

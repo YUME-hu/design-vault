@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { revalidatePath } from "next/cache";
-import { updateStyle } from "@/lib/style-write";
+import { updateStyle } from "@design-vault/adapters/style-write";
 
 /**
  * 编辑已有风格：PUT /api/styles/[id]

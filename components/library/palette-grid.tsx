@@ -1,8 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { copyText } from "@/lib/clipboard";
-import { cn } from "@/lib/utils";
+import { copyText } from "@design-vault/adapters/clipboard";
+import { cn } from "@design-vault/adapters/utils";
 
 const SEMANTIC_ZH: Record<string, string> = {
   primary: "主色",

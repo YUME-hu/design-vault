@@ -1,10 +1,10 @@
 import fs from "node:fs";
 import crypto from "node:crypto";
-import { buildCookie, extractSessdata, getBuvid3 } from "../lib/ingest/bilibili";
-import { collectAllowedTags } from "../lib/ingest/tags";
-import { extractStyle } from "../lib/ingest/deepseek";
-import { appendPending } from "../lib/ingest/pending-store";
-import { pendingItemSchema } from "../lib/schema";
+import { buildCookie, extractSessdata, getBuvid3 } from "@design-vault/adapters/ingest/bilibili";
+import { collectAllowedTags } from "@design-vault/adapters/ingest/tags";
+import { extractStyle } from "@design-vault/adapters/ingest/deepseek";
+import { appendPending } from "@design-vault/adapters/ingest/pending-store";
+import { pendingItemSchema } from "@design-vault/adapters/schema";
 
 const bvid = process.argv[2] ?? "BV1e5SCBiEQF";
 const env = fs.readFileSync(".env.local", "utf8");

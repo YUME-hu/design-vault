@@ -16,7 +16,7 @@ import {
   type PendingItem,
   type Ref,
   type Style,
-} from "../lib/schema";
+} from "@design-vault/adapters/schema";
 
 const DATA_DIR = path.join(process.cwd(), "data");
 

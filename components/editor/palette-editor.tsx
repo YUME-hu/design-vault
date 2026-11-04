@@ -9,10 +9,10 @@ import {
   isHexColor,
   normalizeHex,
   type ColorScale,
-} from "@/lib/color";
-import { toPaletteCss, toPaletteJson, toPaletteTailwind } from "@/lib/export";
-import { copyText } from "@/lib/clipboard";
-import { cn } from "@/lib/utils";
+} from "@design-vault/adapters/color";
+import { toPaletteCss, toPaletteJson, toPaletteTailwind } from "@design-vault/adapters/export";
+import { copyText } from "@design-vault/adapters/clipboard";
+import { cn } from "@design-vault/adapters/utils";
 
 const CORE_KEYS = ["primary", "bg", "surface", "text", "muted"];
 

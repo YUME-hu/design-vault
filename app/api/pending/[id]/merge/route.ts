@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { revalidatePath } from "next/cache";
-import { mergePending } from "@/lib/ingest/pending-actions";
+import { mergePending } from "@design-vault/adapters/ingest/pending-actions";
 
 /** 合并信源：把当前 pending 的 sources 追加到 duplicate_of 指向的风格，然后删除 pending */
 export async function POST(_request: Request, context: { params: Promise<{ id: string }> }) {

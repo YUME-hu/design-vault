@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
 import { SubscriptionConsole } from "@/components/subscriptions/subscription-console";
-import { readUpstreams } from "@/lib/ingest/config";
-import { readPending } from "@/lib/ingest/pending-store";
-import { readIngestState } from "@/lib/ingest/state";
-import { readUsage } from "@/lib/ingest/usage";
+import { readUpstreams } from "@design-vault/adapters/ingest/config";
+import { readPending } from "@design-vault/adapters/ingest/pending-store";
+import { readIngestState } from "@design-vault/adapters/ingest/state";
+import { readUsage } from "@design-vault/adapters/ingest/usage";
 
 export const metadata: Metadata = {
   title: "订阅",

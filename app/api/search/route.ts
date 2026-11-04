@@ -1,8 +1,8 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
-import { buildCookie, extractSessdata, getBuvid3, searchVideos } from "@/lib/ingest/bilibili";
-import { parseSearchPayload } from "@/lib/search/parse";
-import { SessionExpiredError } from "@/lib/ingest/types";
+import { buildCookie, extractSessdata, getBuvid3, searchVideos } from "@design-vault/adapters/ingest/bilibili";
+import { parseSearchPayload } from "@design-vault/adapters/search/parse";
+import { SessionExpiredError } from "@design-vault/adapters/ingest/types";
 
 /** 关键词搜索：服务端带 SESSDATA 调 B 站，前端只拿整理好的结果 */
 export async function POST(request: Request) {

@@ -2,8 +2,8 @@
 
 import Link from "next/link";
 import { useMemo, useState } from "react";
-import { PROJECT_TYPE_LABELS, type ProjectType } from "@/lib/schema";
-import { cn } from "@/lib/utils";
+import { PROJECT_TYPE_LABELS, type ProjectType } from "@design-vault/adapters/schema";
+import { cn } from "@design-vault/adapters/utils";
 
 export type LibraryRecord = {
   id: string;

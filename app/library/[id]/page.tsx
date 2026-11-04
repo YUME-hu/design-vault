@@ -5,9 +5,9 @@ import { ConfirmDraftButton } from "@/components/library/confirm-draft-button";
 import { ExportPanel } from "@/components/library/export-panel";
 import { PaletteGrid } from "@/components/library/palette-grid";
 import { Badge } from "@/components/ui/badge";
-import { getEffects, getRefs, getStyleById, getStyleRecord } from "@/lib/data";
-import { orderedPaletteEntries, toCssVariables, toTailwindTheme } from "@/lib/export";
-import { PROJECT_TYPE_LABELS } from "@/lib/schema";
+import { getEffects, getRefs, getStyleById, getStyleRecord } from "@design-vault/adapters/data";
+import { orderedPaletteEntries, toCssVariables, toTailwindTheme } from "@design-vault/adapters/export";
+import { PROJECT_TYPE_LABELS } from "@design-vault/adapters/schema";
 
 export const dynamic = "force-dynamic";
 

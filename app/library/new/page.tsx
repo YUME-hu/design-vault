@@ -1,10 +1,10 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { StyleForm } from "@/components/library/style-form";
-import { getDraftStyles, getStyles } from "@/lib/data";
-import { readPending } from "@/lib/ingest/pending-store";
-import { buildStyleFromPending } from "@/lib/ingest/pending-to-style";
-import type { Style } from "@/lib/schema";
+import { getDraftStyles, getStyles } from "@design-vault/adapters/data";
+import { readPending } from "@design-vault/adapters/ingest/pending-store";
+import { buildStyleFromPending } from "@design-vault/adapters/ingest/pending-to-style";
+import type { Style } from "@design-vault/adapters/schema";
 
 export const metadata: Metadata = {
   title: "新建风格",

@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { revalidatePath } from "next/cache";
-import { approvePending } from "@/lib/ingest/pending-actions";
+import { approvePending } from "@design-vault/adapters/ingest/pending-actions";
 
 /** 通过并入库：候选补全 → styleSchema 校验 → 写 styles.json → 从 pending 删除 */
 export async function POST(_request: Request, context: { params: Promise<{ id: string }> }) {

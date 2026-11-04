@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { ExportPanel } from "@/components/library/export-panel";
 import { PaletteGrid } from "@/components/library/palette-grid";
-import { getRefs, getStylePool } from "@/lib/data";
-import { orderedPaletteEntries, toCssVariables, toTailwindTheme } from "@/lib/export";
+import { getRefs, getStylePool } from "@design-vault/adapters/data";
+import { orderedPaletteEntries, toCssVariables, toTailwindTheme } from "@design-vault/adapters/export";
 import {
   BRAND_KEYWORD_LABELS,
   COLOR_MODE_LABELS,
@@ -12,8 +12,8 @@ import {
   parseProfileQuery,
   recommend,
   type RankedResult,
-} from "@/lib/recommend";
-import { PROJECT_TYPE_LABELS } from "@/lib/schema";
+} from "@design-vault/adapters/recommend";
+import { PROJECT_TYPE_LABELS } from "@design-vault/adapters/schema";
 
 export const dynamic = "force-dynamic";
 

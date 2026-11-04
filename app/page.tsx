@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { ProfileForm } from "@/components/profile-form";
-import { getVaultCounts } from "@/lib/data";
+import { getVaultCounts } from "@design-vault/adapters/data";
 
 export const dynamic = "force-dynamic";
 

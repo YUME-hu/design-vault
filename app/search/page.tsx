@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { SearchConsole } from "@/components/search/search-console";
-import { ffmpegStatus } from "@/lib/ingest/vision";
+import { ffmpegStatus } from "@design-vault/adapters/ingest/vision";
 
 export const metadata: Metadata = {
   title: "特化搜索",

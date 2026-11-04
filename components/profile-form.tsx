@@ -13,9 +13,9 @@ import {
   TARGET_USER_LABELS,
   profileToQuery,
   type Profile,
-} from "@/lib/recommend";
-import { PROJECT_TYPES, PROJECT_TYPE_LABELS, type ProjectType } from "@/lib/schema";
-import { cn } from "@/lib/utils";
+} from "@design-vault/adapters/recommend";
+import { PROJECT_TYPES, PROJECT_TYPE_LABELS, type ProjectType } from "@design-vault/adapters/schema";
+import { cn } from "@design-vault/adapters/utils";
 
 type TargetUser = (typeof TARGET_USERS)[number];
 type PageType = (typeof PAGE_TYPES)[number];

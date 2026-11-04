@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
-import { getStylePool } from "@/lib/data";
-import { profileSchema, recommend } from "@/lib/recommend";
+import { getStylePool } from "@design-vault/adapters/data";
+import { profileSchema, recommend } from "@design-vault/adapters/recommend";
 
 /**
  * M1a 推荐接口：纯规则打分，不接 LLM、不落库。

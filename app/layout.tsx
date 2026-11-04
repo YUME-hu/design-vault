@@ -8,7 +8,7 @@ import "./globals.css";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
 import { SiteNav } from "@/components/site-nav";
-import { getVaultCounts } from "@/lib/data";
+import { getVaultCounts } from "@design-vault/adapters/data";
 
 export const metadata: Metadata = {
   title: {

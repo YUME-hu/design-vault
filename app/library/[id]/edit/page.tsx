@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { StyleForm } from "@/components/library/style-form";
-import { getStyleRecord } from "@/lib/data";
+import { getStyleRecord } from "@design-vault/adapters/data";
 
 export const dynamic = "force-dynamic";
 

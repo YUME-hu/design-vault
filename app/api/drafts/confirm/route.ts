@@ -1,8 +1,8 @@
 import { NextResponse } from "next/server";
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
-import { readDraftFile, readStylesFile, writeDraftFile, writeStylesFile } from "@/lib/data";
-import { slugSchema, styleSchema, stylesSchema } from "@/lib/schema";
+import { readDraftFile, readStylesFile, writeDraftFile, writeStylesFile } from "@design-vault/adapters/data";
+import { slugSchema, styleSchema, stylesSchema } from "@design-vault/adapters/schema";
 
 /**
  * 草案确认：draft → styles。

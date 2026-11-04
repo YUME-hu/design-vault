@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { EffectForm } from "@/components/effects/effect-form";
-import { getEffects, getStyles } from "@/lib/data";
+import { getEffects, getStyles } from "@design-vault/adapters/data";
 
 export const metadata: Metadata = { title: "效果库", description: "技术栈与布局/动效方案，手工录入 + 抓取提取共用。" };
 export const dynamic = "force-dynamic";

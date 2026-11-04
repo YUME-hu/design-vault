@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { PendingActions } from "@/components/pending/pending-actions";
-import { readPending } from "@/lib/ingest/pending-store";
-import { cn } from "@/lib/utils";
+import { readPending } from "@design-vault/adapters/ingest/pending-store";
+import { cn } from "@design-vault/adapters/utils";
 
 export const metadata: Metadata = {
   title: "审核队列",

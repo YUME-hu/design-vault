@@ -1,15 +1,15 @@
 import { cache } from "react";
-import type { Style } from "../packages/core/src/schema";
-import type { StyleStage } from "../packages/core/src/types";
-import * as collections from "../packages/store/src/collections";
-import { readPending } from "../packages/store/src/pending";
+import type { Style } from "../../core/src/schema";
+import type { StyleStage } from "../../core/src/types";
+import * as collections from "../../store/src/collections";
+import { readPending } from "../../store/src/pending";
 
 /**
  * Web 侧的数据访问层：底层读写全部来自 @design-vault/store，
  * 这里只保留 React cache 与派生查询（详情 / 推荐池 / 标签统计）。
  */
 
-export * from "../packages/store/src/collections";
+export * from "../../store/src/collections";
 export type { StyleStage };
 
 export type StyleRecord = {

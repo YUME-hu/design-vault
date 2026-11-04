@@ -31,6 +31,18 @@
       ],
       "@design-vault/core/*": [
         "./packages/core/src/*"
+      ],
+      "@design-vault/store": [
+        "./packages/store/src/index.ts"
+      ],
+      "@design-vault/store/*": [
+        "./packages/store/src/*"
+      ],
+      "@design-vault/adapters": [
+        "./packages/adapters/src/index.ts"
+      ],
+      "@design-vault/adapters/*": [
+        "./packages/adapters/src/*"
       ]
     },
     "baseUrl": "."

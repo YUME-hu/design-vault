@@ -1,9 +1,9 @@
 import { NextResponse } from "next/server";
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
-import { addUpstream, removeUpstream } from "@/lib/upstreams-write";
-import { lookupUpstreamName } from "@/lib/ingest/upstreams-lookup";
-import { readIngestState, writeIngestState } from "@/lib/ingest/state";
+import { addUpstream, removeUpstream } from "@design-vault/adapters/upstreams-write";
+import { lookupUpstreamName } from "@design-vault/adapters/ingest/upstreams-lookup";
+import { readIngestState, writeIngestState } from "@design-vault/adapters/ingest/state";
 
 /** 订阅管理：POST 添加（服务端查昵称）/ DELETE 移除 */
 

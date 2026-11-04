@@ -3,9 +3,9 @@ import os from "node:os";
 import path from "node:path";
 import { execSync } from "node:child_process";
 import AdmZip from "adm-zip";
-import { pendingItemSchema } from "../lib/schema";
-import { approvePending } from "../lib/ingest/pending-actions";
-import { readIngestState, writeIngestState } from "../lib/ingest/state";
+import { pendingItemSchema } from "@design-vault/adapters/schema";
+import { approvePending } from "@design-vault/adapters/ingest/pending-actions";
+import { readIngestState, writeIngestState } from "@design-vault/adapters/ingest/state";
 
 const results: { name: string; ok: boolean; detail?: string }[] = [];
 const record = (name: string, ok: boolean, detail = "") => {

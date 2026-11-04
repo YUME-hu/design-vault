@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { readUsage } from "@/lib/ingest/usage";
+import { readUsage } from "@design-vault/adapters/ingest/usage";
 
 /** LLM 用量统计：直接读 data/llm-usage.log */
 export async function GET() {

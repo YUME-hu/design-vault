@@ -15,7 +15,7 @@ import {
   normalizeHex,
   oklchToHex,
   relativeLuminance,
-} from "../lib/color";
+} from "@design-vault/adapters/color";
 
 let passed = 0;
 let failed = 0;

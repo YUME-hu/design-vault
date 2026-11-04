@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
-import { getSnapshot, startIngest } from "@/lib/ingest/job";
-import { readIngestState } from "@/lib/ingest/state";
+import { getSnapshot, startIngest } from "@design-vault/adapters/ingest/job";
+import { readIngestState } from "@design-vault/adapters/ingest/state";
 
 /** 手动触发一次抓取；GET 用来给订阅页轮询进度。 */
 export async function POST() {
