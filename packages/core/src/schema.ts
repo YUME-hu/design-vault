@@ -206,6 +206,36 @@ export const pendingItemSchema = z
           .strict(),
       )
       .default([]),
+    /** AI 判定的产物类型；人工可在审核页用 as 覆盖 */
+    item_type: z.enum(["style", "effect", "component"]).default("style"),
+    component_candidate: z
+      .object({
+        name: z.string().min(1),
+        category: z.enum([
+          "navigation", "hero", "card", "form", "button",
+          "table", "feedback", "overlay", "layout", "animation", "other",
+        ]).default("other"),
+        description: z.string().default(""),
+        framework: z.enum(["react", "html"]).default("react"),
+        code: z.string().default(""),
+        dependencies: z.array(z.string()).default([]),
+        states: z
+          .array(z.object({ name: z.string(), description: z.string().default("") }).strict())
+          .default([]),
+      })
+      .strict()
+      .nullable()
+      .default(null),
+    effect_candidate: z
+      .object({
+        name: z.string().min(1),
+        tech_stack: z.array(z.string()).default([]),
+        description: z.string().default(""),
+        code_snippet: z.string().default(""),
+      })
+      .strict()
+      .nullable()
+      .default(null),
     raw_response: z.string().default(""),
   })
   .strict();
@@ -237,6 +267,38 @@ export const effectSchema = z
   .strict();
 
 export const effectsSchema = z.array(effectSchema);
+
+// ---------- 组件库 ----------
+
+export const COMPONENT_CATEGORIES = [
+  "navigation", "hero", "card", "form", "button",
+  "table", "feedback", "overlay", "layout", "animation", "other",
+] as const;
+
+export const componentSchema = z
+  .object({
+    id: slugSchema,
+    name: z.string().min(1),
+    category: z.enum(COMPONENT_CATEGORIES),
+    description: z.string().min(1),
+    framework: z.enum(["react", "html"]).default("react"),
+    /** 允许空串：已登记、待补代码 */
+    code: z.string().default(""),
+    dependencies: z.array(z.string()).default([]),
+    states: z
+      .array(z.object({ name: z.string(), description: z.string().default("") }).strict())
+      .default([]),
+    related_styles: z.array(z.string()).default([]),
+    related_effects: z.array(z.string()).default([]),
+    sources: styleSourcesSchema,
+    notes: z.string().default(""),
+    confidence: z.number().min(0).max(1),
+    created_at: isoDateSchema,
+    updated_at: isoDateSchema,
+  })
+  .strict();
+
+export const componentsSchema = z.array(componentSchema);
 
 // ---------- 参考库 ----------
 
@@ -309,6 +371,8 @@ export type Style = z.infer<typeof styleSchema>;
 export type Effect = z.infer<typeof effectSchema>;
 export type Ref = z.infer<typeof refSchema>;
 export type PendingItem = z.infer<typeof pendingItemSchema>;
+export type ComponentItem = z.infer<typeof componentSchema>;
+export type ComponentCategory = (typeof COMPONENT_CATEGORIES)[number];
 
 /** 主信源（列表/卡片只展示第一条） */
 export function primarySource<T extends { sources: StyleSource[] }>(entity: T): StyleSource {

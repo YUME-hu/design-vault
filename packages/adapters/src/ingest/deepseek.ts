@@ -50,7 +50,10 @@ export function buildSystemPrompt(allowedTags: string[]): string {
 4. project_tags 只能从这个枚举里选，不在枚举里的直接丢弃：${allowedTags.join(", ")}
 5. suitable_projects / unsuitable_projects 只能从这些项目类型里选：${PROJECT_TYPES.join(", ")}
 6. 如果 README 与简介里没有可提取的界面 / 视觉 / 设计信息，把 has_design_info 设为 false，其余字段可以留空。
-7. extracted_effects 只提取信源里「明确提到」或「有明显画面特征」的技术方案：
+7. item_type 判定产物类型：整体视觉语言（配色/排版/质感）= style；可脱离页面复用的动效或技术方案 = effect；带 DOM 结构、状态、交互的可复用 UI 部件 = component。
+   - 组件要额外输出 component_candidate：name、category（navigation/hero/card/form/button/table/feedback/overlay/layout/animation/other）、description、framework（react|html）、code（没有就给空串）、dependencies、states。
+   - 效果类要额外输出 effect_candidate：name、tech_stack、description、code_snippet。
+8. extracted_effects 只提取信源里「明确提到」或「有明显画面特征」的技术方案：
    - 值得提取：核心布局模式（Grid、Flex、多列/瀑布流）、专门的动效库（GSAP、Framer Motion、Lottie）、特定实现技巧（CSS mask、Canvas 粒子、ScrollTrigger、clip-path、WebGL）。
    - 不要提取：通用基础 CSS（color、margin、padding、font-size、border-radius 这类）不算 effect；任何没被提到的库或技巧都不要猜。
    - 每个 effect 的 description 必须说清「怎么实现的」或「用在什么场景」，一句话以上的中文。
@@ -70,6 +73,8 @@ export function buildSystemPrompt(allowedTags: string[]): string {
   "tokens": { "radius": "…", "border": "…", "shadow": "…", "spacing": "…" },
   "components": { "button": "…" },
   "performance_notes": "…",
+  "item_type": "style | effect | component",
+  "component_candidate": { "name": "…", "category": "card", "description": "…", "framework": "react", "code": "", "dependencies": [], "states": [] },
   "extracted_effects": [
     { "name": "两列网格 + 绝对定位背景", "tech_stack": ["CSS Grid"], "description": "用 grid-cols-2 分栏，背景网格用绝对定位叠在内容下方", "code_snippet": "", "performance_notes": "" }
   ]
@@ -101,6 +106,28 @@ const llmPayloadSchema = z
     summary: z.string().default(""),
     has_design_info: z.boolean(),
     extracted_effects: z.array(z.unknown()).optional(),
+    item_type: z.enum(["style", "effect", "component"]).optional(),
+    component_candidate: z
+      .object({
+        name: z.string().optional(),
+        category: z.string().optional(),
+        description: z.string().optional(),
+        framework: z.string().optional(),
+        code: z.string().optional(),
+        dependencies: z.array(z.string()).optional(),
+        states: z.array(z.unknown()).optional(),
+      })
+      .passthrough()
+      .optional(),
+    effect_candidate: z
+      .object({
+        name: z.string().optional(),
+        tech_stack: z.array(z.string()).optional(),
+        description: z.string().optional(),
+        code_snippet: z.string().optional(),
+      })
+      .passthrough()
+      .optional(),
     frontend_prompt: z.string().default(""),
     project_tags: z.array(z.string()).default([]),
     suitable_projects: z.array(z.string()).default([]),
@@ -364,6 +391,9 @@ export async function extractStyle(
       ok: true,
       hasDesignInfo: true,
       extractedEffects: mapEffects(validated.data.extracted_effects),
+      itemType: validated.data.item_type ?? "style",
+      componentCandidate: validated.data.component_candidate ?? null,
+      effectCandidate: validated.data.effect_candidate ?? null,
       candidate: mapped.candidate as Partial<Style>,
       colorDirection: mapped.colorDirection,
       reasoning: validated.data.summary ?? "",

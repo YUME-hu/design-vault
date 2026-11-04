@@ -1,6 +1,7 @@
 import { pendingItemSchema, type PendingItem } from "../schema";
 import { parseGithubRepo } from "../ingest/github";
 import { makePendingId } from "../ingest/pending-store";
+import { normalizeComponentCandidate, normalizeEffectCandidate } from "@design-vault/core/components";
 import type { ExtractDeps, ExtractOutcome, SearchVideo } from "./types";
 
 /**
@@ -25,6 +26,9 @@ function buildPending(
     raw: string;
     duplicateOf: string | null;
     extractedEffects?: PendingItem["extracted_effects"];
+    itemType?: "style" | "effect" | "component";
+    componentCandidate?: Record<string, unknown> | null;
+    effectCandidate?: Record<string, unknown> | null;
     now: Date;
   },
 ): PendingItem {
@@ -52,6 +56,9 @@ function buildPending(
     color_direction: input.colorDirection,
     duplicate_of: input.duplicateOf,
     extracted_effects: input.extractedEffects ?? [],
+    item_type: input.itemType ?? "style",
+    component_candidate: normalizeComponentCandidate(input.componentCandidate ?? null),
+    effect_candidate: normalizeEffectCandidate(input.effectCandidate ?? null),
     reasoning: input.reasoning,
     notes: input.notes,
     raw_response: (input.raw ?? "").slice(0, 12_000),

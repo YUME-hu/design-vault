@@ -1,5 +1,6 @@
 import { pendingItemSchema, type PendingItem } from "../schema";
 import { parseGithubRepo } from "./github";
+import { normalizeComponentCandidate, normalizeEffectCandidate } from "@design-vault/core/components";
 import { makePendingId } from "./pending-store";
 import {
   SessionExpiredError,
@@ -37,9 +38,12 @@ function buildPending(args: {
   notes: string;
   draft: Partial<PendingDraft>;
   duplicateOf?: string | null;
+  itemType?: "style" | "effect" | "component";
+  componentCandidate?: Record<string, unknown> | null;
+  effectCandidate?: Record<string, unknown> | null;
   now: Date;
 }): PendingItem {
-  const { upstreamUid, upstreamName, video, confidence, notes, draft, duplicateOf, now } = args;
+  const { upstreamUid, upstreamName, video, confidence, notes, draft, duplicateOf, itemType, componentCandidate, effectCandidate, now } = args;
 
   const candidate = draft.candidate ?? {};
   const name =
@@ -62,6 +66,9 @@ function buildPending(args: {
     color_direction: draft.color_direction ?? null,
     extracted_effects: draft.extracted_effects ?? [],
     duplicate_of: duplicateOf ?? null,
+    item_type: itemType ?? "style",
+    component_candidate: normalizeComponentCandidate(componentCandidate ?? null),
+    effect_candidate: normalizeEffectCandidate(effectCandidate ?? null),
     reasoning: draft.reasoning ?? "",
     notes,
     raw_response: (draft.raw_response ?? "").slice(0, 12_000),
@@ -216,6 +223,9 @@ export async function runIngest(deps: IngestDeps): Promise<IngestResult> {
                       upstreamName,
                       video: videoFull,
                       confidence: 0.5,
+                      itemType: subtitleExtraction.itemType,
+                      componentCandidate: subtitleExtraction.componentCandidate,
+                      effectCandidate: subtitleExtraction.effectCandidate,
                       notes: subtitleDuplicate
                         ? `来源：字幕提取 发现相似风格：${subtitleDuplicate.match.name}（可合并）`
                         : "来源：字幕提取",
@@ -337,6 +347,9 @@ export async function runIngest(deps: IngestDeps): Promise<IngestResult> {
                 upstreamName,
                 video: videoFull,
                 confidence: 0.6,
+                itemType: extraction.itemType,
+                componentCandidate: extraction.componentCandidate,
+                effectCandidate: extraction.effectCandidate,
                 notes: readmeDuplicate
                   ? `发现相似风格：${readmeDuplicate.match.name}（可合并）`
                   : "",

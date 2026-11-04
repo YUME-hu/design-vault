@@ -1,6 +1,6 @@
 import { createHash } from "node:crypto";
-import { readDraftFile, readEffectsFile, readStylesFile, writeDraftFile, writeEffectsFile, writeStylesFile } from "../data";
-import { slugSchema, stylesSchema, type Effect, type Style, type StyleSource } from "../schema";
+import { readComponentsFile, readDraftFile, readEffectsFile, readStylesFile, writeComponentsFile, writeDraftFile, writeEffectsFile, writeStylesFile } from "../data";
+import { componentSchema, effectSchema, slugSchema, stylesSchema, type ComponentItem, type Effect, type Style, type StyleSource } from "../schema";
 import { readPending, writePending } from "./pending-store";
 import { buildStyleFromPending } from "./pending-to-style";
 
@@ -15,12 +15,21 @@ function today(): string {
   return new Date().toISOString().slice(0, 10);
 }
 
-export function approvePending(id: string): { ok: true; style: Style } | ActionFailure {
+export type ApproveResult =
+  | { ok: true; kind: "style"; style: Style }
+  | { ok: true; kind: "effect" | "component"; id: string; name: string };
+
+export function approvePending(id: string, as?: "style" | "effect" | "component"): ApproveResult | ActionFailure {
   const pending = readPending();
   const index = pending.findIndex((item) => item.id === id);
   if (index === -1) {
     return { ok: false, status: 404, error: `pending "${id}" 不存在（可能已被处理）` };
   }
+
+  const item = pending[index];
+
+  if (as === "component") return approveComponent(pending, index, item);
+  if (as === "effect") return approveEffect(pending, index, item);
 
   const styles = readStylesFile();
   const drafts = readDraftFile();
@@ -83,7 +92,7 @@ export function approvePending(id: string): { ok: true; style: Style } | ActionF
     return { ok: false, status: 500, error: `写入失败：${(error as Error).message}` };
   }
 
-  return { ok: true, style };
+  return { ok: true, kind: "style", style };
 }
 
 export function discardPending(id: string): { ok: true } | ActionFailure {
@@ -159,4 +168,87 @@ export function mergePending(
   } catch (error) {
     return { ok: false, status: 500, error: `写入失败：${(error as Error).message}` };
   }
+}
+
+function slugId(name: string, fallback: string): string {
+  const base = name
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "")
+    .slice(0, 48);
+  return base.length >= 2 ? base : `${fallback}-${createHash("sha1").update(name).digest("hex").slice(0, 6)}`;
+}
+
+function uniqueId(base: string, used: Set<string>): string {
+  if (!used.has(base)) return base;
+  for (let index = 2; index < 100; index += 1) {
+    const candidate = `${base}-${index}`;
+    if (!used.has(candidate)) return candidate;
+  }
+  return `${base}-${Date.now()}`;
+}
+
+function approveComponent(
+  pending: ReturnType<typeof readPending>,
+  index: number,
+  item: ReturnType<typeof readPending>[number],
+): ApproveResult | ActionFailure {
+  const components = readComponentsFile();
+  const candidate = item.component_candidate;
+  const name = (candidate?.name ?? item.name).trim() || item.name;
+  const id = uniqueId(slugId(name, "component"), new Set(components.map((entry) => entry.id)));
+  const now = new Date().toISOString().slice(0, 10);
+
+  const component: ComponentItem = componentSchema.parse({
+    id,
+    name,
+    category: candidate?.category ?? "other",
+    description:
+      candidate?.description?.trim() ||
+      item.candidate?.frontend_prompt?.trim() ||
+      "来自 pending 的组件候选，描述待补全。",
+    framework: candidate?.framework ?? "react",
+    code: candidate?.code ?? "",
+    dependencies: candidate?.dependencies ?? [],
+    states: candidate?.states ?? [],
+    related_styles: [],
+    related_effects: [],
+    sources: item.sources,
+    notes: candidate?.code?.trim() ? item.notes : [item.notes, "待补代码（来自 pending 分流）"].filter(Boolean).join(" "),
+    confidence: item.confidence,
+    created_at: now,
+    updated_at: now,
+  });
+
+  writeComponentsFile([...components, component]);
+  writePending(pending.filter((_, itemIndex) => itemIndex !== index));
+  return { ok: true, kind: "component", id: component.id, name: component.name };
+}
+
+function approveEffect(
+  pending: ReturnType<typeof readPending>,
+  index: number,
+  item: ReturnType<typeof readPending>[number],
+): ApproveResult | ActionFailure {
+  const effects = readEffectsFile();
+  const candidate = item.effect_candidate ?? item.extracted_effects[0] ?? null;
+  const name = (candidate?.name ?? item.name).trim() || item.name;
+  const id = uniqueId(slugId(name, "effect"), new Set(effects.map((entry) => entry.id)));
+
+  const effect: Effect = effectSchema.parse({
+    id,
+    name,
+    tech_stack: candidate?.tech_stack ?? [],
+    description:
+      candidate?.description?.trim() ||
+      item.candidate?.frontend_prompt?.trim() ||
+      "来自 pending 的动效候选，实现思路待补全。",
+    code_snippet: candidate?.code_snippet ?? "",
+    performance_notes: "performance_notes" in (candidate ?? {}) ? (candidate as { performance_notes?: string }).performance_notes ?? "" : "",
+    related_styles: [],
+  });
+
+  writeEffectsFile([...effects, effect]);
+  writePending(pending.filter((_, itemIndex) => itemIndex !== index));
+  return { ok: true, kind: "effect", id: effect.id, name: effect.name };
 }

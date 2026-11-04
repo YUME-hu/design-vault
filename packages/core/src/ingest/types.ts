@@ -39,6 +39,9 @@ export type LlmExtraction =
       ok: true;
       hasDesignInfo: true;
       extractedEffects?: ExtractedEffect[];
+      itemType?: "style" | "effect" | "component";
+      componentCandidate?: Record<string, unknown> | null;
+      effectCandidate?: Record<string, unknown> | null;
       candidate: Partial<Style>;
       colorDirection: ColorDirection;
       reasoning: string;

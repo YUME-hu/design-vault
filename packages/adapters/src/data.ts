@@ -23,6 +23,7 @@ export const getStyles = cache((): Style[] => collections.readStylesFile());
 export const getDraftStyles = cache((): Style[] => collections.readDraftFile());
 export const getEffects = cache(() => collections.readEffectsFile());
 export const getRefs = cache(() => collections.readRefsFile());
+export const getComponents = cache(() => collections.readComponentsFile());
 export const getPending = cache(() => readPending());
 
 /** 已确认优先；找不到再去草案里找。 */
@@ -86,5 +87,6 @@ export function getVaultCounts() {
     pending: getPending().length,
     effects: getEffects().length,
     refs: getRefs().length,
+    components: getComponents().length,
   };
 }
