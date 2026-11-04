@@ -35,7 +35,7 @@
     "prepack": "tsdown"
   },
   "engines": {
-    "node": ">=24"
+    "node": ">=22"
   },
   "dsh": {
     "manifestVersion": 1,
@@ -81,6 +81,8 @@
   "homepage": "https://github.com/YUME-hu/design-vault-plugin#readme",
   "dependencies": {
     "culori": "^4.0.2",
-    "zod": "^3.25.76"
+    "zod": "^3.25.76",
+    "@design-vault/core": "workspace:*",
+    "@design-vault/store": "workspace:*"
   }
 }

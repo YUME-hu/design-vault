@@ -751,7 +751,7 @@ window.__ModuleLoader__.load({
 			}
 			return groups;
 		}
-		// node_modules/.pnpm/culori@4.0.2/node_modules/culori/src/rgb/parseNumber.js
+		// ../../node_modules/.pnpm/culori@4.0.2/node_modules/culori/src/rgb/parseNumber.js
 		const parseNumber = (color, len) => {
 			if (typeof color !== "number") return;
 			if (len === 3) return {
@@ -781,7 +781,7 @@ window.__ModuleLoader__.load({
 				alpha: (color & 255) / 255
 			};
 		};
-		// node_modules/.pnpm/culori@4.0.2/node_modules/culori/src/colors/named.js
+		// ../../node_modules/.pnpm/culori@4.0.2/node_modules/culori/src/colors/named.js
 		const named = {
 			aliceblue: 15792383,
 			antiquewhite: 16444375,
@@ -932,17 +932,17 @@ window.__ModuleLoader__.load({
 			yellow: 16776960,
 			yellowgreen: 10145074
 		};
-		// node_modules/.pnpm/culori@4.0.2/node_modules/culori/src/rgb/parseNamed.js
+		// ../../node_modules/.pnpm/culori@4.0.2/node_modules/culori/src/rgb/parseNamed.js
 		const parseNamed = (color) => {
 			return parseNumber(named[color.toLowerCase()], 6);
 		};
-		// node_modules/.pnpm/culori@4.0.2/node_modules/culori/src/rgb/parseHex.js
+		// ../../node_modules/.pnpm/culori@4.0.2/node_modules/culori/src/rgb/parseHex.js
 		const hex = /^#?([0-9a-f]{8}|[0-9a-f]{6}|[0-9a-f]{4}|[0-9a-f]{3})$/i;
 		const parseHex = (color) => {
 			let match;
 			return (match = color.match(hex)) ? parseNumber(parseInt(match[1], 16), match[1].length) : void 0;
 		};
-		// node_modules/.pnpm/culori@4.0.2/node_modules/culori/src/util/regex.js
+		// ../../node_modules/.pnpm/culori@4.0.2/node_modules/culori/src/util/regex.js
 		const num$1 = "([+-]?\\d*\\.?\\d+(?:[eE][+-]?\\d+)?)";
 		const per = `${num$1}%`;
 		const num_per = `(?:${num$1}%|${num$1})`;
@@ -950,7 +950,7 @@ window.__ModuleLoader__.load({
 		const hue$1 = `(?:${num$1}(deg|grad|rad|turn)|${num$1})`;
 		const c = `\\s*,\\s*`;
 		new RegExp("^" + num_per_none + "$");
-		// node_modules/.pnpm/culori@4.0.2/node_modules/culori/src/rgb/parseRgbLegacy.js
+		// ../../node_modules/.pnpm/culori@4.0.2/node_modules/culori/src/rgb/parseRgbLegacy.js
 		const rgb_num_old = new RegExp(`^rgba?\\(\\s*${num$1}${c}${num$1}${c}${num$1}\\s*(?:,\\s*${num_per}\\s*)?\\)$`);
 		const rgb_per_old = new RegExp(`^rgba?\\(\\s*${per}${c}${per}${c}${per}\\s*(?:,\\s*${num_per}\\s*)?\\)$`);
 		const parseRgbLegacy = (color) => {
@@ -969,14 +969,14 @@ window.__ModuleLoader__.load({
 			else if (match[5] !== void 0) res.alpha = Math.max(0, Math.min(1, +match[5]));
 			return res;
 		};
-		// node_modules/.pnpm/culori@4.0.2/node_modules/culori/src/_prepare.js
+		// ../../node_modules/.pnpm/culori@4.0.2/node_modules/culori/src/_prepare.js
 		const prepare = (color, mode) => color === void 0 ? void 0 : typeof color !== "object" ? parse(color) : color.mode !== void 0 ? color : mode ? {
 			...color,
 			mode
 		} : void 0;
-		// node_modules/.pnpm/culori@4.0.2/node_modules/culori/src/converter.js
+		// ../../node_modules/.pnpm/culori@4.0.2/node_modules/culori/src/converter.js
 		const converter = (target_mode = "rgb") => (color) => (color = prepare(color, target_mode)) !== void 0 ? color.mode === target_mode ? color : converters[color.mode][target_mode] ? converters[color.mode][target_mode](color) : target_mode === "rgb" ? converters[color.mode].rgb(color) : converters.rgb[target_mode](converters[color.mode].rgb(color)) : void 0;
-		// node_modules/.pnpm/culori@4.0.2/node_modules/culori/src/modes.js
+		// ../../node_modules/.pnpm/culori@4.0.2/node_modules/culori/src/modes.js
 		const converters = {};
 		const modes = {};
 		const parsers = [];
@@ -1014,7 +1014,7 @@ window.__ModuleLoader__.load({
 				if (parsers.indexOf(parser) < 0) parsers.push(parser);
 			}
 		};
-		// node_modules/.pnpm/culori@4.0.2/node_modules/culori/src/parse.js
+		// ../../node_modules/.pnpm/culori@4.0.2/node_modules/culori/src/parse.js
 		const IdentStartCodePoint = /[^\x00-\x7F]|[a-zA-Z_]/;
 		const IdentCodePoint = /[^\x00-\x7F]|[-\w]/;
 		const Tok = {
@@ -1265,7 +1265,7 @@ window.__ModuleLoader__.load({
 			while (i < len) if ((result = parsers[i++](color, parsed)) !== void 0) return result;
 			return tokens ? parseColorSyntax(tokens) : void 0;
 		};
-		// node_modules/.pnpm/culori@4.0.2/node_modules/culori/src/rgb/parseRgb.js
+		// ../../node_modules/.pnpm/culori@4.0.2/node_modules/culori/src/rgb/parseRgb.js
 		function parseRgb(color, parsed) {
 			if (!parsed || parsed[0] !== "rgb" && parsed[0] !== "rgba") return;
 			const res = { mode: "rgb" };
@@ -1277,7 +1277,7 @@ window.__ModuleLoader__.load({
 			if (alpha.type !== Tok.None) res.alpha = Math.min(1, Math.max(0, alpha.type === Tok.Number ? alpha.value : alpha.value / 100));
 			return res;
 		}
-		// node_modules/.pnpm/culori@4.0.2/node_modules/culori/src/rgb/parseTransparent.js
+		// ../../node_modules/.pnpm/culori@4.0.2/node_modules/culori/src/rgb/parseTransparent.js
 		const parseTransparent = (c) => c === "transparent" ? {
 			mode: "rgb",
 			r: 0,
@@ -1285,9 +1285,9 @@ window.__ModuleLoader__.load({
 			b: 0,
 			alpha: 0
 		} : void 0;
-		// node_modules/.pnpm/culori@4.0.2/node_modules/culori/src/interpolate/lerp.js
+		// ../../node_modules/.pnpm/culori@4.0.2/node_modules/culori/src/interpolate/lerp.js
 		const lerp = (a, b, t) => a + t * (b - a);
-		// node_modules/.pnpm/culori@4.0.2/node_modules/culori/src/interpolate/piecewise.js
+		// ../../node_modules/.pnpm/culori@4.0.2/node_modules/culori/src/interpolate/piecewise.js
 		const get_classes = (arr) => {
 			let classes = [];
 			for (let i = 0; i < arr.length - 1; i++) {
@@ -1308,9 +1308,9 @@ window.__ModuleLoader__.load({
 				return pair === void 0 ? void 0 : interpolator(pair[0], pair[1], cls - idx);
 			};
 		};
-		// node_modules/.pnpm/culori@4.0.2/node_modules/culori/src/interpolate/linear.js
+		// ../../node_modules/.pnpm/culori@4.0.2/node_modules/culori/src/interpolate/linear.js
 		const interpolatorLinear = interpolatorPiecewise(lerp);
-		// node_modules/.pnpm/culori@4.0.2/node_modules/culori/src/fixup/alpha.js
+		// ../../node_modules/.pnpm/culori@4.0.2/node_modules/culori/src/fixup/alpha.js
 		const fixupAlpha = (arr) => {
 			let some_defined = false;
 			let res = arr.map((v) => {
@@ -1322,7 +1322,7 @@ window.__ModuleLoader__.load({
 			});
 			return some_defined ? res : arr;
 		};
-		// node_modules/.pnpm/culori@4.0.2/node_modules/culori/src/rgb/definition.js
+		// ../../node_modules/.pnpm/culori@4.0.2/node_modules/culori/src/rgb/definition.js
 		const definition$27 = {
 			mode: "rgb",
 			channels: [
@@ -1361,7 +1361,7 @@ window.__ModuleLoader__.load({
 				b: 0
 			}
 		};
-		// node_modules/.pnpm/culori@4.0.2/node_modules/culori/src/a98/convertA98ToXyz65.js
+		// ../../node_modules/.pnpm/culori@4.0.2/node_modules/culori/src/a98/convertA98ToXyz65.js
 		const linearize$2 = (v = 0) => Math.pow(Math.abs(v), 563 / 256) * Math.sign(v);
 		const convertA98ToXyz65 = (a98) => {
 			let r = linearize$2(a98.r);
@@ -1376,7 +1376,7 @@ window.__ModuleLoader__.load({
 			if (a98.alpha !== void 0) res.alpha = a98.alpha;
 			return res;
 		};
-		// node_modules/.pnpm/culori@4.0.2/node_modules/culori/src/a98/convertXyz65ToA98.js
+		// ../../node_modules/.pnpm/culori@4.0.2/node_modules/culori/src/a98/convertXyz65ToA98.js
 		const gamma$2 = (v) => Math.pow(Math.abs(v), 256 / 563) * Math.sign(v);
 		const convertXyz65ToA98 = ({ x, y, z, alpha }) => {
 			if (x === void 0) x = 0;
@@ -1391,7 +1391,7 @@ window.__ModuleLoader__.load({
 			if (alpha !== void 0) res.alpha = alpha;
 			return res;
 		};
-		// node_modules/.pnpm/culori@4.0.2/node_modules/culori/src/lrgb/convertRgbToLrgb.js
+		// ../../node_modules/.pnpm/culori@4.0.2/node_modules/culori/src/lrgb/convertRgbToLrgb.js
 		const fn$3 = (c = 0) => {
 			const abs = Math.abs(c);
 			if (abs <= .04045) return c / 12.92;
@@ -1407,7 +1407,7 @@ window.__ModuleLoader__.load({
 			if (alpha !== void 0) res.alpha = alpha;
 			return res;
 		};
-		// node_modules/.pnpm/culori@4.0.2/node_modules/culori/src/xyz65/convertRgbToXyz65.js
+		// ../../node_modules/.pnpm/culori@4.0.2/node_modules/culori/src/xyz65/convertRgbToXyz65.js
 		const convertRgbToXyz65 = (rgb) => {
 			let { r, g, b, alpha } = convertRgbToLrgb(rgb);
 			let res = {
@@ -1419,7 +1419,7 @@ window.__ModuleLoader__.load({
 			if (alpha !== void 0) res.alpha = alpha;
 			return res;
 		};
-		// node_modules/.pnpm/culori@4.0.2/node_modules/culori/src/lrgb/convertLrgbToRgb.js
+		// ../../node_modules/.pnpm/culori@4.0.2/node_modules/culori/src/lrgb/convertLrgbToRgb.js
 		const fn$2 = (c = 0) => {
 			const abs = Math.abs(c);
 			if (abs > .0031308) return (Math.sign(c) || 1) * (1.055 * Math.pow(abs, 1 / 2.4) - .055);
@@ -1435,7 +1435,7 @@ window.__ModuleLoader__.load({
 			if (alpha !== void 0) res.alpha = alpha;
 			return res;
 		};
-		// node_modules/.pnpm/culori@4.0.2/node_modules/culori/src/xyz65/convertXyz65ToRgb.js
+		// ../../node_modules/.pnpm/culori@4.0.2/node_modules/culori/src/xyz65/convertXyz65ToRgb.js
 		const convertXyz65ToRgb = ({ x, y, z, alpha }) => {
 			if (x === void 0) x = 0;
 			if (y === void 0) y = 0;
@@ -1448,7 +1448,7 @@ window.__ModuleLoader__.load({
 			if (alpha !== void 0) res.alpha = alpha;
 			return res;
 		};
-		// node_modules/.pnpm/culori@4.0.2/node_modules/culori/src/a98/definition.js
+		// ../../node_modules/.pnpm/culori@4.0.2/node_modules/culori/src/a98/definition.js
 		const definition$26 = {
 			...definition$27,
 			mode: "a98",
@@ -1463,9 +1463,9 @@ window.__ModuleLoader__.load({
 				xyz65: convertA98ToXyz65
 			}
 		};
-		// node_modules/.pnpm/culori@4.0.2/node_modules/culori/src/util/normalizeHue.js
+		// ../../node_modules/.pnpm/culori@4.0.2/node_modules/culori/src/util/normalizeHue.js
 		const normalizeHue = (hue) => (hue = hue % 360) < 0 ? hue + 360 : hue;
-		// node_modules/.pnpm/culori@4.0.2/node_modules/culori/src/fixup/hue.js
+		// ../../node_modules/.pnpm/culori@4.0.2/node_modules/culori/src/fixup/hue.js
 		const hue = (hues, fn) => {
 			return hues.map((hue, idx, arr) => {
 				if (hue === void 0) return hue;
@@ -1482,7 +1482,7 @@ window.__ModuleLoader__.load({
 			}, []);
 		};
 		const fixupHueShorter = (arr) => hue(arr, (d) => Math.abs(d) <= 180 ? d : d - 360 * Math.sign(d));
-		// node_modules/.pnpm/culori@4.0.2/node_modules/culori/src/cubehelix/constants.js
+		// ../../node_modules/.pnpm/culori@4.0.2/node_modules/culori/src/cubehelix/constants.js
 		const M = [
 			-.14861,
 			1.78277,
@@ -1493,7 +1493,7 @@ window.__ModuleLoader__.load({
 		];
 		const degToRad = Math.PI / 180;
 		const radToDeg = 180 / Math.PI;
-		// node_modules/.pnpm/culori@4.0.2/node_modules/culori/src/cubehelix/convertRgbToCubehelix.js
+		// ../../node_modules/.pnpm/culori@4.0.2/node_modules/culori/src/cubehelix/convertRgbToCubehelix.js
 		let DE = M[3] * M[4];
 		let BE = M[1] * M[4];
 		let BCAD = M[1] * M[2] - M[0] * M[3];
@@ -1513,7 +1513,7 @@ window.__ModuleLoader__.load({
 			if (alpha !== void 0) res.alpha = alpha;
 			return res;
 		};
-		// node_modules/.pnpm/culori@4.0.2/node_modules/culori/src/cubehelix/convertCubehelixToRgb.js
+		// ../../node_modules/.pnpm/culori@4.0.2/node_modules/culori/src/cubehelix/convertCubehelixToRgb.js
 		const convertCubehelixToRgb = ({ h, s, l, alpha }) => {
 			let res = { mode: "rgb" };
 			h = (h === void 0 ? 0 : h + 120) * degToRad;
@@ -1527,7 +1527,7 @@ window.__ModuleLoader__.load({
 			if (alpha !== void 0) res.alpha = alpha;
 			return res;
 		};
-		// node_modules/.pnpm/culori@4.0.2/node_modules/culori/src/difference.js
+		// ../../node_modules/.pnpm/culori@4.0.2/node_modules/culori/src/difference.js
 		const differenceHueSaturation = (std, smp) => {
 			if (std.h === void 0 || smp.h === void 0 || !std.s || !smp.s) return 0;
 			let std_h = normalizeHue(std.h);
@@ -1549,7 +1549,7 @@ window.__ModuleLoader__.load({
 			let dH = Math.sin((smp_h - std_h + 360) / 2 * Math.PI / 180);
 			return 2 * Math.sqrt(std.c * smp.c) * dH;
 		};
-		// node_modules/.pnpm/culori@4.0.2/node_modules/culori/src/average.js
+		// ../../node_modules/.pnpm/culori@4.0.2/node_modules/culori/src/average.js
 		const averageAngle = (val) => {
 			let sum = val.reduce((sum, val) => {
 				if (val !== void 0) {
@@ -1565,7 +1565,7 @@ window.__ModuleLoader__.load({
 			let angle = Math.atan2(sum.sin, sum.cos) * 180 / Math.PI;
 			return angle < 0 ? 360 + angle : angle;
 		};
-		// node_modules/.pnpm/culori@4.0.2/node_modules/culori/src/cubehelix/definition.js
+		// ../../node_modules/.pnpm/culori@4.0.2/node_modules/culori/src/cubehelix/definition.js
 		const definition$25 = {
 			mode: "cubehelix",
 			channels: [
@@ -1598,7 +1598,7 @@ window.__ModuleLoader__.load({
 			difference: { h: differenceHueSaturation },
 			average: { h: averageAngle }
 		};
-		// node_modules/.pnpm/culori@4.0.2/node_modules/culori/src/lch/convertLabToLch.js
+		// ../../node_modules/.pnpm/culori@4.0.2/node_modules/culori/src/lch/convertLabToLch.js
 		const convertLabToLch = ({ l, a, b, alpha }, mode = "lch") => {
 			if (a === void 0) a = 0;
 			if (b === void 0) b = 0;
@@ -1612,7 +1612,7 @@ window.__ModuleLoader__.load({
 			if (alpha !== void 0) res.alpha = alpha;
 			return res;
 		};
-		// node_modules/.pnpm/culori@4.0.2/node_modules/culori/src/lch/convertLchToLab.js
+		// ../../node_modules/.pnpm/culori@4.0.2/node_modules/culori/src/lch/convertLchToLab.js
 		const convertLchToLab = ({ l, c, h, alpha }, mode = "lab") => {
 			if (h === void 0) h = 0;
 			let res = {
@@ -1624,10 +1624,10 @@ window.__ModuleLoader__.load({
 			if (alpha !== void 0) res.alpha = alpha;
 			return res;
 		};
-		// node_modules/.pnpm/culori@4.0.2/node_modules/culori/src/xyz65/constants.js
+		// ../../node_modules/.pnpm/culori@4.0.2/node_modules/culori/src/xyz65/constants.js
 		const k$2 = Math.pow(29, 3) / Math.pow(3, 3);
 		const e$2 = Math.pow(6, 3) / Math.pow(29, 3);
-		// node_modules/.pnpm/culori@4.0.2/node_modules/culori/src/constants.js
+		// ../../node_modules/.pnpm/culori@4.0.2/node_modules/culori/src/constants.js
 		const D50 = {
 			X: .3457 / .3585,
 			Y: 1,
@@ -1640,7 +1640,7 @@ window.__ModuleLoader__.load({
 		};
 		Math.pow(29, 3) / Math.pow(3, 3);
 		Math.pow(6, 3) / Math.pow(29, 3);
-		// node_modules/.pnpm/culori@4.0.2/node_modules/culori/src/lab65/convertLab65ToXyz65.js
+		// ../../node_modules/.pnpm/culori@4.0.2/node_modules/culori/src/lab65/convertLab65ToXyz65.js
 		let fn$1 = (v) => Math.pow(v, 3) > e$2 ? Math.pow(v, 3) : (116 * v - 16) / k$2;
 		const convertLab65ToXyz65 = ({ l, a, b, alpha }) => {
 			if (l === void 0) l = 0;
@@ -1658,9 +1658,9 @@ window.__ModuleLoader__.load({
 			if (alpha !== void 0) res.alpha = alpha;
 			return res;
 		};
-		// node_modules/.pnpm/culori@4.0.2/node_modules/culori/src/lab65/convertLab65ToRgb.js
+		// ../../node_modules/.pnpm/culori@4.0.2/node_modules/culori/src/lab65/convertLab65ToRgb.js
 		const convertLab65ToRgb = (lab) => convertXyz65ToRgb(convertLab65ToXyz65(lab));
-		// node_modules/.pnpm/culori@4.0.2/node_modules/culori/src/lab65/convertXyz65ToLab65.js
+		// ../../node_modules/.pnpm/culori@4.0.2/node_modules/culori/src/lab65/convertXyz65ToLab65.js
 		const f$1 = (value) => value > e$2 ? Math.cbrt(value) : (k$2 * value + 16) / 116;
 		const convertXyz65ToLab65 = ({ x, y, z, alpha }) => {
 			if (x === void 0) x = 0;
@@ -1678,18 +1678,18 @@ window.__ModuleLoader__.load({
 			if (alpha !== void 0) res.alpha = alpha;
 			return res;
 		};
-		// node_modules/.pnpm/culori@4.0.2/node_modules/culori/src/lab65/convertRgbToLab65.js
+		// ../../node_modules/.pnpm/culori@4.0.2/node_modules/culori/src/lab65/convertRgbToLab65.js
 		const convertRgbToLab65 = (rgb) => {
 			let res = convertXyz65ToLab65(convertRgbToXyz65(rgb));
 			if (rgb.r === rgb.b && rgb.b === rgb.g) res.a = res.b = 0;
 			return res;
 		};
-		// node_modules/.pnpm/culori@4.0.2/node_modules/culori/src/dlch/constants.js
+		// ../../node_modules/.pnpm/culori@4.0.2/node_modules/culori/src/dlch/constants.js
 		const θ = 26 / 180 * Math.PI;
 		const cosθ = Math.cos(θ);
 		const sinθ = Math.sin(θ);
 		const factor = 100 / Math.log(139 / 100);
-		// node_modules/.pnpm/culori@4.0.2/node_modules/culori/src/dlch/convertDlchToLab65.js
+		// ../../node_modules/.pnpm/culori@4.0.2/node_modules/culori/src/dlch/convertDlchToLab65.js
 		const convertDlchToLab65 = ({ l, c, h, alpha }) => {
 			if (l === void 0) l = 0;
 			if (c === void 0) c = 0;
@@ -1706,7 +1706,7 @@ window.__ModuleLoader__.load({
 			if (alpha !== void 0) res.alpha = alpha;
 			return res;
 		};
-		// node_modules/.pnpm/culori@4.0.2/node_modules/culori/src/dlch/convertLab65ToDlch.js
+		// ../../node_modules/.pnpm/culori@4.0.2/node_modules/culori/src/dlch/convertLab65ToDlch.js
 		const convertLab65ToDlch = ({ l, a, b, alpha }) => {
 			if (l === void 0) l = 0;
 			if (a === void 0) a = 0;
@@ -1723,7 +1723,7 @@ window.__ModuleLoader__.load({
 			if (alpha !== void 0) res.alpha = alpha;
 			return res;
 		};
-		// node_modules/.pnpm/culori@4.0.2/node_modules/culori/src/dlab/definition.js
+		// ../../node_modules/.pnpm/culori@4.0.2/node_modules/culori/src/dlab/definition.js
 		const convertDlabToLab65 = (c) => convertDlchToLab65(convertLabToLch(c, "dlch"));
 		const convertLab65ToDlab = (c) => convertLchToLab(convertLab65ToDlch(c), "dlab");
 		const definition$24 = {
@@ -1759,7 +1759,7 @@ window.__ModuleLoader__.load({
 				}
 			}
 		};
-		// node_modules/.pnpm/culori@4.0.2/node_modules/culori/src/dlch/definition.js
+		// ../../node_modules/.pnpm/culori@4.0.2/node_modules/culori/src/dlch/definition.js
 		const definition$23 = {
 			mode: "dlch",
 			parse: ["--din99o-lch"],
@@ -1800,7 +1800,7 @@ window.__ModuleLoader__.load({
 			difference: { h: differenceHueChroma },
 			average: { h: averageAngle }
 		};
-		// node_modules/.pnpm/culori@4.0.2/node_modules/culori/src/hsi/convertHsiToRgb.js
+		// ../../node_modules/.pnpm/culori@4.0.2/node_modules/culori/src/hsi/convertHsiToRgb.js
 		function convertHsiToRgb({ h, s, i, alpha }) {
 			h = normalizeHue(h !== void 0 ? h : 0);
 			if (s === void 0) s = 0;
@@ -1860,7 +1860,7 @@ window.__ModuleLoader__.load({
 			if (alpha !== void 0) res.alpha = alpha;
 			return res;
 		}
-		// node_modules/.pnpm/culori@4.0.2/node_modules/culori/src/hsi/convertRgbToHsi.js
+		// ../../node_modules/.pnpm/culori@4.0.2/node_modules/culori/src/hsi/convertRgbToHsi.js
 		function convertRgbToHsi({ r, g, b, alpha }) {
 			if (r === void 0) r = 0;
 			if (g === void 0) g = 0;
@@ -1875,7 +1875,7 @@ window.__ModuleLoader__.load({
 			if (alpha !== void 0) res.alpha = alpha;
 			return res;
 		}
-		// node_modules/.pnpm/culori@4.0.2/node_modules/culori/src/hsi/definition.js
+		// ../../node_modules/.pnpm/culori@4.0.2/node_modules/culori/src/hsi/definition.js
 		const definition$22 = {
 			mode: "hsi",
 			toMode: { rgb: convertHsiToRgb },
@@ -1905,7 +1905,7 @@ window.__ModuleLoader__.load({
 			difference: { h: differenceHueSaturation },
 			average: { h: averageAngle }
 		};
-		// node_modules/.pnpm/culori@4.0.2/node_modules/culori/src/hsl/convertHslToRgb.js
+		// ../../node_modules/.pnpm/culori@4.0.2/node_modules/culori/src/hsl/convertHslToRgb.js
 		function convertHslToRgb({ h, s, l, alpha }) {
 			h = normalizeHue(h !== void 0 ? h : 0);
 			if (s === void 0) s = 0;
@@ -1966,7 +1966,7 @@ window.__ModuleLoader__.load({
 			if (alpha !== void 0) res.alpha = alpha;
 			return res;
 		}
-		// node_modules/.pnpm/culori@4.0.2/node_modules/culori/src/hsl/convertRgbToHsl.js
+		// ../../node_modules/.pnpm/culori@4.0.2/node_modules/culori/src/hsl/convertRgbToHsl.js
 		function convertRgbToHsl({ r, g, b, alpha }) {
 			if (r === void 0) r = 0;
 			if (g === void 0) g = 0;
@@ -1981,7 +1981,7 @@ window.__ModuleLoader__.load({
 			if (alpha !== void 0) res.alpha = alpha;
 			return res;
 		}
-		// node_modules/.pnpm/culori@4.0.2/node_modules/culori/src/util/hue.js
+		// ../../node_modules/.pnpm/culori@4.0.2/node_modules/culori/src/util/hue.js
 		const hueToDeg = (val, unit) => {
 			switch (unit) {
 				case "deg": return +val;
@@ -1990,7 +1990,7 @@ window.__ModuleLoader__.load({
 				case "turn": return val * 360;
 			}
 		};
-		// node_modules/.pnpm/culori@4.0.2/node_modules/culori/src/hsl/parseHslLegacy.js
+		// ../../node_modules/.pnpm/culori@4.0.2/node_modules/culori/src/hsl/parseHslLegacy.js
 		const hsl_old = new RegExp(`^hsla?\\(\\s*${hue$1}${c}${per}${c}${per}\\s*(?:,\\s*${num_per}\\s*)?\\)$`);
 		const parseHslLegacy = (color) => {
 			let match = color.match(hsl_old);
@@ -2004,7 +2004,7 @@ window.__ModuleLoader__.load({
 			else if (match[7] !== void 0) res.alpha = Math.max(0, Math.min(1, +match[7]));
 			return res;
 		};
-		// node_modules/.pnpm/culori@4.0.2/node_modules/culori/src/hsl/parseHsl.js
+		// ../../node_modules/.pnpm/culori@4.0.2/node_modules/culori/src/hsl/parseHsl.js
 		function parseHsl(color, parsed) {
 			if (!parsed || parsed[0] !== "hsl" && parsed[0] !== "hsla") return;
 			const res = { mode: "hsl" };
@@ -2024,7 +2024,7 @@ window.__ModuleLoader__.load({
 			if (alpha.type !== Tok.None) res.alpha = Math.min(1, Math.max(0, alpha.type === Tok.Number ? alpha.value : alpha.value / 100));
 			return res;
 		}
-		// node_modules/.pnpm/culori@4.0.2/node_modules/culori/src/hsl/definition.js
+		// ../../node_modules/.pnpm/culori@4.0.2/node_modules/culori/src/hsl/definition.js
 		const definition$21 = {
 			mode: "hsl",
 			toMode: { rgb: convertHslToRgb },
@@ -2054,7 +2054,7 @@ window.__ModuleLoader__.load({
 			difference: { h: differenceHueSaturation },
 			average: { h: averageAngle }
 		};
-		// node_modules/.pnpm/culori@4.0.2/node_modules/culori/src/hsv/convertHsvToRgb.js
+		// ../../node_modules/.pnpm/culori@4.0.2/node_modules/culori/src/hsv/convertHsvToRgb.js
 		function convertHsvToRgb({ h, s, v, alpha }) {
 			h = normalizeHue(h !== void 0 ? h : 0);
 			if (s === void 0) s = 0;
@@ -2114,7 +2114,7 @@ window.__ModuleLoader__.load({
 			if (alpha !== void 0) res.alpha = alpha;
 			return res;
 		}
-		// node_modules/.pnpm/culori@4.0.2/node_modules/culori/src/hsv/convertRgbToHsv.js
+		// ../../node_modules/.pnpm/culori@4.0.2/node_modules/culori/src/hsv/convertRgbToHsv.js
 		function convertRgbToHsv({ r, g, b, alpha }) {
 			if (r === void 0) r = 0;
 			if (g === void 0) g = 0;
@@ -2129,7 +2129,7 @@ window.__ModuleLoader__.load({
 			if (alpha !== void 0) res.alpha = alpha;
 			return res;
 		}
-		// node_modules/.pnpm/culori@4.0.2/node_modules/culori/src/hsv/definition.js
+		// ../../node_modules/.pnpm/culori@4.0.2/node_modules/culori/src/hsv/definition.js
 		const definition$20 = {
 			mode: "hsv",
 			toMode: { rgb: convertHsvToRgb },
@@ -2159,7 +2159,7 @@ window.__ModuleLoader__.load({
 			difference: { h: differenceHueSaturation },
 			average: { h: averageAngle }
 		};
-		// node_modules/.pnpm/culori@4.0.2/node_modules/culori/src/hwb/convertHwbToRgb.js
+		// ../../node_modules/.pnpm/culori@4.0.2/node_modules/culori/src/hwb/convertHwbToRgb.js
 		function convertHwbToRgb({ h, w, b, alpha }) {
 			if (w === void 0) w = 0;
 			if (b === void 0) b = 0;
@@ -2175,7 +2175,7 @@ window.__ModuleLoader__.load({
 				alpha
 			});
 		}
-		// node_modules/.pnpm/culori@4.0.2/node_modules/culori/src/hwb/convertRgbToHwb.js
+		// ../../node_modules/.pnpm/culori@4.0.2/node_modules/culori/src/hwb/convertRgbToHwb.js
 		function convertRgbToHwb(rgba) {
 			let hsv = convertRgbToHsv(rgba);
 			if (hsv === void 0) return void 0;
@@ -2190,7 +2190,7 @@ window.__ModuleLoader__.load({
 			if (hsv.alpha !== void 0) res.alpha = hsv.alpha;
 			return res;
 		}
-		// node_modules/.pnpm/culori@4.0.2/node_modules/culori/src/hwb/parseHwb.js
+		// ../../node_modules/.pnpm/culori@4.0.2/node_modules/culori/src/hwb/parseHwb.js
 		function ParseHwb(color, parsed) {
 			if (!parsed || parsed[0] !== "hwb") return;
 			const res = { mode: "hwb" };
@@ -2210,7 +2210,7 @@ window.__ModuleLoader__.load({
 			if (alpha.type !== Tok.None) res.alpha = Math.min(1, Math.max(0, alpha.type === Tok.Number ? alpha.value : alpha.value / 100));
 			return res;
 		}
-		// node_modules/.pnpm/culori@4.0.2/node_modules/culori/src/hwb/definition.js
+		// ../../node_modules/.pnpm/culori@4.0.2/node_modules/culori/src/hwb/definition.js
 		const definition$19 = {
 			mode: "hwb",
 			toMode: { rgb: convertHwbToRgb },
@@ -2240,7 +2240,7 @@ window.__ModuleLoader__.load({
 			difference: { h: differenceHueNaive },
 			average: { h: averageAngle }
 		};
-		// node_modules/.pnpm/culori@4.0.2/node_modules/culori/src/hdr/transfer.js
+		// ../../node_modules/.pnpm/culori@4.0.2/node_modules/culori/src/hdr/transfer.js
 		const M1 = .1593017578125;
 		const M2 = 78.84375;
 		const C1 = .8359375;
@@ -2256,7 +2256,7 @@ window.__ModuleLoader__.load({
 			const c = Math.pow(v / 1e4, M1);
 			return Math.pow((C1 + C2 * c) / (1 + C3 * c), M2);
 		}
-		// node_modules/.pnpm/culori@4.0.2/node_modules/culori/src/itp/convertItpToXyz65.js
+		// ../../node_modules/.pnpm/culori@4.0.2/node_modules/culori/src/itp/convertItpToXyz65.js
 		const toRel = (c) => Math.max(c / 203, 0);
 		const convertItpToXyz65 = ({ i, t, p, alpha }) => {
 			if (i === void 0) i = 0;
@@ -2274,7 +2274,7 @@ window.__ModuleLoader__.load({
 			if (alpha !== void 0) res.alpha = alpha;
 			return res;
 		};
-		// node_modules/.pnpm/culori@4.0.2/node_modules/culori/src/itp/convertXyz65ToItp.js
+		// ../../node_modules/.pnpm/culori@4.0.2/node_modules/culori/src/itp/convertXyz65ToItp.js
 		const toAbs = (c = 0) => Math.max(c * 203, 0);
 		const convertXyz65ToItp = ({ x, y, z, alpha }) => {
 			const absX = toAbs(x);
@@ -2292,7 +2292,7 @@ window.__ModuleLoader__.load({
 			if (alpha !== void 0) res.alpha = alpha;
 			return res;
 		};
-		// node_modules/.pnpm/culori@4.0.2/node_modules/culori/src/itp/definition.js
+		// ../../node_modules/.pnpm/culori@4.0.2/node_modules/culori/src/itp/definition.js
 		const definition$18 = {
 			mode: "itp",
 			channels: [
@@ -2326,7 +2326,7 @@ window.__ModuleLoader__.load({
 				}
 			}
 		};
-		// node_modules/.pnpm/culori@4.0.2/node_modules/culori/src/jab/convertXyz65ToJab.js
+		// ../../node_modules/.pnpm/culori@4.0.2/node_modules/culori/src/jab/convertXyz65ToJab.js
 		const p$1 = 134.03437499999998;
 		const d0$1 = 16295499532821565e-27;
 		const jabPqEncode = (v) => {
@@ -2354,7 +2354,7 @@ window.__ModuleLoader__.load({
 			if (alpha !== void 0) res.alpha = alpha;
 			return res;
 		};
-		// node_modules/.pnpm/culori@4.0.2/node_modules/culori/src/jab/convertJabToXyz65.js
+		// ../../node_modules/.pnpm/culori@4.0.2/node_modules/culori/src/jab/convertJabToXyz65.js
 		const p = 134.03437499999998;
 		const d0 = 16295499532821565e-27;
 		const jabPqDecode = (v) => {
@@ -2380,15 +2380,15 @@ window.__ModuleLoader__.load({
 			if (alpha !== void 0) res.alpha = alpha;
 			return res;
 		};
-		// node_modules/.pnpm/culori@4.0.2/node_modules/culori/src/jab/convertRgbToJab.js
+		// ../../node_modules/.pnpm/culori@4.0.2/node_modules/culori/src/jab/convertRgbToJab.js
 		const convertRgbToJab = (rgb) => {
 			let res = convertXyz65ToJab(convertRgbToXyz65(rgb));
 			if (rgb.r === rgb.b && rgb.b === rgb.g) res.a = res.b = 0;
 			return res;
 		};
-		// node_modules/.pnpm/culori@4.0.2/node_modules/culori/src/jab/convertJabToRgb.js
+		// ../../node_modules/.pnpm/culori@4.0.2/node_modules/culori/src/jab/convertJabToRgb.js
 		const convertJabToRgb = (color) => convertXyz65ToRgb(convertJabToXyz65(color));
-		// node_modules/.pnpm/culori@4.0.2/node_modules/culori/src/jab/definition.js
+		// ../../node_modules/.pnpm/culori@4.0.2/node_modules/culori/src/jab/definition.js
 		const definition$17 = {
 			mode: "jab",
 			channels: [
@@ -2422,7 +2422,7 @@ window.__ModuleLoader__.load({
 				}
 			}
 		};
-		// node_modules/.pnpm/culori@4.0.2/node_modules/culori/src/jch/convertJabToJch.js
+		// ../../node_modules/.pnpm/culori@4.0.2/node_modules/culori/src/jch/convertJabToJch.js
 		const convertJabToJch = ({ j, a, b, alpha }) => {
 			if (a === void 0) a = 0;
 			if (b === void 0) b = 0;
@@ -2436,7 +2436,7 @@ window.__ModuleLoader__.load({
 			if (alpha !== void 0) res.alpha = alpha;
 			return res;
 		};
-		// node_modules/.pnpm/culori@4.0.2/node_modules/culori/src/jch/convertJchToJab.js
+		// ../../node_modules/.pnpm/culori@4.0.2/node_modules/culori/src/jch/convertJchToJab.js
 		const convertJchToJab = ({ j, c, h, alpha }) => {
 			if (h === void 0) h = 0;
 			let res = {
@@ -2448,7 +2448,7 @@ window.__ModuleLoader__.load({
 			if (alpha !== void 0) res.alpha = alpha;
 			return res;
 		};
-		// node_modules/.pnpm/culori@4.0.2/node_modules/culori/src/jch/definition.js
+		// ../../node_modules/.pnpm/culori@4.0.2/node_modules/culori/src/jch/definition.js
 		const definition$16 = {
 			mode: "jch",
 			parse: ["--jzczhz"],
@@ -2487,10 +2487,10 @@ window.__ModuleLoader__.load({
 			difference: { h: differenceHueChroma },
 			average: { h: averageAngle }
 		};
-		// node_modules/.pnpm/culori@4.0.2/node_modules/culori/src/xyz50/constants.js
+		// ../../node_modules/.pnpm/culori@4.0.2/node_modules/culori/src/xyz50/constants.js
 		const k = Math.pow(29, 3) / Math.pow(3, 3);
 		const e = Math.pow(6, 3) / Math.pow(29, 3);
-		// node_modules/.pnpm/culori@4.0.2/node_modules/culori/src/lab/convertLabToXyz50.js
+		// ../../node_modules/.pnpm/culori@4.0.2/node_modules/culori/src/lab/convertLabToXyz50.js
 		let fn = (v) => Math.pow(v, 3) > e ? Math.pow(v, 3) : (116 * v - 16) / k;
 		const convertLabToXyz50 = ({ l, a, b, alpha }) => {
 			if (l === void 0) l = 0;
@@ -2508,7 +2508,7 @@ window.__ModuleLoader__.load({
 			if (alpha !== void 0) res.alpha = alpha;
 			return res;
 		};
-		// node_modules/.pnpm/culori@4.0.2/node_modules/culori/src/xyz50/convertXyz50ToRgb.js
+		// ../../node_modules/.pnpm/culori@4.0.2/node_modules/culori/src/xyz50/convertXyz50ToRgb.js
 		const convertXyz50ToRgb = ({ x, y, z, alpha }) => {
 			if (x === void 0) x = 0;
 			if (y === void 0) y = 0;
@@ -2521,9 +2521,9 @@ window.__ModuleLoader__.load({
 			if (alpha !== void 0) res.alpha = alpha;
 			return res;
 		};
-		// node_modules/.pnpm/culori@4.0.2/node_modules/culori/src/lab/convertLabToRgb.js
+		// ../../node_modules/.pnpm/culori@4.0.2/node_modules/culori/src/lab/convertLabToRgb.js
 		const convertLabToRgb = (lab) => convertXyz50ToRgb(convertLabToXyz50(lab));
-		// node_modules/.pnpm/culori@4.0.2/node_modules/culori/src/xyz50/convertRgbToXyz50.js
+		// ../../node_modules/.pnpm/culori@4.0.2/node_modules/culori/src/xyz50/convertRgbToXyz50.js
 		const convertRgbToXyz50 = (rgb) => {
 			let { r, g, b, alpha } = convertRgbToLrgb(rgb);
 			let res = {
@@ -2535,7 +2535,7 @@ window.__ModuleLoader__.load({
 			if (alpha !== void 0) res.alpha = alpha;
 			return res;
 		};
-		// node_modules/.pnpm/culori@4.0.2/node_modules/culori/src/lab/convertXyz50ToLab.js
+		// ../../node_modules/.pnpm/culori@4.0.2/node_modules/culori/src/lab/convertXyz50ToLab.js
 		const f = (value) => value > e ? Math.cbrt(value) : (k * value + 16) / 116;
 		const convertXyz50ToLab = ({ x, y, z, alpha }) => {
 			if (x === void 0) x = 0;
@@ -2553,13 +2553,13 @@ window.__ModuleLoader__.load({
 			if (alpha !== void 0) res.alpha = alpha;
 			return res;
 		};
-		// node_modules/.pnpm/culori@4.0.2/node_modules/culori/src/lab/convertRgbToLab.js
+		// ../../node_modules/.pnpm/culori@4.0.2/node_modules/culori/src/lab/convertRgbToLab.js
 		const convertRgbToLab = (rgb) => {
 			let res = convertXyz50ToLab(convertRgbToXyz50(rgb));
 			if (rgb.r === rgb.b && rgb.b === rgb.g) res.a = res.b = 0;
 			return res;
 		};
-		// node_modules/.pnpm/culori@4.0.2/node_modules/culori/src/lab/parseLab.js
+		// ../../node_modules/.pnpm/culori@4.0.2/node_modules/culori/src/lab/parseLab.js
 		function parseLab(color, parsed) {
 			if (!parsed || parsed[0] !== "lab") return;
 			const res = { mode: "lab" };
@@ -2571,7 +2571,7 @@ window.__ModuleLoader__.load({
 			if (alpha.type !== Tok.None) res.alpha = Math.min(1, Math.max(0, alpha.type === Tok.Number ? alpha.value : alpha.value / 100));
 			return res;
 		}
-		// node_modules/.pnpm/culori@4.0.2/node_modules/culori/src/lab/definition.js
+		// ../../node_modules/.pnpm/culori@4.0.2/node_modules/culori/src/lab/definition.js
 		const definition$15 = {
 			mode: "lab",
 			toMode: {
@@ -2605,7 +2605,7 @@ window.__ModuleLoader__.load({
 				}
 			}
 		};
-		// node_modules/.pnpm/culori@4.0.2/node_modules/culori/src/lab65/definition.js
+		// ../../node_modules/.pnpm/culori@4.0.2/node_modules/culori/src/lab65/definition.js
 		const definition$14 = {
 			...definition$15,
 			mode: "lab65",
@@ -2625,7 +2625,7 @@ window.__ModuleLoader__.load({
 				b: [-125, 125]
 			}
 		};
-		// node_modules/.pnpm/culori@4.0.2/node_modules/culori/src/lch/parseLch.js
+		// ../../node_modules/.pnpm/culori@4.0.2/node_modules/culori/src/lch/parseLch.js
 		function parseLch(color, parsed) {
 			if (!parsed || parsed[0] !== "lch") return;
 			const res = { mode: "lch" };
@@ -2642,7 +2642,7 @@ window.__ModuleLoader__.load({
 			if (alpha.type !== Tok.None) res.alpha = Math.min(1, Math.max(0, alpha.type === Tok.Number ? alpha.value : alpha.value / 100));
 			return res;
 		}
-		// node_modules/.pnpm/culori@4.0.2/node_modules/culori/src/lch/definition.js
+		// ../../node_modules/.pnpm/culori@4.0.2/node_modules/culori/src/lch/definition.js
 		const definition$13 = {
 			mode: "lch",
 			toMode: {
@@ -2681,7 +2681,7 @@ window.__ModuleLoader__.load({
 			difference: { h: differenceHueChroma },
 			average: { h: averageAngle }
 		};
-		// node_modules/.pnpm/culori@4.0.2/node_modules/culori/src/lch65/definition.js
+		// ../../node_modules/.pnpm/culori@4.0.2/node_modules/culori/src/lch65/definition.js
 		const definition$12 = {
 			...definition$13,
 			mode: "lch65",
@@ -2701,7 +2701,7 @@ window.__ModuleLoader__.load({
 				h: [0, 360]
 			}
 		};
-		// node_modules/.pnpm/culori@4.0.2/node_modules/culori/src/lchuv/convertLuvToLchuv.js
+		// ../../node_modules/.pnpm/culori@4.0.2/node_modules/culori/src/lchuv/convertLuvToLchuv.js
 		const convertLuvToLchuv = ({ l, u, v, alpha }) => {
 			if (u === void 0) u = 0;
 			if (v === void 0) v = 0;
@@ -2715,7 +2715,7 @@ window.__ModuleLoader__.load({
 			if (alpha !== void 0) res.alpha = alpha;
 			return res;
 		};
-		// node_modules/.pnpm/culori@4.0.2/node_modules/culori/src/lchuv/convertLchuvToLuv.js
+		// ../../node_modules/.pnpm/culori@4.0.2/node_modules/culori/src/lchuv/convertLchuvToLuv.js
 		const convertLchuvToLuv = ({ l, c, h, alpha }) => {
 			if (h === void 0) h = 0;
 			let res = {
@@ -2727,7 +2727,7 @@ window.__ModuleLoader__.load({
 			if (alpha !== void 0) res.alpha = alpha;
 			return res;
 		};
-		// node_modules/.pnpm/culori@4.0.2/node_modules/culori/src/luv/convertXyz50ToLuv.js
+		// ../../node_modules/.pnpm/culori@4.0.2/node_modules/culori/src/luv/convertXyz50ToLuv.js
 		const u_fn$1 = (x, y, z) => 4 * x / (x + 15 * y + 3 * z);
 		const v_fn$1 = (x, y, z) => 9 * y / (x + 15 * y + 3 * z);
 		const un$1 = u_fn$1(D50.X, D50.Y, D50.Z);
@@ -2754,7 +2754,7 @@ window.__ModuleLoader__.load({
 			if (alpha !== void 0) res.alpha = alpha;
 			return res;
 		};
-		// node_modules/.pnpm/culori@4.0.2/node_modules/culori/src/luv/convertLuvToXyz50.js
+		// ../../node_modules/.pnpm/culori@4.0.2/node_modules/culori/src/luv/convertLuvToXyz50.js
 		const u_fn = (x, y, z) => 4 * x / (x + 15 * y + 3 * z);
 		const v_fn = (x, y, z) => 9 * y / (x + 15 * y + 3 * z);
 		const un = u_fn(D50.X, D50.Y, D50.Z);
@@ -2781,7 +2781,7 @@ window.__ModuleLoader__.load({
 			if (alpha !== void 0) res.alpha = alpha;
 			return res;
 		};
-		// node_modules/.pnpm/culori@4.0.2/node_modules/culori/src/lchuv/definition.js
+		// ../../node_modules/.pnpm/culori@4.0.2/node_modules/culori/src/lchuv/definition.js
 		const convertRgbToLchuv = (rgb) => convertLuvToLchuv(convertXyz50ToLuv(convertRgbToXyz50(rgb)));
 		const convertLchuvToRgb = (lchuv) => convertXyz50ToRgb(convertLuvToXyz50(convertLchuvToLuv(lchuv)));
 		const definition$11 = {
@@ -2822,7 +2822,7 @@ window.__ModuleLoader__.load({
 			difference: { h: differenceHueChroma },
 			average: { h: averageAngle }
 		};
-		// node_modules/.pnpm/culori@4.0.2/node_modules/culori/src/lrgb/definition.js
+		// ../../node_modules/.pnpm/culori@4.0.2/node_modules/culori/src/lrgb/definition.js
 		const definition$10 = {
 			...definition$27,
 			mode: "lrgb",
@@ -2831,7 +2831,7 @@ window.__ModuleLoader__.load({
 			parse: ["srgb-linear"],
 			serialize: "srgb-linear"
 		};
-		// node_modules/.pnpm/culori@4.0.2/node_modules/culori/src/luv/definition.js
+		// ../../node_modules/.pnpm/culori@4.0.2/node_modules/culori/src/luv/definition.js
 		const definition$9 = {
 			mode: "luv",
 			toMode: {
@@ -2865,7 +2865,7 @@ window.__ModuleLoader__.load({
 				}
 			}
 		};
-		// node_modules/.pnpm/culori@4.0.2/node_modules/culori/src/oklab/convertLrgbToOklab.js
+		// ../../node_modules/.pnpm/culori@4.0.2/node_modules/culori/src/oklab/convertLrgbToOklab.js
 		const convertLrgbToOklab = ({ r, g, b, alpha }) => {
 			if (r === void 0) r = 0;
 			if (g === void 0) g = 0;
@@ -2882,13 +2882,13 @@ window.__ModuleLoader__.load({
 			if (alpha !== void 0) res.alpha = alpha;
 			return res;
 		};
-		// node_modules/.pnpm/culori@4.0.2/node_modules/culori/src/oklab/convertRgbToOklab.js
+		// ../../node_modules/.pnpm/culori@4.0.2/node_modules/culori/src/oklab/convertRgbToOklab.js
 		const convertRgbToOklab = (rgb) => {
 			let res = convertLrgbToOklab(convertRgbToLrgb(rgb));
 			if (rgb.r === rgb.b && rgb.b === rgb.g) res.a = res.b = 0;
 			return res;
 		};
-		// node_modules/.pnpm/culori@4.0.2/node_modules/culori/src/oklab/convertOklabToLrgb.js
+		// ../../node_modules/.pnpm/culori@4.0.2/node_modules/culori/src/oklab/convertOklabToLrgb.js
 		const convertOklabToLrgb = ({ l, a, b, alpha }) => {
 			if (l === void 0) l = 0;
 			if (a === void 0) a = 0;
@@ -2905,9 +2905,9 @@ window.__ModuleLoader__.load({
 			if (alpha !== void 0) res.alpha = alpha;
 			return res;
 		};
-		// node_modules/.pnpm/culori@4.0.2/node_modules/culori/src/oklab/convertOklabToRgb.js
+		// ../../node_modules/.pnpm/culori@4.0.2/node_modules/culori/src/oklab/convertOklabToRgb.js
 		const convertOklabToRgb = (c) => convertLrgbToRgb(convertOklabToLrgb(c));
-		// node_modules/.pnpm/culori@4.0.2/node_modules/culori/src/okhsl/helpers.js
+		// ../../node_modules/.pnpm/culori@4.0.2/node_modules/culori/src/okhsl/helpers.js
 		function toe(x) {
 			const k_1 = .206;
 			const k_2 = .03;
@@ -3059,7 +3059,7 @@ window.__ModuleLoader__.load({
 				C_max
 			];
 		}
-		// node_modules/.pnpm/culori@4.0.2/node_modules/culori/src/okhsl/convertOklabToOkhsl.js
+		// ../../node_modules/.pnpm/culori@4.0.2/node_modules/culori/src/okhsl/convertOklabToOkhsl.js
 		function convertOklabToOkhsl(lab) {
 			const l = lab.l !== void 0 ? lab.l : 0;
 			const a = lab.a !== void 0 ? lab.a : 0;
@@ -3093,7 +3093,7 @@ window.__ModuleLoader__.load({
 			}
 			return ret;
 		}
-		// node_modules/.pnpm/culori@4.0.2/node_modules/culori/src/okhsl/convertOkhslToOklab.js
+		// ../../node_modules/.pnpm/culori@4.0.2/node_modules/culori/src/okhsl/convertOkhslToOklab.js
 		function convertOkhslToOklab(hsl) {
 			let h = hsl.h !== void 0 ? hsl.h : 0;
 			let s = hsl.s !== void 0 ? hsl.s : 0;
@@ -3127,7 +3127,7 @@ window.__ModuleLoader__.load({
 			ret.b = C * b_;
 			return ret;
 		}
-		// node_modules/.pnpm/culori@4.0.2/node_modules/culori/src/okhsl/modeOkhsl.js
+		// ../../node_modules/.pnpm/culori@4.0.2/node_modules/culori/src/okhsl/modeOkhsl.js
 		const modeOkhsl = {
 			...definition$21,
 			mode: "okhsl",
@@ -3148,7 +3148,7 @@ window.__ModuleLoader__.load({
 				rgb: (c) => convertOklabToRgb(convertOkhslToOklab(c))
 			}
 		};
-		// node_modules/.pnpm/culori@4.0.2/node_modules/culori/src/okhsv/convertOklabToOkhsv.js
+		// ../../node_modules/.pnpm/culori@4.0.2/node_modules/culori/src/okhsv/convertOklabToOkhsv.js
 		function convertOklabToOkhsv(lab) {
 			let l = lab.l !== void 0 ? lab.l : 0;
 			let a = lab.a !== void 0 ? lab.a : 0;
@@ -3182,7 +3182,7 @@ window.__ModuleLoader__.load({
 			if (lab.alpha !== void 0) ret.alpha = lab.alpha;
 			return ret;
 		}
-		// node_modules/.pnpm/culori@4.0.2/node_modules/culori/src/okhsv/convertOkhsvToOklab.js
+		// ../../node_modules/.pnpm/culori@4.0.2/node_modules/culori/src/okhsv/convertOkhsvToOklab.js
 		function convertOkhsvToOklab(hsv) {
 			const ret = { mode: "oklab" };
 			if (hsv.alpha !== void 0) ret.alpha = hsv.alpha;
@@ -3211,7 +3211,7 @@ window.__ModuleLoader__.load({
 			ret.b = C * b_ * scale_L;
 			return ret;
 		}
-		// node_modules/.pnpm/culori@4.0.2/node_modules/culori/src/okhsv/modeOkhsv.js
+		// ../../node_modules/.pnpm/culori@4.0.2/node_modules/culori/src/okhsv/modeOkhsv.js
 		const modeOkhsv = {
 			...definition$20,
 			mode: "okhsv",
@@ -3232,7 +3232,7 @@ window.__ModuleLoader__.load({
 				rgb: (c) => convertOklabToRgb(convertOkhsvToOklab(c))
 			}
 		};
-		// node_modules/.pnpm/culori@4.0.2/node_modules/culori/src/oklab/parseOklab.js
+		// ../../node_modules/.pnpm/culori@4.0.2/node_modules/culori/src/oklab/parseOklab.js
 		function parseOklab(color, parsed) {
 			if (!parsed || parsed[0] !== "oklab") return;
 			const res = { mode: "oklab" };
@@ -3244,7 +3244,7 @@ window.__ModuleLoader__.load({
 			if (alpha.type !== Tok.None) res.alpha = Math.min(1, Math.max(0, alpha.type === Tok.Number ? alpha.value : alpha.value / 100));
 			return res;
 		}
-		// node_modules/.pnpm/culori@4.0.2/node_modules/culori/src/oklab/definition.js
+		// ../../node_modules/.pnpm/culori@4.0.2/node_modules/culori/src/oklab/definition.js
 		const definition$8 = {
 			...definition$15,
 			mode: "oklab",
@@ -3264,7 +3264,7 @@ window.__ModuleLoader__.load({
 			parse: [parseOklab],
 			serialize: (c) => `oklab(${c.l !== void 0 ? c.l : "none"} ${c.a !== void 0 ? c.a : "none"} ${c.b !== void 0 ? c.b : "none"}${c.alpha < 1 ? ` / ${c.alpha}` : ""})`
 		};
-		// node_modules/.pnpm/culori@4.0.2/node_modules/culori/src/oklch/parseOklch.js
+		// ../../node_modules/.pnpm/culori@4.0.2/node_modules/culori/src/oklch/parseOklch.js
 		function parseOklch(color, parsed) {
 			if (!parsed || parsed[0] !== "oklch") return;
 			const res = { mode: "oklch" };
@@ -3281,7 +3281,7 @@ window.__ModuleLoader__.load({
 			if (alpha.type !== Tok.None) res.alpha = Math.min(1, Math.max(0, alpha.type === Tok.Number ? alpha.value : alpha.value / 100));
 			return res;
 		}
-		// node_modules/.pnpm/culori@4.0.2/node_modules/culori/src/oklch/definition.js
+		// ../../node_modules/.pnpm/culori@4.0.2/node_modules/culori/src/oklch/definition.js
 		const definition$7 = {
 			...definition$13,
 			mode: "oklch",
@@ -3301,7 +3301,7 @@ window.__ModuleLoader__.load({
 				h: [0, 360]
 			}
 		};
-		// node_modules/.pnpm/culori@4.0.2/node_modules/culori/src/p3/convertP3ToXyz65.js
+		// ../../node_modules/.pnpm/culori@4.0.2/node_modules/culori/src/p3/convertP3ToXyz65.js
 		const convertP3ToXyz65 = (rgb) => {
 			let { r, g, b, alpha } = convertRgbToLrgb(rgb);
 			let res = {
@@ -3313,7 +3313,7 @@ window.__ModuleLoader__.load({
 			if (alpha !== void 0) res.alpha = alpha;
 			return res;
 		};
-		// node_modules/.pnpm/culori@4.0.2/node_modules/culori/src/p3/convertXyz65ToP3.js
+		// ../../node_modules/.pnpm/culori@4.0.2/node_modules/culori/src/p3/convertXyz65ToP3.js
 		const convertXyz65ToP3 = ({ x, y, z, alpha }) => {
 			if (x === void 0) x = 0;
 			if (y === void 0) y = 0;
@@ -3326,7 +3326,7 @@ window.__ModuleLoader__.load({
 			if (alpha !== void 0) res.alpha = alpha;
 			return res;
 		};
-		// node_modules/.pnpm/culori@4.0.2/node_modules/culori/src/p3/definition.js
+		// ../../node_modules/.pnpm/culori@4.0.2/node_modules/culori/src/p3/definition.js
 		const definition$6 = {
 			...definition$27,
 			mode: "p3",
@@ -3341,7 +3341,7 @@ window.__ModuleLoader__.load({
 				xyz65: convertP3ToXyz65
 			}
 		};
-		// node_modules/.pnpm/culori@4.0.2/node_modules/culori/src/prophoto/convertXyz50ToProphoto.js
+		// ../../node_modules/.pnpm/culori@4.0.2/node_modules/culori/src/prophoto/convertXyz50ToProphoto.js
 		const gamma$1 = (v) => {
 			let abs = Math.abs(v);
 			if (abs >= 1 / 512) return Math.sign(v) * Math.pow(abs, 1 / 1.8);
@@ -3360,7 +3360,7 @@ window.__ModuleLoader__.load({
 			if (alpha !== void 0) res.alpha = alpha;
 			return res;
 		};
-		// node_modules/.pnpm/culori@4.0.2/node_modules/culori/src/prophoto/convertProphotoToXyz50.js
+		// ../../node_modules/.pnpm/culori@4.0.2/node_modules/culori/src/prophoto/convertProphotoToXyz50.js
 		const linearize$1 = (v = 0) => {
 			let abs = Math.abs(v);
 			if (abs >= 16 / 512) return Math.sign(v) * Math.pow(abs, 1.8);
@@ -3379,7 +3379,7 @@ window.__ModuleLoader__.load({
 			if (prophoto.alpha !== void 0) res.alpha = prophoto.alpha;
 			return res;
 		};
-		// node_modules/.pnpm/culori@4.0.2/node_modules/culori/src/prophoto/definition.js
+		// ../../node_modules/.pnpm/culori@4.0.2/node_modules/culori/src/prophoto/definition.js
 		const definition$5 = {
 			...definition$27,
 			mode: "prophoto",
@@ -3394,7 +3394,7 @@ window.__ModuleLoader__.load({
 				rgb: (color) => convertXyz50ToRgb(convertProphotoToXyz50(color))
 			}
 		};
-		// node_modules/.pnpm/culori@4.0.2/node_modules/culori/src/rec2020/convertXyz65ToRec2020.js
+		// ../../node_modules/.pnpm/culori@4.0.2/node_modules/culori/src/rec2020/convertXyz65ToRec2020.js
 		const α$1 = 1.09929682680944;
 		const β$1 = .018053968510807;
 		const gamma = (v) => {
@@ -3415,7 +3415,7 @@ window.__ModuleLoader__.load({
 			if (alpha !== void 0) res.alpha = alpha;
 			return res;
 		};
-		// node_modules/.pnpm/culori@4.0.2/node_modules/culori/src/rec2020/convertRec2020ToXyz65.js
+		// ../../node_modules/.pnpm/culori@4.0.2/node_modules/culori/src/rec2020/convertRec2020ToXyz65.js
 		const α = 1.09929682680944;
 		const β = .018053968510807;
 		const linearize = (v = 0) => {
@@ -3436,7 +3436,7 @@ window.__ModuleLoader__.load({
 			if (rec2020.alpha !== void 0) res.alpha = rec2020.alpha;
 			return res;
 		};
-		// node_modules/.pnpm/culori@4.0.2/node_modules/culori/src/rec2020/definition.js
+		// ../../node_modules/.pnpm/culori@4.0.2/node_modules/culori/src/rec2020/definition.js
 		const definition$4 = {
 			...definition$27,
 			mode: "rec2020",
@@ -3451,10 +3451,10 @@ window.__ModuleLoader__.load({
 			parse: ["rec2020"],
 			serialize: "rec2020"
 		};
-		// node_modules/.pnpm/culori@4.0.2/node_modules/culori/src/xyb/constants.js
+		// ../../node_modules/.pnpm/culori@4.0.2/node_modules/culori/src/xyb/constants.js
 		const bias = .0037930732552754493;
 		const bias_cbrt = Math.cbrt(bias);
-		// node_modules/.pnpm/culori@4.0.2/node_modules/culori/src/xyb/convertRgbToXyb.js
+		// ../../node_modules/.pnpm/culori@4.0.2/node_modules/culori/src/xyb/convertRgbToXyb.js
 		const transfer$1 = (v) => Math.cbrt(v) - bias_cbrt;
 		const convertRgbToXyb = (color) => {
 			const { r, g, b, alpha } = convertRgbToLrgb(color);
@@ -3470,7 +3470,7 @@ window.__ModuleLoader__.load({
 			if (alpha !== void 0) res.alpha = alpha;
 			return res;
 		};
-		// node_modules/.pnpm/culori@4.0.2/node_modules/culori/src/xyb/convertXybToRgb.js
+		// ../../node_modules/.pnpm/culori@4.0.2/node_modules/culori/src/xyb/convertXybToRgb.js
 		const transfer = (v) => Math.pow(v + bias_cbrt, 3);
 		const convertXybToRgb = ({ x, y, b, alpha }) => {
 			if (x === void 0) x = 0;
@@ -3487,7 +3487,7 @@ window.__ModuleLoader__.load({
 			if (alpha !== void 0) res.alpha = alpha;
 			return res;
 		};
-		// node_modules/.pnpm/culori@4.0.2/node_modules/culori/src/xyb/definition.js
+		// ../../node_modules/.pnpm/culori@4.0.2/node_modules/culori/src/xyb/definition.js
 		const definition$3 = {
 			mode: "xyb",
 			channels: [
@@ -3515,7 +3515,7 @@ window.__ModuleLoader__.load({
 				}
 			}
 		};
-		// node_modules/.pnpm/culori@4.0.2/node_modules/culori/src/xyz50/definition.js
+		// ../../node_modules/.pnpm/culori@4.0.2/node_modules/culori/src/xyz50/definition.js
 		const definition$2 = {
 			mode: "xyz50",
 			parse: ["xyz-d50"],
@@ -3549,7 +3549,7 @@ window.__ModuleLoader__.load({
 				}
 			}
 		};
-		// node_modules/.pnpm/culori@4.0.2/node_modules/culori/src/xyz65/convertXyz65ToXyz50.js
+		// ../../node_modules/.pnpm/culori@4.0.2/node_modules/culori/src/xyz65/convertXyz65ToXyz50.js
 		const convertXyz65ToXyz50 = (xyz65) => {
 			let { x, y, z, alpha } = xyz65;
 			if (x === void 0) x = 0;
@@ -3564,7 +3564,7 @@ window.__ModuleLoader__.load({
 			if (alpha !== void 0) res.alpha = alpha;
 			return res;
 		};
-		// node_modules/.pnpm/culori@4.0.2/node_modules/culori/src/xyz65/convertXyz50ToXyz65.js
+		// ../../node_modules/.pnpm/culori@4.0.2/node_modules/culori/src/xyz65/convertXyz50ToXyz65.js
 		const convertXyz50ToXyz65 = (xyz50) => {
 			let { x, y, z, alpha } = xyz50;
 			if (x === void 0) x = 0;
@@ -3579,7 +3579,7 @@ window.__ModuleLoader__.load({
 			if (alpha !== void 0) res.alpha = alpha;
 			return res;
 		};
-		// node_modules/.pnpm/culori@4.0.2/node_modules/culori/src/xyz65/definition.js
+		// ../../node_modules/.pnpm/culori@4.0.2/node_modules/culori/src/xyz65/definition.js
 		const definition$1 = {
 			mode: "xyz65",
 			toMode: {
@@ -3613,7 +3613,7 @@ window.__ModuleLoader__.load({
 				}
 			}
 		};
-		// node_modules/.pnpm/culori@4.0.2/node_modules/culori/src/yiq/convertRgbToYiq.js
+		// ../../node_modules/.pnpm/culori@4.0.2/node_modules/culori/src/yiq/convertRgbToYiq.js
 		const convertRgbToYiq = ({ r, g, b, alpha }) => {
 			if (r === void 0) r = 0;
 			if (g === void 0) g = 0;
@@ -3627,7 +3627,7 @@ window.__ModuleLoader__.load({
 			if (alpha !== void 0) res.alpha = alpha;
 			return res;
 		};
-		// node_modules/.pnpm/culori@4.0.2/node_modules/culori/src/yiq/convertYiqToRgb.js
+		// ../../node_modules/.pnpm/culori@4.0.2/node_modules/culori/src/yiq/convertYiqToRgb.js
 		const convertYiqToRgb = ({ y, i, q, alpha }) => {
 			if (y === void 0) y = 0;
 			if (i === void 0) i = 0;
@@ -3641,7 +3641,7 @@ window.__ModuleLoader__.load({
 			if (alpha !== void 0) res.alpha = alpha;
 			return res;
 		};
-		// node_modules/.pnpm/culori@4.0.2/node_modules/culori/src/yiq/definition.js
+		// ../../node_modules/.pnpm/culori@4.0.2/node_modules/culori/src/yiq/definition.js
 		const definition = {
 			mode: "yiq",
 			toMode: { rgb: convertYiqToRgb },
